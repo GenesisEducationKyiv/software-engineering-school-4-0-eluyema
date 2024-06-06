@@ -1,0 +1,2 @@
+npx pnpm format
+npx pnpm lint
