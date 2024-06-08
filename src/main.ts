@@ -1,12 +1,13 @@
+import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+
 import { AppModule } from './app.module';
 import { validateEnvironmentVars } from './config/configuration';
-import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
   validateEnvironmentVars();

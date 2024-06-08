@@ -1,8 +1,10 @@
 // src/mailer/services/template.service.ts
-import { Injectable } from '@nestjs/common';
-import * as hbs from 'handlebars';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+
+import { Injectable } from '@nestjs/common';
+import * as hbs from 'handlebars';
+
 import { TemplateService } from '../../interfaces/services/template.service.interface';
 
 @Injectable()

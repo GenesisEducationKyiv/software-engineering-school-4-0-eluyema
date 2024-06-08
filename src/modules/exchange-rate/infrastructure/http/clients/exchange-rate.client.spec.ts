@@ -1,10 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { ExchangeRateClientImpl } from './exchange-rate.client';
-import { of } from 'rxjs';
+import { Test, TestingModule } from '@nestjs/testing';
 import { AxiosResponse } from 'axios';
+import { of } from 'rxjs';
+
 import { GetExchangeRatesDto } from './dto/get-exchange-rates.dto';
+import { ExchangeRateClientImpl } from './exchange-rate.client';
 
 describe('ExchangeRateClientImpl', () => {
   let client: ExchangeRateClientImpl;

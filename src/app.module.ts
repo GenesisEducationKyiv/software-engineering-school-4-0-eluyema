@@ -1,10 +1,11 @@
-import { ConfigModule } from '@nestjs/config';
-import { configuration } from './config/configuration';
 import { Module } from '@nestjs/common';
-import { ExchangeRateModule } from './modules/exchange-rate/exchange-rate.module';
-import { SubscriptionModule } from './modules/subscription/subscription.module';
-import { MailerModule } from './modules/mailer/mailer.module';
+import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
+
+import { configuration } from './config/configuration';
+import { ExchangeRateModule } from './modules/exchange-rate/exchange-rate.module';
+import { MailerModule } from './modules/mailer/mailer.module';
+import { SubscriptionModule } from './modules/subscription/subscription.module';
 
 @Module({
   imports: [

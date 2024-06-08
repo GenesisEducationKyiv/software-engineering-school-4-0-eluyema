@@ -1,7 +1,8 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { ISubscriptionRepository } from '../repositories/subscription.repository';
+import { Inject, Injectable } from '@nestjs/common';
+
 import { TYPES } from '../../interfaces/types';
 import { Subscription } from '../entities/subscription.entity';
+import { ISubscriptionRepository } from '../repositories/subscription.repository';
 
 @Injectable()
 export class SubscriptionService {

@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ExchangeRateService } from '../domain/services/exchange-rate.service';
+
 import { ExchangeRate } from '../domain/entities/exchange-rate.entity';
-import { TYPES } from '../interfaces/types';
+import { ExchangeRateService } from '../domain/services/exchange-rate.service';
 import { FetchExchangeRateApplication } from '../interfaces/applications/fetch-exchange-rate.application.interface';
 import { ExchangeRateClient } from '../interfaces/clients/exchange-rate.client';
+import { TYPES } from '../interfaces/types';
 
 @Injectable()
 export class FetchExchangeRateApplicationImpl
