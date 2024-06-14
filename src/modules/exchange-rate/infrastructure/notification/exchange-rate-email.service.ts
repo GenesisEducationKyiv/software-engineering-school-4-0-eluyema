@@ -2,17 +2,17 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { Email } from 'src/modules/mailer/domain/entities/email.entity';
 import { AvailableTemplatesEnum } from 'src/modules/mailer/domain/entities/template.entity';
-import { EmailService } from 'src/modules/mailer/interfaces/services/email.service.interface';
-import { TemplateService } from 'src/modules/mailer/interfaces/services/template.service.interface';
-import { TYPES as MAILER_TYPES } from 'src/modules/mailer/interfaces/types';
-import { SubscriptionService } from 'src/modules/subscription/domain/services/subscription.service';
-import { TYPES as SUBSCRIPTION_TYPES } from 'src/modules/subscription/interfaces/types';
+import { TYPES as MAILER_TYPES } from 'src/modules/mailer/infrastructure/ioc';
+import { SubscriptionService } from 'src/modules/subscription/domain/services/interfaces/subscription.service.interface';
+import { TYPES as SUBSCRIPTION_TYPES } from 'src/modules/subscription/infrastructure/ioc';
 
-import { ExchangeRate } from '../../../domain/entities/exchange-rate.entity';
-import { ExchangeRateNotificationService } from '../../../interfaces/notification/exchange-rate-notification.service.interface';
+import { EmailService } from './interfaces/email.service.interface';
+import { ExchangeRateNotificationService } from './interfaces/exchange-rate-notification.service.interface';
+import { TemplateService } from './interfaces/template.service.interface';
+import { ExchangeRate } from '../../domain/entities/exchange-rate.entity';
 
 @Injectable()
-export class ExchangeRateEmailService
+export class ExchangeRateEmailServiceImpl
   implements ExchangeRateNotificationService
 {
   constructor(

@@ -4,7 +4,7 @@ import { join } from 'path';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as hbs from 'handlebars';
 
-import { HandlebarsTemplateService } from './template.service';
+import { HandlebarsTemplateService } from '../template/template.service';
 
 jest.mock('fs/promises');
 jest.mock('handlebars');

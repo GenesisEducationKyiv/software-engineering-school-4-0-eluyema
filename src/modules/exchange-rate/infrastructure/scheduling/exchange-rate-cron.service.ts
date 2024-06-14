@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
-import { FetchExchangeRateApplication } from '../../../interfaces/applications/fetch-exchange-rate.application.interface';
-import { ExchangeRateCronService } from '../../../interfaces/cron/exchange-rate-cron.service.interface';
-import { ExchangeRateNotificationService } from '../../../interfaces/notification/exchange-rate-notification.service.interface';
-import { TYPES } from '../../../interfaces/types';
+import { ExchangeRateCronService } from './interfaces/exchange-rate-cron.service.interface';
+import { FetchExchangeRateApplication } from '../../application/interfaces/fetch-exchange-rate.application.interface';
+import { TYPES } from '../ioc/types';
+import { ExchangeRateNotificationService } from '../notification/interfaces/exchange-rate-notification.service.interface';
 
 @Injectable()
 export class ExchangeRateCronServiceImpl implements ExchangeRateCronService {

@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { EmailService } from './interfaces/mailer.service.interface';
+import { SendEmailApplication } from './interfaces/send-email.application.interface';
 import { Email } from '../domain/entities/email.entity';
-import { SendEmailApplication } from '../interfaces/applications/send-email.application.interface';
-import { EmailService } from '../interfaces/services/email.service.interface';
-import { TYPES } from '../interfaces/types';
+import { TYPES } from '../infrastructure/ioc/types';
 
 @Injectable()
 export class SendEmailApplicationImpl implements SendEmailApplication {

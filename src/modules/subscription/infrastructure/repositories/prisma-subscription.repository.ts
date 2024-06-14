@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from 'src/shared/infrastructure/prisma/prisma.service';
 
-import { Subscription } from '../../../domain/entities/subscription.entity';
-import { ISubscriptionRepository } from '../../../domain/repositories/subscription.repository';
+import { Subscription } from '../../domain/entities/subscription.entity';
+import { SubscriptionRepository } from '../../domain/repositories/subscription.repository';
 
 @Injectable()
-export class PrismaSubscriptionRepository implements ISubscriptionRepository {
+export class PrismaSubscriptionRepositoryImpl
+  implements SubscriptionRepository
+{
   constructor(private readonly prisma: PrismaService) {}
 
   async create(email: string): Promise<Subscription> {

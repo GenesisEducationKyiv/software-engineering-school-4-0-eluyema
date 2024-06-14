@@ -5,10 +5,10 @@ import { join } from 'path';
 import { Injectable } from '@nestjs/common';
 import * as hbs from 'handlebars';
 
-import { TemplateService } from '../../interfaces/services/template.service.interface';
+import { TemplateService } from '../../../exchange-rate/infrastructure/notification/interfaces/template.service.interface';
 
 @Injectable()
-export class HandlebarsTemplateService implements TemplateService {
+export class HandlebarsTemplateServiceImpl implements TemplateService {
   async renderTemplate(template: string, context: unknown): Promise<string> {
     const templatePath = join(__dirname, '..', 'templates', `${template}.hbs`);
     const templateContent = await readFile(templatePath, 'utf8');

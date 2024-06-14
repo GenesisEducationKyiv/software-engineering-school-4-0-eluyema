@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 
-import { ExchangeRateClient } from 'src/modules/exchange-rate/interfaces/clients/exchange-rate.client';
+import { ExchangeRateClient } from 'src/modules/exchange-rate/application/interfaces/exchange-rate.client';
 
 import { GetExchangeRatesDto } from './dto/get-exchange-rates.dto';
 

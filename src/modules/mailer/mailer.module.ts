@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { SendEmailApplicationImpl } from './application/send-email.application';
-import { NodemailerService } from './infrastructure/implementations/nodemailer.service';
-import { HandlebarsTemplateService } from './infrastructure/implementations/template.service';
-import { TYPES } from './interfaces/types';
+import { NodemailerServiceImpl } from './infrastructure/email/nodemailer.service';
+import { HandlebarsTemplateServiceImpl } from './infrastructure/template/template.service';
+import { TYPES } from './infrastructure/ioc/types';
 
 const sendEmailApp = {
   provide: TYPES.applications.SendEmailApplication,
@@ -13,12 +13,12 @@ const sendEmailApp = {
 
 const emailService = {
   provide: TYPES.services.EmailService,
-  useClass: NodemailerService,
+  useClass: NodemailerServiceImpl,
 };
 
 const templateService = {
   provide: TYPES.services.TemplateService,
-  useClass: HandlebarsTemplateService,
+  useClass: HandlebarsTemplateServiceImpl,
 };
 
 @Module({

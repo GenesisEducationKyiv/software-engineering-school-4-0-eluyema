@@ -1,4 +1,4 @@
-import { AvailableTemplatesEnum } from '../../domain/entities/template.entity';
+import { AvailableTemplatesEnum } from '../../../../mailer/domain/entities/template.entity';
 
 export interface TemplateService {
   renderTemplate(
