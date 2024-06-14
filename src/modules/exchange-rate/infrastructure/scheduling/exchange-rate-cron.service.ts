@@ -12,7 +12,7 @@ export class ExchangeRateCronServiceImpl implements ExchangeRateCronService {
     private readonly sendExchangeRateToSubscribersApplication: SendExchangeRateToSubscribersApplication,
   ) {}
 
-  @Cron(CronExpression.EVERY_DAY_AT_10M)
+  @Cron(CronExpression.EVERY_DAY_AT_10AM)
   async handleCron() {
     await this.sendExchangeRateToSubscribersApplication.execute();
   }
