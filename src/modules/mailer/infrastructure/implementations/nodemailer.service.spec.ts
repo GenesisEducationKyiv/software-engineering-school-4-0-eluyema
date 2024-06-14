@@ -9,12 +9,12 @@ jest.mock('nodemailer');
 
 describe('NodemailerService', () => {
   let service: NodemailerService;
-  let transporterMock: jest.Mocked<nodemailer.Transporter>;
+  let transporterMock: Partial<jest.Mocked<nodemailer.Transporter>>;
 
   beforeEach(async () => {
     transporterMock = {
       sendMail: jest.fn().mockResolvedValue({}),
-    } as any;
+    };
 
     (nodemailer.createTransport as jest.Mock).mockReturnValue(transporterMock);
 

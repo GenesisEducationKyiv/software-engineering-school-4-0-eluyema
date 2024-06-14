@@ -14,11 +14,11 @@ export class SubscriptionService {
   async create(email: string): Promise<boolean> {
     const existingSubscription =
       await this.subscriptionRepository.findByEmail(email);
-    if (!existingSubscription) {
-      await this.subscriptionRepository.create(email);
-      return true;
+    if (existingSubscription) {
+      return false;
     }
-    return false;
+    await this.subscriptionRepository.create(email);
+    return true;
   }
 
   async getSubscribers(): Promise<string[]> {
