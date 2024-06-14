@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { SubscriptionService } from './subscription.service';
-import { ISubscriptionRepository } from '../repositories/subscription.repository';
-import { Subscription } from '../entities/subscription.entity';
 import { TYPES } from '../../interfaces/types';
+import { Subscription } from '../entities/subscription.entity';
+import { ISubscriptionRepository } from '../repositories/subscription.repository';
 
 describe('SubscriptionService', () => {
   let service: SubscriptionService;

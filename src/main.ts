@@ -1,12 +1,13 @@
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+
 import { AppModule } from './app.module';
 import { validateEnvironmentVars } from './config/configuration';
-import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
   validateEnvironmentVars();
@@ -15,6 +16,7 @@ async function bootstrap() {
     new FastifyAdapter({ logger: true }),
   );
   app.setGlobalPrefix('/api');
+  app.useGlobalPipes(new ValidationPipe());
   const configService = app.get(ConfigService);
 
   const port = configService.get('server.port');

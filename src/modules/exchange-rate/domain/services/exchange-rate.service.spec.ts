@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { ExchangeRateService } from './exchange-rate.service';
 import { ExchangeRate } from '../entities/exchange-rate.entity';
 

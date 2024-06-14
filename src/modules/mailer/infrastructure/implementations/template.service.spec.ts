@@ -1,8 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { HandlebarsTemplateService } from './template.service';
-import * as hbs from 'handlebars';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+
+import { Test, TestingModule } from '@nestjs/testing';
+import * as hbs from 'handlebars';
+
+import { HandlebarsTemplateService } from './template.service';
 
 jest.mock('fs/promises');
 jest.mock('handlebars');

@@ -1,10 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { ExchangeRateClientImpl } from './exchange-rate.client';
+import { Test, TestingModule } from '@nestjs/testing';
+import { AxiosRequestHeaders, AxiosResponse } from 'axios';
 import { of } from 'rxjs';
-import { AxiosResponse } from 'axios';
+
 import { GetExchangeRatesDto } from './dto/get-exchange-rates.dto';
+import { ExchangeRateClientImpl } from './exchange-rate.client';
 
 describe('ExchangeRateClientImpl', () => {
   let client: ExchangeRateClientImpl;
@@ -56,7 +57,7 @@ describe('ExchangeRateClientImpl', () => {
       status: 200,
       statusText: 'OK',
       headers: {},
-      config: { headers: {} as any }, // Add a headers object to config
+      config: { headers: {} as AxiosRequestHeaders },
     };
     jest.spyOn(httpService, 'get').mockReturnValue(of(axiosResponse));
     const data = await client.fetchExchangeRates();

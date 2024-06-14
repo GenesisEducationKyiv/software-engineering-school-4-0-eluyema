@@ -1,7 +1,8 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { ISubscriptionRepository } from '../repositories/subscription.repository';
+import { Inject, Injectable } from '@nestjs/common';
+
 import { TYPES } from '../../interfaces/types';
 import { Subscription } from '../entities/subscription.entity';
+import { ISubscriptionRepository } from '../repositories/subscription.repository';
 
 @Injectable()
 export class SubscriptionService {
@@ -13,11 +14,11 @@ export class SubscriptionService {
   async create(email: string): Promise<boolean> {
     const existingSubscription =
       await this.subscriptionRepository.findByEmail(email);
-    if (!existingSubscription) {
-      await this.subscriptionRepository.create(email);
-      return true;
+    if (existingSubscription) {
+      return false;
     }
-    return false;
+    await this.subscriptionRepository.create(email);
+    return true;
   }
 
   async getSubscribers(): Promise<string[]> {

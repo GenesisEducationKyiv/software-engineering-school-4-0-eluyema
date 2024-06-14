@@ -1,13 +1,14 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { ExchangeRateController } from './controller/exchange-rate.controller';
 import { ConfigModule } from '@nestjs/config';
-import { TYPES } from './interfaces/types';
+
 import { FetchExchangeRateApplicationImpl } from './application/fetch-exchange-rate.application';
+import { ExchangeRateController } from './controller/exchange-rate.controller';
 import { ExchangeRateService } from './domain/services/exchange-rate.service';
 import { ExchangeRateClientImpl } from './infrastructure/http/clients/exchange-rate.client';
-import { HttpModule } from '@nestjs/axios';
-import { ExchangeRateCronServiceImpl } from './infrastructure/scheduling/cron/exchange-rate-cron.service';
 import { ExchangeRateEmailService } from './infrastructure/notification/email/exchange-rate-email.service';
+import { ExchangeRateCronServiceImpl } from './infrastructure/scheduling/cron/exchange-rate-cron.service';
+import { TYPES } from './interfaces/types';
 import { MailerModule } from '../mailer/mailer.module';
 import { SubscriptionModule } from '../subscription/subscription.module';
 

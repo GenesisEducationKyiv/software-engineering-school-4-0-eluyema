@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
-import { SubscriptionController } from './controller/subscription.controller';
-import { TYPES } from './interfaces/types';
+
+import { PrismaModule } from 'src/shared/infrastructure/prisma/prisma.module';
+
 import { CreateSubscriptionApplicationImpl } from './application/create-subscription.application';
+import { SubscriptionController } from './controller/subscription.controller';
 import { SubscriptionService } from './domain/services/subscription.service';
 import { PrismaSubscriptionRepository } from './infrastructure/prisma/repositories/prisma-subscription.repository';
-import { PrismaModule } from 'src/shared/infrastructure/prisma/prisma.module';
+import { TYPES } from './interfaces/types';
 
 const createSubscriptionApp = {
   provide: TYPES.applications.CreateSubscriptionApplication,
