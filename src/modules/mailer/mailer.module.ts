@@ -3,8 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 
 import { SendEmailApplicationImpl } from './application/send-email.application';
 import { NodemailerServiceImpl } from './infrastructure/email/nodemailer.service';
-import { HandlebarsTemplateServiceImpl } from './infrastructure/template/template.service';
 import { TYPES } from './infrastructure/ioc/types';
+import { HandlebarsTemplateServiceImpl } from './infrastructure/template/template.service';
 
 const sendEmailApp = {
   provide: TYPES.applications.SendEmailApplication,

@@ -4,20 +4,23 @@ import { join } from 'path';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as hbs from 'handlebars';
 
-import { HandlebarsTemplateService } from '../template/template.service';
+import { TemplateService } from 'src/modules/exchange-rate/infrastructure/notification/interfaces/template.service.interface';
+
+import { HandlebarsTemplateServiceImpl } from './template.service';
+import { AvailableTemplatesEnum } from '../../domain/entities/template.entity';
 
 jest.mock('fs/promises');
 jest.mock('handlebars');
 
 describe('HandlebarsTemplateService', () => {
-  let service: HandlebarsTemplateService;
+  let service: TemplateService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [HandlebarsTemplateService],
+      providers: [HandlebarsTemplateServiceImpl],
     }).compile();
 
-    service = module.get<HandlebarsTemplateService>(HandlebarsTemplateService);
+    service = module.get<TemplateService>(HandlebarsTemplateServiceImpl);
   });
 
   it('should be defined', () => {
@@ -25,7 +28,7 @@ describe('HandlebarsTemplateService', () => {
   });
 
   it('should render template', async () => {
-    const templateName = 'exchange-rate';
+    const templateName = AvailableTemplatesEnum.EXCHANGE_RATE;
     const context = { rate: 28, date: '2021-08-01' };
     const templateContent =
       '<p>The exchange rate is {{rate}} as of {{date}}.</p>';
@@ -38,7 +41,7 @@ describe('HandlebarsTemplateService', () => {
     const result = await service.renderTemplate(templateName, context);
     expect(result).toBe(expectedResult);
     expect(readFile).toHaveBeenCalledWith(
-      join(__dirname, '..', 'templates', `${templateName}.hbs`),
+      join(__dirname, 'templates', `${templateName}.hbs`),
       'utf8',
     );
     expect(hbs.compile).toHaveBeenCalledWith(templateContent);

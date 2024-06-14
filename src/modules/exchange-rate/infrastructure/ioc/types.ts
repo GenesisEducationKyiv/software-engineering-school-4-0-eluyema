@@ -1,17 +1,24 @@
 export const TYPES = {
+  domain: {
+    factories: {
+      ExchangeRateFactory: Symbol('ExchangeRateFactory'),
+    },
+  },
   applications: {
     FetchExchangeRateApplication: Symbol('FetchExchangeRateApplication'),
+    SendExchangeRateToSubscribersApplication: Symbol(
+      'SendExchangeRateToSubscribersApplication',
+    ),
   },
   services: {
     ExchangeRateService: Symbol('ExchangeRateService'),
   },
-  clients: {
+  infrastructure: {
     ExchangeRateClient: Symbol('ExchangeRateClient'),
-  },
-  notification: {
     ExchangeRateNotificationService: Symbol('ExchangeRateNotificationService'),
-  },
-  cron: {
     ExchangeRateCronService: Symbol('ExchangeRateCronService'),
+    ExchangeRateEmailComposerService: Symbol(
+      'ExchangeRateEmailComposerServiceImpl',
+    ),
   },
 };

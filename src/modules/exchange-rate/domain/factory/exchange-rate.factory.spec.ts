@@ -1,17 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { ExchangeRateService } from './exchange-rate.service';
+import { ExchangeRateFactoryImpl } from './exchange-rate.factory';
+import { ExchangeRateFactory } from './interfaces/exchange-rate.factory.interface';
 import { ExchangeRate } from '../entities/exchange-rate.entity';
 
 describe('ExchangeRateService', () => {
-  let service: ExchangeRateService;
+  let service: ExchangeRateFactory;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ExchangeRateService],
+      providers: [ExchangeRateFactoryImpl],
     }).compile();
 
-    service = module.get<ExchangeRateService>(ExchangeRateService);
+    service = module.get<ExchangeRateFactory>(ExchangeRateFactoryImpl);
   });
 
   it('should be defined', () => {
@@ -22,7 +23,7 @@ describe('ExchangeRateService', () => {
     const base = 'USD';
     const rate = 28;
     const date = new Date();
-    const exchangeRate = service.createExchangeRate(base, rate, date);
+    const exchangeRate = service.create(base, rate, date);
     expect(exchangeRate).toBeInstanceOf(ExchangeRate);
     expect(exchangeRate.base).toBe(base);
     expect(exchangeRate.rate).toBe(rate);

@@ -2,14 +2,14 @@ import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as nodemailer from 'nodemailer';
 
+import { MailerService } from './interfaces/mailer.service.interface';
 import { NodemailerServiceImpl } from './nodemailer.service';
-import { EmailService } from '../../application/interfaces/mailer.service.interface';
 import { Email } from '../../domain/entities/email.entity';
 
 jest.mock('nodemailer');
 
 describe('NodemailerService', () => {
-  let service: EmailService;
+  let service: MailerService;
   let transporterMock: Partial<jest.Mocked<nodemailer.Transporter>>;
 
   beforeEach(async () => {
@@ -39,7 +39,7 @@ describe('NodemailerService', () => {
       ],
     }).compile();
 
-    service = module.get<EmailService>(NodemailerServiceImpl);
+    service = module.get<MailerService>(NodemailerServiceImpl);
   });
 
   it('should be defined', () => {
