@@ -2,8 +2,8 @@ import { Body, Controller, Inject, Post, Res } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
-import { CreateSubscriptionApplication } from '../interfaces/applications/create-subscription.application.interface';
-import { TYPES } from '../interfaces/types';
+import { CreateSubscriptionApplication } from '../application/interfaces/create-subscription.application.interface';
+import { TYPES } from '../infrastructure/ioc/types';
 
 @Controller('subscribe')
 export class SubscriptionController {

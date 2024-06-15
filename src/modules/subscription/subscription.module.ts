@@ -4,9 +4,9 @@ import { PrismaModule } from 'src/shared/infrastructure/prisma/prisma.module';
 
 import { CreateSubscriptionApplicationImpl } from './application/create-subscription.application';
 import { SubscriptionController } from './controller/subscription.controller';
-import { SubscriptionService } from './domain/services/subscription.service';
-import { PrismaSubscriptionRepository } from './infrastructure/prisma/repositories/prisma-subscription.repository';
-import { TYPES } from './interfaces/types';
+import { SubscriptionServiceImpl } from './domain/services/subscription.service';
+import { TYPES } from './infrastructure/ioc/types';
+import { PrismaSubscriptionRepositoryImpl } from './infrastructure/repositories/prisma-subscription.repository';
 
 const createSubscriptionApp = {
   provide: TYPES.applications.CreateSubscriptionApplication,
@@ -15,12 +15,12 @@ const createSubscriptionApp = {
 
 const subscriptionService = {
   provide: TYPES.services.SubscriptionService,
-  useClass: SubscriptionService,
+  useClass: SubscriptionServiceImpl,
 };
 
 const subscriptionRepository = {
   provide: TYPES.repositories.SubscriptionRepository,
-  useClass: PrismaSubscriptionRepository,
+  useClass: PrismaSubscriptionRepositoryImpl,
 };
 
 @Module({

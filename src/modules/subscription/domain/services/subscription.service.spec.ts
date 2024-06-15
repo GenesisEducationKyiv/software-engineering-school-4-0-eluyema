@@ -1,18 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { SubscriptionService } from './subscription.service';
-import { TYPES } from '../../interfaces/types';
+import { SubscriptionService } from './interfaces/subscription.service.interface';
+import { SubscriptionServiceImpl } from './subscription.service';
+import { TYPES } from '../../infrastructure/ioc/types';
 import { Subscription } from '../entities/subscription.entity';
-import { ISubscriptionRepository } from '../repositories/subscription.repository';
+import { SubscriptionRepository } from '../repositories/subscription.repository';
 
 describe('SubscriptionService', () => {
   let service: SubscriptionService;
-  let repository: ISubscriptionRepository;
+  let repository: SubscriptionRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        SubscriptionService,
+        SubscriptionServiceImpl,
         {
           provide: TYPES.repositories.SubscriptionRepository,
           useValue: {
@@ -24,8 +25,8 @@ describe('SubscriptionService', () => {
       ],
     }).compile();
 
-    service = module.get<SubscriptionService>(SubscriptionService);
-    repository = module.get<ISubscriptionRepository>(
+    service = module.get<SubscriptionService>(SubscriptionServiceImpl);
+    repository = module.get<SubscriptionRepository>(
       TYPES.repositories.SubscriptionRepository,
     );
   });

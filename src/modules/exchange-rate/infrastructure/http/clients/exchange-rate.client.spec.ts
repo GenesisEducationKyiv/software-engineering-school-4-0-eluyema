@@ -1,8 +1,10 @@
 import { HttpService } from '@nestjs/axios';
-import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AxiosRequestHeaders, AxiosResponse } from 'axios';
 import { of } from 'rxjs';
+
+import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc';
+import { TestAppConfigServiceImpl } from 'src/test-utils/config/test-app-config.service';
 
 import { GetExchangeRatesDto } from './dto/get-exchange-rates.dto';
 import { ExchangeRateClientImpl } from './exchange-rate.client';
@@ -22,16 +24,8 @@ describe('ExchangeRateClientImpl', () => {
           },
         },
         {
-          provide: ConfigService,
-          useValue: {
-            get: jest.fn().mockImplementation((key: string) => {
-              const config = {
-                'exchangeApi.url': 'https://api.exchangerate.com',
-                'exchangeApi.key': 'test-api-key',
-              };
-              return config[key];
-            }),
-          },
+          provide: SHARED_CONFIG_TYPES.infrastructure.AppConfigService,
+          useClass: TestAppConfigServiceImpl,
         },
       ],
     }).compile();

@@ -1,7 +1,7 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 
-import { FetchExchangeRateApplication } from '../interfaces/applications/fetch-exchange-rate.application.interface';
-import { TYPES } from '../interfaces/types';
+import { FetchExchangeRateApplication } from '../application/interfaces/fetch-exchange-rate.application.interface';
+import { TYPES } from '../infrastructure/ioc/types';
 
 @Controller('rate')
 export class ExchangeRateController {

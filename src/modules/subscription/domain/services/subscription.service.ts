@@ -1,14 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { TYPES } from '../../interfaces/types';
+import { SubscriptionService } from './interfaces/subscription.service.interface';
+import { TYPES } from '../../infrastructure/ioc/types';
 import { Subscription } from '../entities/subscription.entity';
-import { ISubscriptionRepository } from '../repositories/subscription.repository';
+import { SubscriptionRepository } from '../repositories/subscription.repository';
 
 @Injectable()
-export class SubscriptionService {
+export class SubscriptionServiceImpl implements SubscriptionService {
   constructor(
     @Inject(TYPES.repositories.SubscriptionRepository)
-    private readonly subscriptionRepository: ISubscriptionRepository,
+    private readonly subscriptionRepository: SubscriptionRepository,
   ) {}
 
   async create(email: string): Promise<boolean> {
