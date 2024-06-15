@@ -20,6 +20,11 @@ export class EmailFactory {
     const invalidEmails = emailAddresses.filter(
       (email) => !emailRegex.test(email),
     );
+
+    if (!emailAddresses.length) {
+      throw new Error(`Recipient array can't be empty`);
+    }
+
     if (invalidEmails.length > 0) {
       throw new Error(`Invalid email addresses: ${invalidEmails.join(', ')}`);
     }
