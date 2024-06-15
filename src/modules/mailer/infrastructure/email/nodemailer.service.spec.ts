@@ -1,6 +1,8 @@
-import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as nodemailer from 'nodemailer';
+
+import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc';
+import { TestAppConfigServiceImpl } from 'src/test-utils/config/test-app-config.service';
 
 import { MailerService } from './interfaces/mailer.service.interface';
 import { NodemailerServiceImpl } from './nodemailer.service';
@@ -23,18 +25,8 @@ describe('NodemailerService', () => {
       providers: [
         NodemailerServiceImpl,
         {
-          provide: ConfigService,
-          useValue: {
-            get: jest.fn().mockImplementation((key: string) => {
-              const config = {
-                MAIL_HOST: 'smtp.mailtrap.io',
-                MAIL_PORT: 2525,
-                MAIL_USER: 'username',
-                MAIL_PASSWORD: 'password',
-              };
-              return config[key];
-            }),
-          },
+          provide: SHARED_CONFIG_TYPES.infrastructure.AppConfigService,
+          useClass: TestAppConfigServiceImpl,
         },
       ],
     }).compile();

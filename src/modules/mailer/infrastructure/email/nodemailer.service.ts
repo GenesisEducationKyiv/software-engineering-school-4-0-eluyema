@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Inject, Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+
+import { AppConfigService } from 'src/shared/infrastructure/config/interfaces/app-config.service.interface';
+import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc/types';
 
 import { MailerService } from './interfaces/mailer.service.interface';
 import { Email } from '../../domain/entities/email.entity';
@@ -9,14 +11,19 @@ import { Email } from '../../domain/entities/email.entity';
 export class NodemailerServiceImpl implements MailerService {
   private transporter: nodemailer.Transporter;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    @Inject(SHARED_CONFIG_TYPES.infrastructure.AppConfigService)
+    readonly appConfigService: AppConfigService,
+  ) {
+    const mailerConfig = appConfigService.mailer;
+
     this.transporter = nodemailer.createTransport({
-      host: this.configService.get('mailer.host'),
-      port: this.configService.get('mailer.port'),
+      host: mailerConfig.host,
+      port: mailerConfig.port,
       secure: false,
       auth: {
-        user: this.configService.get('mailer.user'),
-        pass: this.configService.get('mailer.password'),
+        user: mailerConfig.user,
+        pass: mailerConfig.password,
       },
     });
   }

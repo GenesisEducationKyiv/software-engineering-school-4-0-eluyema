@@ -1,3 +1,5 @@
+import { AppConfig } from './interfaces/configuration.interface';
+
 export const RequiredEnvVars = [
   'SERVER_PORT',
   'SERVER_HOST',
@@ -12,28 +14,9 @@ export const RequiredEnvVars = [
   'MAIL_PASSWORD',
 ];
 
-interface Configuration {
-  server: {
-    port: number;
-    host: string;
-  };
-  database: {
-    url: string;
-  };
-  exchangeApi: {
-    url: string;
-  };
-  mailer: {
-    host: string;
-    port: string;
-    user: string;
-    password: string;
-  };
-}
-
 const DEFAULT_SERVER_PORT = 3000;
 
-export const configuration = (): Configuration => {
+export const configuration = (): AppConfig => {
   const defaultConfiguration = {
     server: {
       port:
@@ -48,7 +31,7 @@ export const configuration = (): Configuration => {
     },
     mailer: {
       host: process.env.MAIL_HOST,
-      port: process.env.MAIL_PORT,
+      port: Number(process.env.MAIL_PORT),
       user: process.env.MAIL_USER,
       password: process.env.MAIL_PASSWORD,
     },

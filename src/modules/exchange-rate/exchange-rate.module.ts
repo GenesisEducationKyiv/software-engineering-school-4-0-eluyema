@@ -2,6 +2,9 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
+import { AppConfigServiceImpl } from 'src/shared/infrastructure/config/app-config.service';
+import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc/types';
+
 import { FetchExchangeRateApplicationImpl } from './application/fetch-exchange-rate.application';
 import { SendExchangeRateToSubscribersApplicationImpl } from './application/send-exchange-rate-to-subscribers.application';
 import { ExchangeRateController } from './controller/exchange-rate.controller';
@@ -55,6 +58,11 @@ const emailComposerService = {
   useClass: ExchangeRateEmailComposerServiceImpl,
 };
 
+const appConfigService = {
+  provide: SHARED_CONFIG_TYPES.infrastructure.AppConfigService,
+  useClass: AppConfigServiceImpl,
+};
+
 @Module({
   imports: [ConfigModule, HttpModule, MailerModule, SubscriptionModule],
   controllers: [ExchangeRateController],
@@ -67,6 +75,7 @@ const emailComposerService = {
     exchangeRateCronService,
     sendExchangeRateToSubscribersApp,
     exchangeRateFactory,
+    appConfigService,
   ],
 })
 export class ExchangeRateModule {}
