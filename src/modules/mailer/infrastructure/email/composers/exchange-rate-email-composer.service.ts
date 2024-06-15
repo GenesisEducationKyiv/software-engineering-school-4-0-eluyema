@@ -1,4 +1,3 @@
-// src/mailer/services/email-composer.service.ts
 import { Inject, Injectable } from '@nestjs/common';
 
 import { ExchangeRate } from 'src/modules/exchange-rate/domain/entities/exchange-rate.entity';

@@ -1,4 +1,3 @@
-// src/mailer/services/template.service.ts
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 

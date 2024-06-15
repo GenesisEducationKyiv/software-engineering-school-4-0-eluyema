@@ -1,4 +1,3 @@
-// app-config.service.ts
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
