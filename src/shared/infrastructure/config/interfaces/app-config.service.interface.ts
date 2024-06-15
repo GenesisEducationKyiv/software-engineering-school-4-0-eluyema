@@ -1,4 +1,5 @@
 import {
+  CronConfig,
   DatabaseConfig,
   ExchangeApiConfig,
   MailerConfig,
@@ -13,4 +14,6 @@ export interface AppConfigService {
   get exchangeApi(): ExchangeApiConfig;
 
   get mailer(): MailerConfig;
+
+  get cron(): CronConfig;
 }

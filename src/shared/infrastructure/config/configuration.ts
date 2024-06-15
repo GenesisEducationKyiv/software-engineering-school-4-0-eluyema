@@ -12,6 +12,7 @@ export const RequiredEnvVars = [
   'MAIL_PORT',
   'MAIL_USER',
   'MAIL_PASSWORD',
+  'CRON_SCHEDULE_PATTERN',
 ];
 
 const DEFAULT_SERVER_PORT = 3000;
@@ -34,6 +35,9 @@ export const configuration = (): AppConfig => {
       port: Number(process.env.MAIL_PORT),
       user: process.env.MAIL_USER,
       password: process.env.MAIL_PASSWORD,
+    },
+    cron: {
+      pattern: process.env.CRON_SCHEDULE_PATTERN,
     },
   };
 

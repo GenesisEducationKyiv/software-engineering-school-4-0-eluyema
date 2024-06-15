@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { AppConfigService } from './interfaces/app-config.service.interface';
 import {
   AppConfig,
+  CronConfig,
   DatabaseConfig,
   ExchangeApiConfig,
   MailerConfig,
@@ -30,5 +31,9 @@ export class AppConfigServiceImpl implements AppConfigService {
 
   get mailer(): MailerConfig {
     return this.configService.get<MailerConfig>('mailer', { infer: true });
+  }
+
+  get cron(): CronConfig {
+    return this.configService.get<MailerConfig>('cron', { infer: true });
   }
 }

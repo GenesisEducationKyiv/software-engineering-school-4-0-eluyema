@@ -18,9 +18,14 @@ export interface MailerConfig {
   password: string;
 }
 
+export interface CronConfig {
+  pattern: string;
+}
+
 export interface AppConfig {
   server: ServerConfig;
   database: DatabaseConfig;
   exchangeApi: ExchangeApiConfig;
   mailer: MailerConfig;
+  cron: CronConfig;
 }

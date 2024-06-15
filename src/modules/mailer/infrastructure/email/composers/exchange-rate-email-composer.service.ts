@@ -4,6 +4,7 @@ import { ExchangeRate } from 'src/modules/exchange-rate/domain/entities/exchange
 import { TemplateService } from 'src/modules/exchange-rate/infrastructure/notification/interfaces/template.service.interface';
 import { Email } from 'src/modules/mailer/domain/entities/email.entity';
 import { AvailableTemplatesEnum } from 'src/modules/mailer/domain/entities/template.entity';
+import { EmailFactory } from 'src/modules/mailer/domain/factories/email.factory';
 import { TYPES as MAILER_TYPES } from 'src/modules/mailer/infrastructure/ioc';
 
 import { ExchangeRateEmailComposerService } from '../interfaces/exchange-rate-email-composer.service.interface';
@@ -32,6 +33,7 @@ export class ExchangeRateEmailComposerServiceImpl
       AvailableTemplatesEnum.EXCHANGE_RATE,
       context,
     );
-    return new Email(recipients, subject, '', html);
+
+    return EmailFactory.create({ to: recipients, subject, html });
   }
 }

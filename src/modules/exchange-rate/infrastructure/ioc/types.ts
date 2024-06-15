@@ -1,9 +1,4 @@
 export const TYPES = {
-  domain: {
-    factories: {
-      ExchangeRateFactory: Symbol('ExchangeRateFactory'),
-    },
-  },
   applications: {
     FetchExchangeRateApplication: Symbol('FetchExchangeRateApplication'),
     SendExchangeRateToSubscribersApplication: Symbol(
