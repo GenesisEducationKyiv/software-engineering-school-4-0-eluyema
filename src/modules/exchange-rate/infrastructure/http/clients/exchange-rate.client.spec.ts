@@ -46,6 +46,7 @@ describe('ExchangeRateClientImpl', () => {
       base: 'USD',
       rates: { UAH: 28 },
     };
+
     const axiosResponse: AxiosResponse<GetExchangeRatesDto> = {
       data: result,
       status: 200,
@@ -53,6 +54,7 @@ describe('ExchangeRateClientImpl', () => {
       headers: {},
       config: { headers: {} as AxiosRequestHeaders },
     };
+
     jest.spyOn(httpService, 'get').mockReturnValue(of(axiosResponse));
     const data = await client.fetchExchangeRates();
     expect(data).toEqual(result);

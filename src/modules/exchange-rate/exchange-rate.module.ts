@@ -8,7 +8,7 @@ import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc/type
 import { FetchExchangeRateApplicationImpl } from './application/fetch-exchange-rate.application';
 import { SendExchangeRateToSubscribersApplicationImpl } from './application/send-exchange-rate-to-subscribers.application';
 import { ExchangeRateController } from './controller/exchange-rate.controller';
-import { ExchangeRateService } from './domain/services/exchange-rate.service';
+import { ExchangeRateServiceImpl } from './domain/services/exchange-rate.service';
 import { ExchangeRateClientImpl } from './infrastructure/http/clients/exchange-rate.client';
 import { TYPES } from './infrastructure/ioc/types';
 import { ExchangeRateNotificationServiceImpl } from './infrastructure/notification/exchange-rate-email.service';
@@ -29,7 +29,7 @@ const sendExchangeRateToSubscribersApp = {
 
 const exchangeRateService = {
   provide: TYPES.services.ExchangeRateService,
-  useClass: ExchangeRateService,
+  useClass: ExchangeRateServiceImpl,
 };
 
 const exchangeRateClient = {

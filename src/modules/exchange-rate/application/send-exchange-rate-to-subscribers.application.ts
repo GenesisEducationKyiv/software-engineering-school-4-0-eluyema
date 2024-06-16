@@ -4,7 +4,7 @@ import { SubscriptionService } from 'src/modules/subscription/domain/services/in
 import { TYPES as SUBSCRIPTION_TYPES } from 'src/modules/subscription/infrastructure/ioc';
 
 import { SendExchangeRateToSubscribersApplication } from './interfaces/send-exchange-rate-to-subscribers.application.interface';
-import { ExchangeRateService } from '../domain/services/exchange-rate.service';
+import { ExchangeRateService } from '../domain/services/interfaces/exchange-rate.service.interface';
 import { TYPES as EXCHANGE_RATE_TYPES } from '../infrastructure/ioc';
 import { ExchangeRateNotificationService } from '../infrastructure/notification/interfaces/exchange-rate-notification.service.interface';
 
