@@ -4,6 +4,7 @@ import { ExchangeRateServiceImpl } from './exchange-rate.service';
 import { GetExchangeRatesDto } from '../../infrastructure/http/clients/dto/get-exchange-rates.dto';
 import { ExchangeRateClient } from '../../infrastructure/http/clients/interfaces/exchange-rate.client';
 import { TYPES } from '../../infrastructure/ioc/types';
+import { ExchangeRate } from '../entities/exchange-rate.entity';
 
 describe('ExchangeRateServiceImpl', () => {
   let service: ExchangeRateServiceImpl;
@@ -52,5 +53,6 @@ describe('ExchangeRateServiceImpl', () => {
       currentTime.getTime(),
     );
     expect(exchangeRate.rate).toBeGreaterThan(0);
+    expect(exchangeRate).toBeInstanceOf(ExchangeRate);
   });
 });

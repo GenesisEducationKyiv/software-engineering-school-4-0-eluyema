@@ -1,4 +1,5 @@
 import { EmailFactory } from './email.factory';
+import { Email } from '../entities/email.entity';
 
 describe('EmailFactory', () => {
   it('should create correct email with text and subject', () => {
@@ -13,6 +14,7 @@ describe('EmailFactory', () => {
     expect(email.to).toEqual(data.to);
     expect(email.subject).toEqual(data.subject);
     expect(email.html).toBeUndefined();
+    expect(email).toBeInstanceOf(Email);
   });
 
   it('should create correct email with html and subject', () => {
@@ -27,6 +29,7 @@ describe('EmailFactory', () => {
     expect(email.to).toEqual(data.to);
     expect(email.subject).toEqual(data.subject);
     expect(email.text).toBeUndefined();
+    expect(email).toBeInstanceOf(Email);
   });
 
   it('should create correct email with several recipients', () => {
@@ -46,6 +49,7 @@ describe('EmailFactory', () => {
     expect(email.to).toEqual(data.to);
     expect(email.subject).toEqual(data.subject);
     expect(email.text).toBeUndefined();
+    expect(email).toBeInstanceOf(Email);
   });
 
   it('should throw an error with empty recipients', () => {
