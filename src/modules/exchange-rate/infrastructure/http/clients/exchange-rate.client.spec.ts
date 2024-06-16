@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AxiosRequestHeaders, AxiosResponse } from 'axios';
+import { AxiosError, AxiosRequestHeaders, AxiosResponse } from 'axios';
 import { of } from 'rxjs';
 
 import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc';
@@ -56,5 +56,20 @@ describe('ExchangeRateClientImpl', () => {
     jest.spyOn(httpService, 'get').mockReturnValue(of(axiosResponse));
     const data = await client.fetchExchangeRates();
     expect(data).toEqual(result);
+  });
+
+  it('should throw an error when request failed', () => {
+    jest.spyOn(httpService, 'get').mockImplementation(() => {
+      throw new AxiosError('Request failed', '500');
+    });
+
+    client
+      .fetchExchangeRates()
+      .then((data) => {
+        expect(data).toBeUndefined();
+      })
+      .catch((err) => {
+        expect(err.message).toEqual('Request to get currency rate failed');
+      });
   });
 });
