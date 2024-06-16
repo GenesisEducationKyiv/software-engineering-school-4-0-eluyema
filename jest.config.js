@@ -12,4 +12,5 @@ module.exports = {
   coverageDirectory: './coverage',
   testEnvironment: 'node',
   setupFilesAfterEnv: ['<rootDir>/src/test-utils/database/mocked-prisma.ts'],
+  modulePathIgnorePatterns: ['<rootDir>/test-utils/'],
 };

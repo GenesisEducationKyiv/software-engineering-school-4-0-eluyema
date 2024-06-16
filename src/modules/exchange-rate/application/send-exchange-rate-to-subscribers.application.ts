@@ -27,6 +27,10 @@ export class SendExchangeRateToSubscribersApplicationImpl
       this.subscriptionService.getSubscribers(),
     ]);
 
+    if (!subscribers.length) {
+      return;
+    }
+
     await this.exchangeRateNotificationService.sendExchangeRateNotification(
       exchangeRate,
       subscribers,
