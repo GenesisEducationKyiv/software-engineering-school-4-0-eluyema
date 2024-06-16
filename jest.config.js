@@ -11,4 +11,5 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.(t|j)s', '!src/**/*.d.ts', '!node_modules/'],
   coverageDirectory: './coverage',
   testEnvironment: 'node',
+  setupFilesAfterEnv: ['<rootDir>/src/test-utils/database/mocked-prisma.ts'],
 };

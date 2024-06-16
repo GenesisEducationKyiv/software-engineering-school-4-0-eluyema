@@ -1,37 +1,28 @@
 import { HttpService } from '@nestjs/axios';
-import { Test, TestingModule } from '@nestjs/testing';
 import { AxiosError, AxiosRequestHeaders, AxiosResponse } from 'axios';
 import { of } from 'rxjs';
 
-import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc';
 import { TestAppConfigServiceImpl } from 'src/test-utils/config/test-app-config.service';
 
 import { GetExchangeRatesDto } from './dto/get-exchange-rates.dto';
 import { ExchangeRateClientImpl } from './exchange-rate.client';
+
+jest.mock('@nestjs/axios', () => ({
+  HttpService: function () {
+    this.get = jest.fn();
+  },
+}));
 
 describe('ExchangeRateClientImpl', () => {
   let client: ExchangeRateClientImpl;
   let httpService: HttpService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        ExchangeRateClientImpl,
-        {
-          provide: HttpService,
-          useValue: {
-            get: jest.fn(),
-          },
-        },
-        {
-          provide: SHARED_CONFIG_TYPES.infrastructure.AppConfigService,
-          useClass: TestAppConfigServiceImpl,
-        },
-      ],
-    }).compile();
-
-    client = module.get<ExchangeRateClientImpl>(ExchangeRateClientImpl);
-    httpService = module.get<HttpService>(HttpService);
+    httpService = new HttpService();
+    client = new ExchangeRateClientImpl(
+      httpService,
+      new TestAppConfigServiceImpl(),
+    );
   });
 
   it('should be defined', () => {
