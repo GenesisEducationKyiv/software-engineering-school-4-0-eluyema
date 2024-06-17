@@ -39,7 +39,7 @@ export const configuration = (): AppConfig => {
     cron: {
       pattern: process.env.CRON_SCHEDULE_PATTERN,
     },
-  };
+  } as AppConfig;
 
   return defaultConfiguration;
 };

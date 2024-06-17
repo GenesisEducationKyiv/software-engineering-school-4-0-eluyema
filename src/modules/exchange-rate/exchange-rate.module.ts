@@ -2,6 +2,7 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
+import { AppConfigModule } from 'src/shared/infrastructure/config/app-config.module';
 import { AppConfigServiceImpl } from 'src/shared/infrastructure/config/app-config.service';
 import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc/types';
 
@@ -10,7 +11,7 @@ import { SendExchangeRateToSubscribersApplicationImpl } from './application/send
 import { ExchangeRateController } from './controller/exchange-rate.controller';
 import { ExchangeRateServiceImpl } from './domain/services/exchange-rate.service';
 import { ExchangeRateClientImpl } from './infrastructure/http/clients/exchange-rate.client';
-import { TYPES } from './infrastructure/ioc/types';
+import { TYPES } from './infrastructure/ioc';
 import { ExchangeRateNotificationServiceImpl } from './infrastructure/notification/exchange-rate-email.service';
 import { ExchangeRateCronServiceImpl } from './infrastructure/scheduling/exchange-rate-cron.service';
 import { ExchangeRateEmailComposerServiceImpl } from '../mailer/infrastructure/email/composers/exchange-rate-email-composer.service';
@@ -58,7 +59,13 @@ const appConfigService = {
 };
 
 @Module({
-  imports: [ConfigModule, HttpModule, MailerModule, SubscriptionModule],
+  imports: [
+    AppConfigModule,
+    ConfigModule,
+    HttpModule,
+    MailerModule,
+    SubscriptionModule,
+  ],
   controllers: [ExchangeRateController],
   providers: [
     fetchExchangeRateApp,
