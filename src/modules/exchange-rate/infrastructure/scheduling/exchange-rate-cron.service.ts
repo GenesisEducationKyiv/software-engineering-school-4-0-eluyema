@@ -11,19 +11,18 @@ import { TYPES } from '../ioc/types';
 
 @Injectable()
 export class ExchangeRateCronServiceImpl implements ExchangeRateCronService {
-  private readonly cronPattern: string;
+  private cronPattern: string;
 
   constructor(
     private schedulerRegistry: SchedulerRegistry,
     @Inject(TYPES.applications.SendExchangeRateToSubscribersApplication)
     private readonly sendExchangeRateToSubscribersApplication: SendExchangeRateToSubscribersApplication,
     @Inject(SHARED_CONFIG_TYPES.infrastructure.AppConfigService)
-    readonly appConfigService: AppConfigService,
-  ) {
-    this.cronPattern = appConfigService.cron.pattern;
-  }
+    private readonly appConfigService: AppConfigService,
+  ) {}
 
   async onModuleInit() {
+    this.cronPattern = this.appConfigService.cron.pattern;
     this.initializeCronJob();
   }
 

@@ -1,7 +1,6 @@
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 
-import { Test, TestingModule } from '@nestjs/testing';
 import * as hbs from 'handlebars';
 
 import { TemplateService } from 'src/modules/exchange-rate/infrastructure/notification/interfaces/template.service.interface';
@@ -16,11 +15,7 @@ describe('HandlebarsTemplateService', () => {
   let service: TemplateService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [HandlebarsTemplateServiceImpl],
-    }).compile();
-
-    service = module.get<TemplateService>(HandlebarsTemplateServiceImpl);
+    service = new HandlebarsTemplateServiceImpl();
   });
 
   it('should be defined', () => {

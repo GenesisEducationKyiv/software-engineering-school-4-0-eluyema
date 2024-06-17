@@ -69,7 +69,7 @@ export class TestAppConfigServiceImpl implements AppConfigService {
   }
 
   get cron(): CronConfig {
-    return this.cron;
+    return this.config.cron;
   }
 
   set cron(value: CronConfig) {

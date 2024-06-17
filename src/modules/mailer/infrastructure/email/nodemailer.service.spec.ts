@@ -1,7 +1,5 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import * as nodemailer from 'nodemailer';
 
-import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc';
 import { TestAppConfigServiceImpl } from 'src/test-utils/config/test-app-config.service';
 
 import { MailerService } from './interfaces/mailer.service.interface';
@@ -21,17 +19,7 @@ describe('NodemailerService', () => {
 
     (nodemailer.createTransport as jest.Mock).mockReturnValue(transporterMock);
 
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        NodemailerServiceImpl,
-        {
-          provide: SHARED_CONFIG_TYPES.infrastructure.AppConfigService,
-          useClass: TestAppConfigServiceImpl,
-        },
-      ],
-    }).compile();
-
-    service = module.get<MailerService>(NodemailerServiceImpl);
+    service = new NodemailerServiceImpl(new TestAppConfigServiceImpl());
   });
 
   it('should be defined', () => {

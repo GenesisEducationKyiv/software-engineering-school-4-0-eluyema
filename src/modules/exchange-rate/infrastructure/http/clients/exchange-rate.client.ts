@@ -21,9 +21,14 @@ export class ExchangeRateClientImpl implements ExchangeRateClient {
   }
 
   async fetchExchangeRates(): Promise<GetExchangeRatesDto> {
-    const response = await firstValueFrom(
-      this.httpService.get<GetExchangeRatesDto>(this.exchangeApiUrl),
-    );
-    return response.data;
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get<GetExchangeRatesDto>(this.exchangeApiUrl),
+      );
+      return response.data;
+    } catch (err) {
+      console.error(err.message);
+      throw new Error('Request to get currency rate failed');
+    }
   }
 }
