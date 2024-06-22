@@ -4,8 +4,8 @@ import { of } from 'rxjs';
 
 import { TestAppConfigServiceImpl } from 'src/test-utils/config/test-app-config.service';
 
-import { GetExchangeRatesDto } from './dto/get-exchange-rates.dto';
-import { ExchangeRateClientImpl } from './exchange-rate.client';
+import { GetExchangeRatesDto } from './dto/openexchangerates.dto';
+import { OpenexchangeratesClientImpl } from './openexchangerates.client';
 
 jest.mock('@nestjs/axios', () => ({
   HttpService: function () {
@@ -13,13 +13,13 @@ jest.mock('@nestjs/axios', () => ({
   },
 }));
 
-describe('ExchangeRateClientImpl', () => {
-  let client: ExchangeRateClientImpl;
+describe('OpenexchangeratesClientImpl', () => {
+  let client: OpenexchangeratesClientImpl;
   let httpService: HttpService;
 
   beforeEach(async () => {
     httpService = new HttpService();
-    client = new ExchangeRateClientImpl(
+    client = new OpenexchangeratesClientImpl(
       httpService,
       new TestAppConfigServiceImpl(),
     );

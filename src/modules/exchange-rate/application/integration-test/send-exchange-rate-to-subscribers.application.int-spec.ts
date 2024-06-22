@@ -12,7 +12,7 @@ import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc/type
 import { PrismaService } from 'src/shared/infrastructure/prisma/prisma.service';
 
 import { ExchangeRateServiceImpl } from '../../domain/services/exchange-rate.service';
-import { ExchangeRateClientImpl } from '../../infrastructure/http/clients/exchange-rate.client';
+import { OpenexchangeratesClientImpl } from '../../infrastructure/http/clients/openexchangerates.client';
 import { TYPES } from '../../infrastructure/ioc';
 import { ExchangeRateNotificationServiceImpl } from '../../infrastructure/notification/exchange-rate-email.service';
 import { FetchExchangeRateApplicationImpl } from '../fetch-exchange-rate.application';
@@ -30,7 +30,7 @@ const exchangeRateService = {
 
 const exchangeRateClient = {
   provide: TYPES.infrastructure.ExchangeRateClient,
-  useClass: ExchangeRateClientImpl,
+  useClass: OpenexchangeratesClientImpl,
 };
 
 const appConfigService = {

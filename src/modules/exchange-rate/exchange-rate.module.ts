@@ -9,8 +9,9 @@ import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc/type
 import { FetchExchangeRateApplicationImpl } from './application/fetch-exchange-rate.application';
 import { SendExchangeRateToSubscribersApplicationImpl } from './application/send-exchange-rate-to-subscribers.application';
 import { ExchangeRateController } from './controller/exchange-rate.controller';
-import { ExchangeRateServiceImpl } from './domain/services/exchange-rate.service';
-import { ExchangeRateClientImpl } from './infrastructure/http/clients/exchange-rate.client';
+import { BaseExchangeRateService } from './domain/services/exchange-rate.service';
+import { BankgovClientImpl } from './infrastructure/http/clients/bankgov.client';
+import { OpenexchangeratesClientImpl } from './infrastructure/http/clients/openexchangerates.client';
 import { TYPES } from './infrastructure/ioc';
 import { ExchangeRateNotificationServiceImpl } from './infrastructure/notification/exchange-rate-email.service';
 import { ExchangeRateCronServiceImpl } from './infrastructure/scheduling/exchange-rate-cron.service';
@@ -28,14 +29,14 @@ const sendExchangeRateToSubscribersApp = {
   useClass: SendExchangeRateToSubscribersApplicationImpl,
 };
 
-const exchangeRateService = {
-  provide: TYPES.services.ExchangeRateService,
-  useClass: ExchangeRateServiceImpl,
+const openexchangeratesClient = {
+  provide: TYPES.infrastructure.OpenexchangeratesClient,
+  useClass: OpenexchangeratesClientImpl,
 };
 
-const exchangeRateClient = {
-  provide: TYPES.infrastructure.ExchangeRateClient,
-  useClass: ExchangeRateClientImpl,
+const bankgovClient = {
+  provide: TYPES.infrastructure.BankgovClient,
+  useClass: BankgovClientImpl,
 };
 
 const exchangeRateNotificationService = {
@@ -58,6 +59,15 @@ const appConfigService = {
   useClass: AppConfigServiceImpl,
 };
 
+const exchangeRateService = {
+  provide: TYPES.services.ExchangeRateService,
+  useFactory: (...services: BaseExchangeRateService[]) => {
+    return BaseExchangeRateService.chainServices(services);
+  },
+  // important: order is matter!
+  inject: [openexchangeratesClient.provide, bankgovClient.provide],
+};
+
 @Module({
   imports: [
     AppConfigModule,
@@ -69,13 +79,15 @@ const appConfigService = {
   controllers: [ExchangeRateController],
   providers: [
     fetchExchangeRateApp,
-    exchangeRateService,
-    exchangeRateClient,
+
     emailComposerService,
     exchangeRateNotificationService,
     exchangeRateCronService,
     sendExchangeRateToSubscribersApp,
     appConfigService,
+    openexchangeratesClient,
+    bankgovClient,
+    exchangeRateService,
   ],
 })
 export class ExchangeRateModule {}

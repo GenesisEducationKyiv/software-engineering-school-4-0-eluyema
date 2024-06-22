@@ -1,8 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { ExchangeRateServiceImpl } from './exchange-rate.service';
-import { GetExchangeRatesDto } from '../../infrastructure/http/clients/dto/get-exchange-rates.dto';
-import { ExchangeRateClient } from '../../infrastructure/http/clients/interfaces/exchange-rate.client';
+import { ExchangeRateClient } from '../../infrastructure/http/clients/interfaces/exchange-rate-client';
 import { TYPES } from '../../infrastructure/ioc/types';
 import { ExchangeRate } from '../entities/exchange-rate.entity';
 
@@ -34,12 +33,10 @@ describe('ExchangeRateServiceImpl', () => {
   });
 
   it('should get exchange rate', async () => {
-    const exchangeRatesDto: GetExchangeRatesDto = {
-      disclaimer: '',
-      license: '',
-      timestamp: '1627840847',
+    const exchangeRatesDto: ExchangeRate = {
       base: 'USD',
-      rates: { UAH: 28 },
+      rate: 28,
+      date: new Date(),
     };
     jest
       .spyOn(exchangeRateClient, 'fetchExchangeRates')
