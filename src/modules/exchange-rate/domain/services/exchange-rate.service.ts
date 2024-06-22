@@ -35,6 +35,6 @@ export abstract class BaseExchangeRateService
     for (let i = 0; i < services.length - 1; i++) {
       services[i].setNext(services[i + 1]);
     }
-    return services[0]; // Return the first service as the entry point of the chain
+    return services[0];
   }
 }
