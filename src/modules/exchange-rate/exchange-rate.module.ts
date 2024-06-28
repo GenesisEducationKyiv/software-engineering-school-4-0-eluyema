@@ -10,7 +10,7 @@ import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc/type
 import { FetchExchangeRateApplicationImpl } from './application/fetch-exchange-rate.application';
 import { SendExchangeRateToSubscribersApplicationImpl } from './application/send-exchange-rate-to-subscribers.application';
 import { ExchangeRateController } from './controller/exchange-rate.controller';
-import { BaseExchangeRateService } from './domain/services/exchange-rate.service';
+import { ExchangeRateServiceImpl } from './domain/services/exchange-rate.service';
 import { BankgovClientImpl } from './infrastructure/http/clients/bankgov.client';
 import { LoggingExchangeRateServiceDecorator } from './infrastructure/http/clients/logging-exchange-rate.decorator';
 import { OpenexchangeratesClientImpl } from './infrastructure/http/clients/openexchangerates.client';
@@ -81,15 +81,7 @@ const privatbankClient = {
 
 const exchangeRateService = {
   provide: TYPES.services.ExchangeRateService,
-  useFactory: (...services: BaseExchangeRateService[]) => {
-    return BaseExchangeRateService.chainServices(services);
-  },
-  // important: order is matter!
-  inject: [
-    bankgovClient.provide,
-    openexchangeratesClient.provide,
-    privatbankClient.provide,
-  ],
+  useClass: ExchangeRateServiceImpl,
 };
 
 const exchangeRateNotificationService = {

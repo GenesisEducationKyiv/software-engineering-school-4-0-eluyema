@@ -4,14 +4,14 @@ import { firstValueFrom } from 'rxjs';
 
 import { ExchangeRate } from 'src/modules/exchange-rate/domain/entities/exchange-rate.entity';
 import { ExchangeRateFactory } from 'src/modules/exchange-rate/domain/factories/exchange-rate.factory';
-import { BaseExchangeRateService } from 'src/modules/exchange-rate/domain/services/exchange-rate.service';
 import { AppConfigService } from 'src/shared/infrastructure/config/interfaces/app-config.service.interface';
 import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc';
 
 import { PrivatbankDto } from './dto/privatbank.dto';
+import { ExchangeRateClient } from './interfaces/exchange-rate-client';
 
 @Injectable()
-export class PrivatbankClientImpl extends BaseExchangeRateService {
+export class PrivatbankClientImpl implements ExchangeRateClient {
   private exchangeApiUrl: string;
 
   constructor(
@@ -19,11 +19,10 @@ export class PrivatbankClientImpl extends BaseExchangeRateService {
     @Inject(SHARED_CONFIG_TYPES.infrastructure.AppConfigService)
     readonly appConfigService: AppConfigService,
   ) {
-    super();
     this.exchangeApiUrl = appConfigService.exchangeApi.privatbankUrl;
   }
 
-  protected async fetchExchangeRates(): Promise<ExchangeRate> {
+  async getCurrentExchangeRate(): Promise<ExchangeRate> {
     try {
       const exchangeRatesDto = await firstValueFrom(
         this.httpService.get<PrivatbankDto>(this.exchangeApiUrl),

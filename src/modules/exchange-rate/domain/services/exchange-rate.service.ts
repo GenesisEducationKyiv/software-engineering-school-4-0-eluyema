@@ -1,40 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
-import { ChainableExchangeRateService } from './interfaces/chainable-exchange-rate.service.interface';
+import { ChainExchangeRateServiceImpl } from './chain-exchange-rate.service';
+import { ChainExchangeRateService } from './interfaces/chain-exchange-rate.service.interface';
+import { ExchangeRateClient } from './interfaces/exchange-rate.client.interface';
+import { ExchangeRateService } from './interfaces/exchange-rate.service.interface';
+import { TYPES } from '../../infrastructure/ioc';
 import { ExchangeRate } from '../entities/exchange-rate.entity';
 
 @Injectable()
-export abstract class BaseExchangeRateService
-  implements ChainableExchangeRateService
-{
-  private nextService: ChainableExchangeRateService | null = null;
+export class ExchangeRateServiceImpl implements ExchangeRateService {
+  private chainExchangeRateService: ChainExchangeRateService;
 
-  setNext(next: ChainableExchangeRateService): ChainableExchangeRateService {
-    this.nextService = next;
-    return next;
+  constructor(
+    @Inject(TYPES.infrastructure.BankgovClient)
+    bankgovClient: ExchangeRateClient,
+    @Inject(TYPES.infrastructure.OpenexchangeratesClient)
+    openexchangeratesClient: ExchangeRateClient,
+    @Inject(TYPES.infrastructure.PrivatbankClient)
+    privatbankClient: ExchangeRateClient,
+  ) {
+    this.chainExchangeRateService = ChainExchangeRateServiceImpl.generateChain([
+      openexchangeratesClient,
+      privatbankClient,
+      bankgovClient,
+    ]);
   }
 
   async getCurrentExchangeRate(): Promise<ExchangeRate> {
     try {
-      return await this.fetchExchangeRates();
+      return await this.chainExchangeRateService.getCurrentExchangeRate();
     } catch (error) {
-      if (this.nextService) {
-        return this.nextService.getCurrentExchangeRate();
-      }
       throw new Error(
         'Failed to fetch exchange rates from all available services.',
       );
     }
-  }
-
-  protected abstract fetchExchangeRates(): Promise<ExchangeRate>;
-
-  static chainServices(
-    services: BaseExchangeRateService[],
-  ): BaseExchangeRateService {
-    for (let i = 0; i < services.length - 1; i++) {
-      services[i].setNext(services[i + 1]);
-    }
-    return services[0];
   }
 }

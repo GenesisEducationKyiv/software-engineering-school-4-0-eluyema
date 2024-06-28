@@ -1,12 +1,12 @@
 import { FetchExchangeRateApplicationImpl } from './fetch-exchange-rate.application';
 import { ExchangeRate } from '../domain/entities/exchange-rate.entity';
-import { BaseExchangeRateService } from '../domain/services/exchange-rate.service';
+import { ExchangeRateService } from '../domain/services/interfaces/exchange-rate.service.interface';
 
 describe('FetchExchangeRateApplicationImpl', () => {
   let application: FetchExchangeRateApplicationImpl;
-  let exchangeRateService: BaseExchangeRateService;
+  let exchangeRateService: ExchangeRateService;
 
-  class TestExchangeRateService extends BaseExchangeRateService {
+  class TestExchangeRateService implements ExchangeRateService {
     getCurrentExchangeRate = jest.fn();
     setNext = jest.fn();
     fetchExchangeRates = jest.fn();

@@ -4,7 +4,7 @@ import { SubscriptionService } from 'src/modules/subscription/domain/services/in
 import { TYPES as SUBSCRIPTION_TYPES } from 'src/modules/subscription/infrastructure/ioc';
 
 import { SendExchangeRateToSubscribersApplication } from './interfaces/send-exchange-rate-to-subscribers.application.interface';
-import { BaseExchangeRateService } from '../domain/services/exchange-rate.service';
+import { ExchangeRateService } from '../domain/services/interfaces/exchange-rate.service.interface';
 import { TYPES as EXCHANGE_RATE_TYPES } from '../infrastructure/ioc';
 import { ExchangeRateNotificationService } from '../infrastructure/notification/interfaces/exchange-rate-notification.service.interface';
 
@@ -14,7 +14,7 @@ export class SendExchangeRateToSubscribersApplicationImpl
 {
   constructor(
     @Inject(EXCHANGE_RATE_TYPES.services.ExchangeRateService)
-    private readonly exchangeRateService: BaseExchangeRateService,
+    private readonly exchangeRateService: ExchangeRateService,
     @Inject(SUBSCRIPTION_TYPES.services.SubscriptionService)
     private readonly subscriptionService: SubscriptionService,
     @Inject(EXCHANGE_RATE_TYPES.infrastructure.ExchangeRateNotificationService)

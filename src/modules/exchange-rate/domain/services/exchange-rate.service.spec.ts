@@ -14,9 +14,21 @@ describe('ExchangeRateServiceImpl', () => {
       providers: [
         ExchangeRateServiceImpl,
         {
-          provide: TYPES.infrastructure.ExchangeRateClient,
+          provide: TYPES.infrastructure.PrivatbankClient,
           useValue: {
-            fetchExchangeRates: jest.fn(),
+            getCurrentExchangeRate: jest.fn(),
+          },
+        },
+        {
+          provide: TYPES.infrastructure.OpenexchangeratesClient,
+          useValue: {
+            getCurrentExchangeRate: jest.fn(),
+          },
+        },
+        {
+          provide: TYPES.infrastructure.BankgovClient,
+          useValue: {
+            getCurrentExchangeRate: jest.fn(),
           },
         },
       ],
@@ -24,7 +36,7 @@ describe('ExchangeRateServiceImpl', () => {
 
     service = module.get<ExchangeRateServiceImpl>(ExchangeRateServiceImpl);
     exchangeRateClient = module.get<ExchangeRateClient>(
-      TYPES.infrastructure.ExchangeRateClient,
+      TYPES.infrastructure.OpenexchangeratesClient,
     );
   });
 
@@ -39,7 +51,7 @@ describe('ExchangeRateServiceImpl', () => {
       date: new Date(),
     };
     jest
-      .spyOn(exchangeRateClient, 'fetchExchangeRates')
+      .spyOn(exchangeRateClient, 'getCurrentExchangeRate')
       .mockImplementation(async () => exchangeRatesDto);
 
     const currentTime = new Date();

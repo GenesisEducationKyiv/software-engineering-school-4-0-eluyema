@@ -2,16 +2,16 @@ import { SubscriptionService } from 'src/modules/subscription/domain/services/in
 
 import { SendExchangeRateToSubscribersApplicationImpl } from './send-exchange-rate-to-subscribers.application';
 import { ExchangeRate } from '../domain/entities/exchange-rate.entity';
-import { BaseExchangeRateService } from '../domain/services/exchange-rate.service';
+import { ExchangeRateService } from '../domain/services/interfaces/exchange-rate.service.interface';
 import { ExchangeRateNotificationService } from '../infrastructure/notification/interfaces/exchange-rate-notification.service.interface';
 
 describe('SendExchangeRateToSubscribersApplicationImpl', () => {
   let application: SendExchangeRateToSubscribersApplicationImpl;
-  let exchangeRateService: BaseExchangeRateService;
+  let exchangeRateService: ExchangeRateService;
   let subscriptionService: SubscriptionService;
   let exchangeRateNotificationService: ExchangeRateNotificationService;
 
-  class TestExchangeRateService extends BaseExchangeRateService {
+  class TestExchangeRateService implements ExchangeRateService {
     getCurrentExchangeRate = jest.fn();
     fetchExchangeRates = jest.fn();
     setNext = jest.fn();

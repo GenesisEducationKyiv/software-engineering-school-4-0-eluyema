@@ -11,7 +11,7 @@ import { AppConfigServiceImpl } from 'src/shared/infrastructure/config/app-confi
 import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc/types';
 import { PrismaService } from 'src/shared/infrastructure/prisma/prisma.service';
 
-import { ExchangeRateServiceImpl } from '../../domain/services/exchange-rate.service';
+import { ExchangeRateServiceImpl } from '../../domain/services/chain-exchange-rate.service';
 import { OpenexchangeratesClientImpl } from '../../infrastructure/http/clients/openexchangerates.client';
 import { TYPES } from '../../infrastructure/ioc';
 import { ExchangeRateNotificationServiceImpl } from '../../infrastructure/notification/exchange-rate-email.service';
