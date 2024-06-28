@@ -12,17 +12,11 @@ export class ExchangeRateServiceImpl implements ExchangeRateService {
   private chainExchangeRateService: ChainExchangeRateService;
 
   constructor(
-    @Inject(TYPES.infrastructure.BankgovClient)
-    bankgovClient: ExchangeRateClient,
-    @Inject(TYPES.infrastructure.OpenexchangeratesClient)
-    openexchangeratesClient: ExchangeRateClient,
-    @Inject(TYPES.infrastructure.PrivatbankClient)
-    privatbankClient: ExchangeRateClient,
+    @Inject(TYPES.infrastructure.ExchangeRateClients)
+    clients: ExchangeRateClient[],
   ) {
     this.chainExchangeRateService = ChainExchangeRateServiceImpl.generateChain([
-      openexchangeratesClient,
-      privatbankClient,
-      bankgovClient,
+      ...clients,
     ]);
   }
 
