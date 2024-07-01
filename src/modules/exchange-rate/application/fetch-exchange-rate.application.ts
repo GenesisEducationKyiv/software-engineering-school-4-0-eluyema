@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { FetchExchangeRateApplication } from './interfaces/fetch-exchange-rate.application.interface';
 import { ExchangeRate } from '../domain/entities/exchange-rate.entity';
-import { BaseExchangeRateService } from '../domain/services/exchange-rate.service';
+import { ExchangeRateService } from '../domain/services/interfaces/exchange-rate.service.interface';
 import { TYPES } from '../infrastructure/ioc/types';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class FetchExchangeRateApplicationImpl
 {
   constructor(
     @Inject(TYPES.services.ExchangeRateService)
-    private readonly exchangeRateService: BaseExchangeRateService,
+    private readonly exchangeRateService: ExchangeRateService,
   ) {}
 
   async execute(): Promise<ExchangeRate> {

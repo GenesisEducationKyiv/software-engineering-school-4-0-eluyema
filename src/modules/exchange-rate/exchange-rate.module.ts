@@ -10,7 +10,8 @@ import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc/type
 import { FetchExchangeRateApplicationImpl } from './application/fetch-exchange-rate.application';
 import { SendExchangeRateToSubscribersApplicationImpl } from './application/send-exchange-rate-to-subscribers.application';
 import { ExchangeRateController } from './controller/exchange-rate.controller';
-import { BaseExchangeRateService } from './domain/services/exchange-rate.service';
+import { ExchangeRateServiceImpl } from './domain/services/exchange-rate.service';
+import { ExchangeRateClient } from './domain/services/interfaces/exchange-rate.client.interface';
 import { BankgovClientImpl } from './infrastructure/http/clients/bankgov.client';
 import { LoggingExchangeRateServiceDecorator } from './infrastructure/http/clients/logging-exchange-rate.decorator';
 import { OpenexchangeratesClientImpl } from './infrastructure/http/clients/openexchangerates.client';
@@ -37,59 +38,38 @@ const sendExchangeRateToSubscribersApp = {
   useClass: SendExchangeRateToSubscribersApplicationImpl,
 };
 
-const openexchangeratesClient = {
-  provide: TYPES.infrastructure.OpenexchangeratesClient,
+const exchangeRateClients = {
+  provide: TYPES.infrastructure.ExchangeRateClients,
   useFactory: (
     appConfigService: AppConfigService,
     httpService: HttpService,
   ) => {
-    const client = new OpenexchangeratesClientImpl(
-      httpService,
-      appConfigService,
+    const clientsMap = new Map<string, ExchangeRateClient>();
+
+    clientsMap.set(
+      'bank.gov.ua',
+      new BankgovClientImpl(httpService, appConfigService),
     );
-    return new LoggingExchangeRateServiceDecorator(
-      client,
+    clientsMap.set(
       'openexchangerates.org',
+      new OpenexchangeratesClientImpl(httpService, appConfigService),
     );
-  },
-  inject: [appConfigService.provide, HttpService],
-};
+    clientsMap.set(
+      'api.privatbank.ua',
+      new PrivatbankClientImpl(httpService, appConfigService),
+    );
 
-const bankgovClient = {
-  provide: TYPES.infrastructure.BankgovClient,
-  useFactory: (
-    appConfigService: AppConfigService,
-    httpService: HttpService,
-  ) => {
-    const client = new BankgovClientImpl(httpService, appConfigService);
-    return new LoggingExchangeRateServiceDecorator(client, 'bank.gov.ua');
-  },
-  inject: [appConfigService.provide, HttpService],
-};
-
-const privatbankClient = {
-  provide: TYPES.infrastructure.PrivatbankClient,
-  useFactory: (
-    appConfigService: AppConfigService,
-    httpService: HttpService,
-  ) => {
-    const client = new PrivatbankClientImpl(httpService, appConfigService);
-    return new LoggingExchangeRateServiceDecorator(client, 'api.privatbank.ua');
+    return [...clientsMap].map(
+      ([name, instance]) =>
+        new LoggingExchangeRateServiceDecorator(instance, name),
+    );
   },
   inject: [appConfigService.provide, HttpService],
 };
 
 const exchangeRateService = {
   provide: TYPES.services.ExchangeRateService,
-  useFactory: (...services: BaseExchangeRateService[]) => {
-    return BaseExchangeRateService.chainServices(services);
-  },
-  // important: order is matter!
-  inject: [
-    bankgovClient.provide,
-    openexchangeratesClient.provide,
-    privatbankClient.provide,
-  ],
+  useClass: ExchangeRateServiceImpl,
 };
 
 const exchangeRateNotificationService = {
@@ -123,9 +103,7 @@ const emailComposerService = {
     exchangeRateCronService,
     sendExchangeRateToSubscribersApp,
     appConfigService,
-    openexchangeratesClient,
-    bankgovClient,
-    privatbankClient,
+    exchangeRateClients,
     exchangeRateService,
   ],
 })

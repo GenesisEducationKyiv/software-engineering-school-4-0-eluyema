@@ -1,18 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 import { ExchangeRate } from 'src/modules/exchange-rate/domain/entities/exchange-rate.entity';
-import { BaseExchangeRateService } from 'src/modules/exchange-rate/domain/services/exchange-rate.service';
+import { ExchangeRateService } from 'src/modules/exchange-rate/domain/services/interfaces/exchange-rate.service.interface';
 
 @Injectable()
-export class LoggingExchangeRateServiceDecorator extends BaseExchangeRateService {
+export class LoggingExchangeRateServiceDecorator
+  implements ExchangeRateService
+{
   private readonly logger = new Logger(this.constructor.name);
 
   constructor(
-    private readonly decorated: BaseExchangeRateService,
+    private readonly decorated: ExchangeRateService,
     private readonly clientName: string,
-  ) {
-    super();
-  }
+  ) {}
 
   async getCurrentExchangeRate(): Promise<ExchangeRate> {
     this.logger.log(
