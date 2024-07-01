@@ -1,4 +1,4 @@
-export class GetExchangeRatesDto {
+export class OpenexchangeratesDto {
   disclaimer: string;
   license: string;
   timestamp: string;

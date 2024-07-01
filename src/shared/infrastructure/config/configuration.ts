@@ -7,7 +7,9 @@ export const RequiredEnvVars = [
   'DATABASE_USER',
   'DATABASE_PASSWORD',
   'DATABASE_DB',
-  'EXCHANGE_API_URL',
+  'OPENEXCHANGERATES_EXCHANGE_API_URL',
+  'BANK_GOV_EXCHANGE_API_URL',
+  'PRIVATBANK_EXCHANGE_API_URL',
   'MAIL_HOST',
   'MAIL_PORT',
   'MAIL_USER',
@@ -28,7 +30,9 @@ export const configuration = (): AppConfig => {
       url: process.env.DATABASE_URL,
     },
     exchangeApi: {
-      url: process.env.EXCHANGE_API_URL,
+      openexchangeratesUrl: process.env.OPENEXCHANGERATES_EXCHANGE_API_URL,
+      privatbankUrl: process.env.PRIVATBANK_EXCHANGE_API_URL,
+      bankgovUrl: process.env.BANK_GOV_EXCHANGE_API_URL,
     },
     mailer: {
       host: process.env.MAIL_HOST,

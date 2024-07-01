@@ -23,7 +23,9 @@ export class TestAppConfigServiceImpl implements AppConfigService {
       url: '0.0.0.0:5232',
     },
     exchangeApi: {
-      url: '0.0.0.0:3111',
+      openexchangeratesUrl: '0.0.0.0:3111',
+      privatbankUrl: '0.0.0.0:3111',
+      bankgovUrl: '0.0.0.0:3111',
     },
     server: {
       port: 3000,

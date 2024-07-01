@@ -7,8 +7,8 @@ import { AppConfigServiceImpl } from 'src/shared/infrastructure/config/app-confi
 import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc/types';
 
 import { ExchangeRate } from '../../domain/entities/exchange-rate.entity';
-import { ExchangeRateServiceImpl } from '../../domain/services/exchange-rate.service';
-import { ExchangeRateClientImpl } from '../../infrastructure/http/clients/exchange-rate.client';
+import { BankgovClientImpl } from '../../infrastructure/http/clients/bankgov.client';
+import { OpenexchangeratesClientImpl } from '../../infrastructure/http/clients/openexchangerates.client';
 import { TYPES } from '../../infrastructure/ioc';
 import { FetchExchangeRateApplicationImpl } from '../fetch-exchange-rate.application';
 
@@ -19,12 +19,12 @@ const fetchExchangeRateApp = {
 
 const exchangeRateService = {
   provide: TYPES.services.ExchangeRateService,
-  useClass: ExchangeRateServiceImpl,
+  useClass: BankgovClientImpl,
 };
 
 const exchangeRateClient = {
-  provide: TYPES.infrastructure.ExchangeRateClient,
-  useClass: ExchangeRateClientImpl,
+  provide: TYPES.infrastructure.BankgovClient,
+  useClass: OpenexchangeratesClientImpl,
 };
 
 const appConfigService = {
