@@ -1,4 +1,4 @@
-**This project use DDD architecture, node.js, nest.js, prisma, nodemailer.**
+**This project use Clean architecture, node.js, nest.js, prisma, nodemailer.**
 
 For mail template it uses handlebars templates.
 
