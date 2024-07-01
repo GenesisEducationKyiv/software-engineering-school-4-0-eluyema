@@ -6,8 +6,8 @@ import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc';
 
 import { SendEmailApplicationImpl } from './application/send-email.application';
 import { NodemailerServiceImpl } from './infrastructure/email/nodemailer.service';
-import { TYPES } from './infrastructure/ioc/types';
 import { HandlebarsTemplateServiceImpl } from './infrastructure/template/template.service';
+import { TYPES } from './ioc/types';
 
 const sendEmailApp = {
   provide: TYPES.applications.SendEmailApplication,

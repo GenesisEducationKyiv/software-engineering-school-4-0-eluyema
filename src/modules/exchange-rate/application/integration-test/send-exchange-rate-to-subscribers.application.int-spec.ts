@@ -18,8 +18,8 @@ import { BankgovClientImpl } from '../../infrastructure/http/clients/bankgov.cli
 import { LoggingExchangeRateServiceDecorator } from '../../infrastructure/http/clients/logging-exchange-rate.decorator';
 import { OpenexchangeratesClientImpl } from '../../infrastructure/http/clients/openexchangerates.client';
 import { PrivatbankClientImpl } from '../../infrastructure/http/clients/privatbank.client';
-import { TYPES } from '../../infrastructure/ioc';
 import { ExchangeRateNotificationServiceImpl } from '../../infrastructure/notification/exchange-rate-email.service';
+import { TYPES } from '../../ioc';
 import { FetchExchangeRateApplicationImpl } from '../fetch-exchange-rate.application';
 import { SendExchangeRateToSubscribersApplicationImpl } from '../send-exchange-rate-to-subscribers.application';
 

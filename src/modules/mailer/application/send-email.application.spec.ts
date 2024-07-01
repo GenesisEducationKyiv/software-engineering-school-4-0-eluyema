@@ -1,6 +1,6 @@
+import { MailerService } from './interfaces/mailer.service.interface';
 import { SendEmailApplicationImpl } from './send-email.application';
 import { EmailFactory } from '../domain/factories/email.factory';
-import { MailerService } from '../infrastructure/email/interfaces/mailer.service.interface';
 
 describe('SendEmailApplicationImpl', () => {
   let application: SendEmailApplicationImpl;

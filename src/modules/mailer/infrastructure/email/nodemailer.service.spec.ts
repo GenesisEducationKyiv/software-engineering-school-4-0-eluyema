@@ -2,8 +2,8 @@ import * as nodemailer from 'nodemailer';
 
 import { TestAppConfigServiceImpl } from 'src/test-utils/config/test-app-config.service';
 
-import { MailerService } from './interfaces/mailer.service.interface';
 import { NodemailerServiceImpl } from './nodemailer.service';
+import { MailerService } from '../../application/interfaces/mailer.service.interface';
 import { Email } from '../../domain/entities/email.entity';
 
 jest.mock('nodemailer');

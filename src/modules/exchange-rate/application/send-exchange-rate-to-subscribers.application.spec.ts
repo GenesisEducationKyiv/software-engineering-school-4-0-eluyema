@@ -1,9 +1,9 @@
 import { SubscriptionService } from 'src/modules/subscription/domain/services/interfaces/subscription.service.interface';
 
+import { ExchangeRateNotificationService } from './interfaces/exchange-rate-notification.service.interface';
 import { SendExchangeRateToSubscribersApplicationImpl } from './send-exchange-rate-to-subscribers.application';
 import { ExchangeRate } from '../domain/entities/exchange-rate.entity';
 import { ExchangeRateService } from '../domain/services/interfaces/exchange-rate.service.interface';
-import { ExchangeRateNotificationService } from '../infrastructure/notification/interfaces/exchange-rate-notification.service.interface';
 
 describe('SendExchangeRateToSubscribersApplicationImpl', () => {
   let application: SendExchangeRateToSubscribersApplicationImpl;

@@ -4,7 +4,7 @@ import * as nodemailer from 'nodemailer';
 import { AppConfigService } from 'src/shared/infrastructure/config/interfaces/app-config.service.interface';
 import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc/types';
 
-import { MailerService } from './interfaces/mailer.service.interface';
+import { MailerService } from '../../application/interfaces/mailer.service.interface';
 import { Email } from '../../domain/entities/email.entity';
 
 @Injectable()

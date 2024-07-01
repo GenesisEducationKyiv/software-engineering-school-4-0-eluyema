@@ -23,6 +23,7 @@
     "test": "jest",
     "pretest:int": "pnpm test-infrastructure:start && pnpm migrations:test",
     "test:int": "jest -i --no-cache --watch --config jest-int.json",
+    "test:arch": "jest -i --no-cache --watch --config jest-arch.json",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "prepare": "husky"

@@ -7,7 +7,7 @@ import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc';
 
 import { ExchangeRateCronService } from './interfaces/exchange-rate-cron.service.interface';
 import { SendExchangeRateToSubscribersApplication } from '../../application/interfaces/send-exchange-rate-to-subscribers.application.interface';
-import { TYPES } from '../ioc/types';
+import { TYPES } from '../../ioc/types';
 
 @Injectable()
 export class ExchangeRateCronServiceImpl implements ExchangeRateCronService {

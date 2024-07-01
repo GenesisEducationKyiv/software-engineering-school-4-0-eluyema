@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { CreateSubscriptionApplication } from './interfaces/create-subscription.application.interface';
 import { SubscriptionService } from '../domain/services/interfaces/subscription.service.interface';
-import { TYPES } from '../infrastructure/ioc/types';
+import { TYPES } from '../ioc/types';
 
 @Injectable()
 export class CreateSubscriptionApplicationImpl
