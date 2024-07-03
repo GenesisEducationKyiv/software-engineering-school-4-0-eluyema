@@ -4,8 +4,10 @@ import { filesOfProject } from 'tsarch';
 
 const skipTestFilesPattern = '^(?!.*\\.(spec|int-spec)\\.ts$).*$';
 
+const SECOND = 1000;
+
 describe('architecture', () => {
-  jest.setTimeout(60000);
+  jest.setTimeout(60 * SECOND);
 
   it('application should not depend on the controllers', async () => {
     const rule = filesOfProject()
