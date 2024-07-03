@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { ExchangeRateServiceImpl } from './exchange-rate.service';
 import { ExchangeRateClient } from '../../infrastructure/http/clients/interfaces/exchange-rate-client';
-import { TYPES } from '../../infrastructure/ioc/types';
+import { TYPES } from '../../ioc/types';
 import { ExchangeRate } from '../entities/exchange-rate.entity';
 
 describe('ExchangeRateServiceImpl', () => {

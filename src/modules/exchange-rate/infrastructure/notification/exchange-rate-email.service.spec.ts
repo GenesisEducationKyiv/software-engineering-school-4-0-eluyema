@@ -1,6 +1,6 @@
+import { MailerService } from 'src/modules/mailer/application/interfaces/mailer.service.interface';
 import { EmailFactory } from 'src/modules/mailer/domain/factories/email.factory';
 import { ExchangeRateEmailComposerService } from 'src/modules/mailer/infrastructure/email/interfaces/exchange-rate-email-composer.service.interface';
-import { MailerService } from 'src/modules/mailer/infrastructure/email/interfaces/mailer.service.interface';
 
 import { ExchangeRateNotificationServiceImpl } from './exchange-rate-email.service';
 import { ExchangeRateFactory } from '../../domain/factories/exchange-rate.factory';

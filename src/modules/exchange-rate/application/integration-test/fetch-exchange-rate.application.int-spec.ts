@@ -9,7 +9,7 @@ import { TYPES as SHARED_CONFIG_TYPES } from 'src/shared/infrastructure/ioc/type
 import { ExchangeRate } from '../../domain/entities/exchange-rate.entity';
 import { BankgovClientImpl } from '../../infrastructure/http/clients/bankgov.client';
 import { OpenexchangeratesClientImpl } from '../../infrastructure/http/clients/openexchangerates.client';
-import { TYPES } from '../../infrastructure/ioc';
+import { TYPES } from '../../ioc';
 import { FetchExchangeRateApplicationImpl } from '../fetch-exchange-rate.application';
 
 const fetchExchangeRateApp = {

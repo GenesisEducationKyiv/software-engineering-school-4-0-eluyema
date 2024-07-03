@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { SubscriptionService } from './interfaces/subscription.service.interface';
 import { SubscriptionServiceImpl } from './subscription.service';
-import { TYPES } from '../../infrastructure/ioc/types';
+import { TYPES } from '../../ioc/types';
 import { Subscription } from '../entities/subscription.entity';
 import { SubscriptionRepository } from '../repositories/subscription.repository';
 

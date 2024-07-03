@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { SubscriptionService } from 'src/modules/subscription/domain/services/interfaces/subscription.service.interface';
-import { TYPES as SUBSCRIPTION_TYPES } from 'src/modules/subscription/infrastructure/ioc';
+import { TYPES as SUBSCRIPTION_TYPES } from 'src/modules/subscription/ioc';
 
+import { ExchangeRateNotificationService } from './interfaces/exchange-rate-notification.service.interface';
 import { SendExchangeRateToSubscribersApplication } from './interfaces/send-exchange-rate-to-subscribers.application.interface';
 import { ExchangeRateService } from '../domain/services/interfaces/exchange-rate.service.interface';
-import { TYPES as EXCHANGE_RATE_TYPES } from '../infrastructure/ioc';
-import { ExchangeRateNotificationService } from '../infrastructure/notification/interfaces/exchange-rate-notification.service.interface';
+import { TYPES as EXCHANGE_RATE_TYPES } from '../ioc';
 
 @Injectable()
 export class SendExchangeRateToSubscribersApplicationImpl

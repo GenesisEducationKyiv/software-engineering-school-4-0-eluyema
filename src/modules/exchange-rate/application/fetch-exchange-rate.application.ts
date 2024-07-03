@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { FetchExchangeRateApplication } from './interfaces/fetch-exchange-rate.application.interface';
 import { ExchangeRate } from '../domain/entities/exchange-rate.entity';
 import { ExchangeRateService } from '../domain/services/interfaces/exchange-rate.service.interface';
-import { TYPES } from '../infrastructure/ioc/types';
+import { TYPES } from '../ioc/types';
 
 @Injectable()
 export class FetchExchangeRateApplicationImpl
