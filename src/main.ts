@@ -7,7 +7,7 @@ import {
 } from '@nestjs/platform-fastify';
 
 import { AppModule } from './app.module';
-import { validateEnvironmentVars } from './config/configuration';
+import { validateEnvironmentVars } from './shared/infrastructure/config/configuration';
 
 async function bootstrap() {
   validateEnvironmentVars();
