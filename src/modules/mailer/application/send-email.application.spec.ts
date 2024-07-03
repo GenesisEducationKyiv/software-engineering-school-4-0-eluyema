@@ -19,7 +19,7 @@ describe('SendEmailApplicationImpl', () => {
     expect(application).toBeDefined();
   });
 
-  it('should be defined', async () => {
+  it('should call send mail only once', async () => {
     const email = EmailFactory.create({
       to: ['email1@gmail.com', 'email2@gmail.com'],
       subject: 'Exchange rate',
