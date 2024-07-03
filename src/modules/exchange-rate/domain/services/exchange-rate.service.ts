@@ -1,12 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { ExchangeRateService } from './interfaces/exchange-rate.service.interface';
 import { ExchangeRateClient } from '../../infrastructure/http/clients/interfaces/exchange-rate.client';
 import { TYPES } from '../../infrastructure/ioc/types';
 import { ExchangeRate } from '../entities/exchange-rate.entity';
 import { ExchangeRateFactory } from '../factories/exchange-rate.factory';
 
 @Injectable()
-export class ExchangeRateService {
+export class ExchangeRateServiceImpl implements ExchangeRateService {
   constructor(
     @Inject(TYPES.infrastructure.ExchangeRateClient)
     private readonly exchangeRateClient: ExchangeRateClient,
