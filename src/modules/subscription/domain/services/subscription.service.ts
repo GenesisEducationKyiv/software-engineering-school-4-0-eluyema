@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { SubscriptionService } from './interfaces/subscription.service.interface';
-import { TYPES } from '../../infrastructure/ioc/types';
+import { TYPES } from '../../ioc/types';
 import { Subscription } from '../entities/subscription.entity';
 import { SubscriptionRepository } from '../repositories/subscription.repository';
 

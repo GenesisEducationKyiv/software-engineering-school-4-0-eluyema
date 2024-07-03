@@ -4,7 +4,7 @@ import { ChainExchangeRateServiceImpl } from './chain-exchange-rate.service';
 import { ChainExchangeRateService } from './interfaces/chain-exchange-rate.service.interface';
 import { ExchangeRateClient } from './interfaces/exchange-rate.client.interface';
 import { ExchangeRateService } from './interfaces/exchange-rate.service.interface';
-import { TYPES } from '../../infrastructure/ioc';
+import { TYPES } from '../../ioc';
 import { ExchangeRate } from '../entities/exchange-rate.entity';
 
 @Injectable()

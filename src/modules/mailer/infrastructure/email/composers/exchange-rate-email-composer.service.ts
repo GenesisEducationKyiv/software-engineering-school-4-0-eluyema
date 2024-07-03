@@ -5,7 +5,7 @@ import { TemplateService } from 'src/modules/exchange-rate/infrastructure/notifi
 import { Email } from 'src/modules/mailer/domain/entities/email.entity';
 import { AvailableTemplatesEnum } from 'src/modules/mailer/domain/entities/template.entity';
 import { EmailFactory } from 'src/modules/mailer/domain/factories/email.factory';
-import { TYPES as MAILER_TYPES } from 'src/modules/mailer/infrastructure/ioc';
+import { TYPES as MAILER_TYPES } from 'src/modules/mailer/ioc';
 
 import { ExchangeRateEmailComposerService } from '../interfaces/exchange-rate-email-composer.service.interface';
 

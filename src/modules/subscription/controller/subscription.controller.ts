@@ -3,7 +3,7 @@ import { FastifyReply } from 'fastify';
 
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { CreateSubscriptionApplication } from '../application/interfaces/create-subscription.application.interface';
-import { TYPES } from '../infrastructure/ioc/types';
+import { TYPES } from '../ioc/types';
 
 @Controller('subscribe')
 export class SubscriptionController {

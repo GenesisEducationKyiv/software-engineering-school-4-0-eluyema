@@ -16,9 +16,9 @@ import { BankgovClientImpl } from './infrastructure/http/clients/bankgov.client'
 import { LoggingExchangeRateServiceDecorator } from './infrastructure/http/clients/logging-exchange-rate.decorator';
 import { OpenexchangeratesClientImpl } from './infrastructure/http/clients/openexchangerates.client';
 import { PrivatbankClientImpl } from './infrastructure/http/clients/privatbank.client';
-import { TYPES } from './infrastructure/ioc';
 import { ExchangeRateNotificationServiceImpl } from './infrastructure/notification/exchange-rate-email.service';
 import { ExchangeRateCronServiceImpl } from './infrastructure/scheduling/exchange-rate-cron.service';
+import { TYPES } from './ioc';
 import { ExchangeRateEmailComposerServiceImpl } from '../mailer/infrastructure/email/composers/exchange-rate-email-composer.service';
 import { MailerModule } from '../mailer/mailer.module';
 import { SubscriptionModule } from '../subscription/subscription.module';

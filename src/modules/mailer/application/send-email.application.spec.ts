@@ -1,6 +1,6 @@
+import { MailerService } from './interfaces/mailer.service.interface';
 import { SendEmailApplicationImpl } from './send-email.application';
 import { EmailFactory } from '../domain/factories/email.factory';
-import { MailerService } from '../infrastructure/email/interfaces/mailer.service.interface';
 
 describe('SendEmailApplicationImpl', () => {
   let application: SendEmailApplicationImpl;
@@ -19,7 +19,7 @@ describe('SendEmailApplicationImpl', () => {
     expect(application).toBeDefined();
   });
 
-  it('should be defined', async () => {
+  it('should call send mail only once', async () => {
     const email = EmailFactory.create({
       to: ['email1@gmail.com', 'email2@gmail.com'],
       subject: 'Exchange rate',
