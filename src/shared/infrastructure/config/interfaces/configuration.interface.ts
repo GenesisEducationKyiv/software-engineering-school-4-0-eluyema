@@ -8,7 +8,9 @@ export interface DatabaseConfig {
 }
 
 export interface ExchangeApiConfig {
-  url: string;
+  openexchangeratesUrl: string;
+  privatbankUrl: string;
+  bankgovUrl: string;
 }
 
 export interface MailerConfig {

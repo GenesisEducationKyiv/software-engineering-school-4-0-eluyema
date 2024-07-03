@@ -9,7 +9,7 @@ export const TYPES = {
     ExchangeRateService: Symbol('ExchangeRateService'),
   },
   infrastructure: {
-    ExchangeRateClient: Symbol('ExchangeRateClient'),
+    ExchangeRateClients: Symbol('ExchangeRateClients'),
     ExchangeRateNotificationService: Symbol('ExchangeRateNotificationService'),
     ExchangeRateCronService: Symbol('ExchangeRateCronService'),
     ExchangeRateEmailComposerService: Symbol(

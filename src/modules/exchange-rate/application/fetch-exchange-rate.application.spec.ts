@@ -8,6 +8,8 @@ describe('FetchExchangeRateApplicationImpl', () => {
 
   class TestExchangeRateService implements ExchangeRateService {
     getCurrentExchangeRate = jest.fn();
+    setNext = jest.fn();
+    fetchExchangeRates = jest.fn();
   }
 
   beforeEach(async () => {

@@ -13,6 +13,8 @@ describe('SendExchangeRateToSubscribersApplicationImpl', () => {
 
   class TestExchangeRateService implements ExchangeRateService {
     getCurrentExchangeRate = jest.fn();
+    fetchExchangeRates = jest.fn();
+    setNext = jest.fn();
   }
 
   class TestSubscriptionService implements SubscriptionService {
