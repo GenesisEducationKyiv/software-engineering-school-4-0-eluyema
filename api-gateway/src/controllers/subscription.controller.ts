@@ -26,14 +26,6 @@ export class SubscriptionController {
     @Res() response: FastifyReply,
     @Body() createSubscriptionDto: CreateSubscriptionDto,
   ) {
-    const isSubscribeSuccess = await this.createSubscriptionApp.execute(
-      createSubscriptionDto.email,
-    );
-
-    if (!isSubscribeSuccess) {
-      response.status(409).send();
-      return;
-    }
-    return response.status(200).send();
+    await this.createSubscriptionApp.execute(createSubscriptionDto.email);
   }
 }
