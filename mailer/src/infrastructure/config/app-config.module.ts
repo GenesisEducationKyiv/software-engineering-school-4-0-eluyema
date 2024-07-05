@@ -1,6 +1,6 @@
-import { ConfigModule as NestConfigModule } from '@nestjs/config';
+import { ConfigModule as NestConfigModule } from "@nestjs/config";
 
-import { configuration } from './configuration';
+import { configuration } from "./configuration";
 
 export const AppConfigModule = NestConfigModule.forRoot({
   isGlobal: true,

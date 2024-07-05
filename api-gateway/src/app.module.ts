@@ -1,15 +1,15 @@
-import { HttpModule } from '@nestjs/axios';
-import { Module } from '@nestjs/common';
+import { HttpModule } from "@nestjs/axios";
+import { Module } from "@nestjs/common";
 
-import { CreateSubscriptionApplicationImpl } from './application/create-subscription.application';
-import { FetchExchangeRateApplicationImpl } from './application/fetch-exchange-rate.application';
-import { ExchangeRateController } from './controllers/exchange-rate.controller';
-import { SubscriptionController } from './controllers/subscription.controller';
-import { AppConfigModule } from './infrastructure/config/app-config.module';
-import { AppConfigServiceImpl } from './infrastructure/config/app-config.service';
-import { ExchangeRateServiceImpl } from './infrastructure/http/exchange-rate.service';
-import { SubscriptionServiceImpl } from './infrastructure/http/subscription.service';
-import { TYPES } from './ioc/types';
+import { CreateSubscriptionApplicationImpl } from "./application/create-subscription.application";
+import { FetchExchangeRateApplicationImpl } from "./application/fetch-exchange-rate.application";
+import { ExchangeRateController } from "./controllers/exchange-rate.controller";
+import { SubscriptionController } from "./controllers/subscription.controller";
+import { AppConfigModule } from "./infrastructure/config/app-config.module";
+import { AppConfigServiceImpl } from "./infrastructure/config/app-config.service";
+import { ExchangeRateServiceImpl } from "./infrastructure/http/exchange-rate.service";
+import { SubscriptionServiceImpl } from "./infrastructure/http/subscription.service";
+import { TYPES } from "./ioc/types";
 
 const appConfigService = {
   provide: TYPES.infrastructure.AppConfigService,

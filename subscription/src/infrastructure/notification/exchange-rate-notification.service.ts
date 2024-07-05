@@ -1,10 +1,10 @@
-import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable } from '@nestjs/common';
-import { firstValueFrom } from 'rxjs';
+import { HttpService } from "@nestjs/axios";
+import { Inject, Injectable } from "@nestjs/common";
+import { firstValueFrom } from "rxjs";
 
-import { NotificationService } from './interfaces/notification.service.interface';
-import { TYPES } from '../../ioc';
-import { AppConfigService } from '../config/interfaces/app-config.service.interface';
+import { NotificationService } from "./interfaces/notification.service.interface";
+import { TYPES } from "../../ioc";
+import { AppConfigService } from "../config/interfaces/app-config.service.interface";
 
 @Injectable()
 export class ExchangeRateNotificationService implements NotificationService {

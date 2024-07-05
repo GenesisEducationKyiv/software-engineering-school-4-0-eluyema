@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from "@nestjs/common";
 
-import { FetchExchangeRateApplication } from './interfaces/fetch-exchange-rate.application.interface';
-import { ExchangeRateService } from '../infrastructure/http/interfaces/exchange-rate.service.interface';
-import { TYPES } from '../ioc/types';
+import { FetchExchangeRateApplication } from "./interfaces/fetch-exchange-rate.application.interface";
+import { ExchangeRateService } from "../infrastructure/http/interfaces/exchange-rate.service.interface";
+import { TYPES } from "../ioc/types";
 
 @Injectable()
 export class FetchExchangeRateApplicationImpl

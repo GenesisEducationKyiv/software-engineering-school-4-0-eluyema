@@ -1,1 +1,1 @@
-export { TYPES } from './types';
+export { TYPES } from "./types";

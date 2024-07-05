@@ -1,19 +1,19 @@
 export const TYPES = {
   applications: {
-    CreateSubscriptionApplication: Symbol('CreateSubscriptionApplication'),
+    CreateSubscriptionApplication: Symbol("CreateSubscriptionApplication"),
     TriggerSendExchangeRateNotificationApplication: Symbol(
-      'TriggerSendExchangeRateNotificationApplication',
+      "TriggerSendExchangeRateNotificationApplication",
     ),
   },
   services: {
-    SubscriptionService: Symbol('SubscriptionService'),
+    SubscriptionService: Symbol("SubscriptionService"),
   },
   repositories: {
-    SubscriptionRepository: Symbol('SubscriptionRepository'),
+    SubscriptionRepository: Symbol("SubscriptionRepository"),
   },
   infrastructure: {
-    AppConfigService: Symbol('AppConfigService'),
-    NotificationService: Symbol('NotificationService'),
-    ExchangeRateCronService: Symbol('ExchangeRateCronService'),
+    AppConfigService: Symbol("AppConfigService"),
+    NotificationService: Symbol("NotificationService"),
+    ExchangeRateCronService: Symbol("ExchangeRateCronService"),
   },
 };

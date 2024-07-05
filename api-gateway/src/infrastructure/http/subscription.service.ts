@@ -1,11 +1,11 @@
-import { HttpService } from '@nestjs/axios';
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { AxiosError } from 'axios';
-import { firstValueFrom } from 'rxjs';
+import { HttpService } from "@nestjs/axios";
+import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
+import { AxiosError } from "axios";
+import { firstValueFrom } from "rxjs";
 
-import { SubscriptionService } from './interfaces/subscription.service.interface';
-import { TYPES } from '../../ioc';
-import { AppConfigService } from '../config/interfaces/app-config.service.interface';
+import { SubscriptionService } from "./interfaces/subscription.service.interface";
+import { TYPES } from "../../ioc";
+import { AppConfigService } from "../config/interfaces/app-config.service.interface";
 
 @Injectable()
 export class SubscriptionServiceImpl implements SubscriptionService {
@@ -23,7 +23,7 @@ export class SubscriptionServiceImpl implements SubscriptionService {
   async subscribe(email: string) {
     try {
       const params = new URLSearchParams();
-      params.append('email', email);
+      params.append("email", email);
 
       const response = await firstValueFrom(
         this.httpService.post<void>(
@@ -31,7 +31,7 @@ export class SubscriptionServiceImpl implements SubscriptionService {
           params,
           {
             headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
+              "Content-Type": "application/x-www-form-urlencoded",
             },
           },
         ),
@@ -40,20 +40,20 @@ export class SubscriptionServiceImpl implements SubscriptionService {
       return response.data;
     } catch (error) {
       if (!(error instanceof AxiosError)) {
-        throw new HttpException('', HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException("", HttpStatus.INTERNAL_SERVER_ERROR);
       }
 
       const httpCode = error.response ? error.response.status : 500;
 
       if (httpCode === 409) {
-        throw new HttpException('', HttpStatus.CONFLICT);
+        throw new HttpException("", HttpStatus.CONFLICT);
       }
 
       if (httpCode === 400) {
-        throw new HttpException('', HttpStatus.BAD_REQUEST);
+        throw new HttpException("", HttpStatus.BAD_REQUEST);
       }
 
-      throw new HttpException('', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException("", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

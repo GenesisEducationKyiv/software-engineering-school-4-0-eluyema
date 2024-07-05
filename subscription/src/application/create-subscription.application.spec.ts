@@ -1,7 +1,7 @@
-import { CreateSubscriptionApplicationImpl } from './create-subscription.application';
-import { SubscriptionService } from '../domain/services/interfaces/subscription.service.interface';
+import { CreateSubscriptionApplicationImpl } from "./create-subscription.application";
+import { SubscriptionService } from "../domain/services/interfaces/subscription.service.interface";
 
-describe('CreateSubscriptionApplicationImpl', () => {
+describe("CreateSubscriptionApplicationImpl", () => {
   let application: CreateSubscriptionApplicationImpl;
   let subscriptionService: SubscriptionService;
 
@@ -15,22 +15,22 @@ describe('CreateSubscriptionApplicationImpl', () => {
     application = new CreateSubscriptionApplicationImpl(subscriptionService);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(application).toBeDefined();
   });
 
-  it('should return true on success created subscription', async () => {
-    const email = 'goodemail@gmail.com';
-    jest.spyOn(subscriptionService, 'create').mockResolvedValue(true);
+  it("should return true on success created subscription", async () => {
+    const email = "goodemail@gmail.com";
+    jest.spyOn(subscriptionService, "create").mockResolvedValue(true);
 
     const result = await application.execute(email);
 
     expect(result).toEqual(true);
   });
 
-  it('should return false when creating subscription failed', async () => {
-    const email = 'bademail@gmail.com';
-    jest.spyOn(subscriptionService, 'create').mockResolvedValue(false);
+  it("should return false when creating subscription failed", async () => {
+    const email = "bademail@gmail.com";
+    jest.spyOn(subscriptionService, "create").mockResolvedValue(false);
 
     const result = await application.execute(email);
 

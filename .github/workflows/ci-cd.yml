@@ -9,17 +9,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
         with:
           version: 9.2.0
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.11.0'
-          cache: 'pnpm'
+          node-version: "20.11.0"
+          cache: "npm"
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      - name: Check prettier
-        run: pnpm format:check
-      - name: Check eslint
-        run: pnpm lint:check
+        run: npm run install-dependencies:all
+      - name: Check lint errors in microservices
+        run: npm run lint:check:all

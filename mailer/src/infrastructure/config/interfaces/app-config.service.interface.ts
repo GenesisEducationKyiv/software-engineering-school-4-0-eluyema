@@ -1,4 +1,4 @@
-import { MailerConfig, ServerConfig } from './configuration.interface';
+import { MailerConfig, ServerConfig } from "./configuration.interface";
 
 export interface AppConfigService {
   get server(): ServerConfig;

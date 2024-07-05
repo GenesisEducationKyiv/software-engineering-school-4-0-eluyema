@@ -3,8 +3,8 @@ import {
   Catch,
   ExceptionFilter,
   HttpException,
-} from '@nestjs/common';
-import { FastifyReply } from 'fastify';
+} from "@nestjs/common";
+import { FastifyReply } from "fastify";
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {

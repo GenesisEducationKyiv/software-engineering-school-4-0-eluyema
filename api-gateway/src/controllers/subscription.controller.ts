@@ -5,16 +5,16 @@ import {
   Post,
   Res,
   UseFilters,
-} from '@nestjs/common';
-import { FastifyReply } from 'fastify';
+} from "@nestjs/common";
+import { FastifyReply } from "fastify";
 
-import { CreateSubscriptionDto } from './dtos/create-subscription.dto';
-import { CreateSubscriptionApplication } from '../application/interfaces/create-subscription.application.interface';
-import { HttpExceptionFilter } from '../infrastructure/nestjs/filters/http-exception.filter';
-import { TYPES } from '../ioc/types';
+import { CreateSubscriptionDto } from "./dtos/create-subscription.dto";
+import { CreateSubscriptionApplication } from "../application/interfaces/create-subscription.application.interface";
+import { HttpExceptionFilter } from "../infrastructure/nestjs/filters/http-exception.filter";
+import { TYPES } from "../ioc/types";
 
 @UseFilters(new HttpExceptionFilter())
-@Controller('subscribe')
+@Controller("subscribe")
 export class SubscriptionController {
   constructor(
     @Inject(TYPES.applications.CreateSubscriptionApplication)

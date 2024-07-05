@@ -1,12 +1,12 @@
-import { EmailFactory } from './email.factory';
-import { Email } from '../entities/email.entity';
+import { EmailFactory } from "./email.factory";
+import { Email } from "../entities/email.entity";
 
-describe('EmailFactory', () => {
-  it('should create correct email with text and subject', () => {
+describe("EmailFactory", () => {
+  it("should create correct email with text and subject", () => {
     const data = {
-      to: ['goodemail@gmail.com'],
-      subject: 'Good news',
-      text: 'The weather is good today!',
+      to: ["goodemail@gmail.com"],
+      subject: "Good news",
+      text: "The weather is good today!",
     };
     const email = EmailFactory.create(data);
     expect(email).toBeDefined();
@@ -17,11 +17,11 @@ describe('EmailFactory', () => {
     expect(email).toBeInstanceOf(Email);
   });
 
-  it('should create correct email with html and subject', () => {
+  it("should create correct email with html and subject", () => {
     const data = {
-      to: ['goodemail@gmail.com'],
-      subject: 'Good news',
-      html: '<b>The weather is good today!</b>',
+      to: ["goodemail@gmail.com"],
+      subject: "Good news",
+      html: "<b>The weather is good today!</b>",
     };
     const email = EmailFactory.create(data);
     expect(email).toBeDefined();
@@ -32,16 +32,16 @@ describe('EmailFactory', () => {
     expect(email).toBeInstanceOf(Email);
   });
 
-  it('should create correct email with several recipients', () => {
+  it("should create correct email with several recipients", () => {
     const data = {
       to: [
-        'recipient1@gmail.com',
-        'recipient2@gmail.com',
-        'recipient3@gmail.com',
-        'recipient4@gmail.com',
+        "recipient1@gmail.com",
+        "recipient2@gmail.com",
+        "recipient3@gmail.com",
+        "recipient4@gmail.com",
       ],
-      subject: 'Good news',
-      html: '<b>The weather is good today!</b>',
+      subject: "Good news",
+      html: "<b>The weather is good today!</b>",
     };
     const email = EmailFactory.create(data);
     expect(email).toBeDefined();
@@ -52,11 +52,11 @@ describe('EmailFactory', () => {
     expect(email).toBeInstanceOf(Email);
   });
 
-  it('should throw an error with empty recipients', () => {
+  it("should throw an error with empty recipients", () => {
     const data = {
       to: [],
-      subject: 'Good news',
-      html: '<b>The weather is good today!</b>',
+      subject: "Good news",
+      html: "<b>The weather is good today!</b>",
     };
     expect(() => {
       const email = EmailFactory.create(data);
@@ -64,19 +64,19 @@ describe('EmailFactory', () => {
     }).toThrow(`Recipient array can't be empty`);
   });
 
-  it('should throw an error with uncorrect emails of recipients', () => {
+  it("should throw an error with uncorrect emails of recipients", () => {
     const data = {
       to: [
-        'recipient1@gmail.',
-        'recipient2@gmail.com',
-        'recipient3@gmail.com',
-        'recipient4@gmail.com',
+        "recipient1@gmail.",
+        "recipient2@gmail.com",
+        "recipient3@gmail.com",
+        "recipient4@gmail.com",
       ],
-      subject: 'Good news',
-      html: '<b>The weather is good today!</b>',
+      subject: "Good news",
+      html: "<b>The weather is good today!</b>",
     };
     expect(() => {
       EmailFactory.create(data);
-    }).toThrow('Invalid email addresses: recipient1@gmail.');
+    }).toThrow("Invalid email addresses: recipient1@gmail.");
   });
 });

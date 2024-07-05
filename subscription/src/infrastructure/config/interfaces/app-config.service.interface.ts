@@ -3,7 +3,7 @@ import {
   DatabaseConfig,
   MicroservicesConfig,
   ServerConfig,
-} from './configuration.interface';
+} from "./configuration.interface";
 
 export interface AppConfigService {
   get server(): ServerConfig;

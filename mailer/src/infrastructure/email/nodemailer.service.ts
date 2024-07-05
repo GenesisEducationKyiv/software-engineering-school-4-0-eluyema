@@ -1,11 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
-import * as nodemailer from 'nodemailer';
+import { Inject, Injectable } from "@nestjs/common";
+import * as nodemailer from "nodemailer";
 
-import { TYPES } from 'src/ioc';
+import { TYPES } from "src/ioc";
 
-import { MailerService } from '../../application/interfaces/mailer.service.interface';
-import { Email } from '../../domain/entities/email.entity';
-import { AppConfigService } from '../config/interfaces/app-config.service.interface';
+import { MailerService } from "../../application/interfaces/mailer.service.interface";
+import { Email } from "../../domain/entities/email.entity";
+import { AppConfigService } from "../config/interfaces/app-config.service.interface";
 
 @Injectable()
 export class NodemailerServiceImpl implements MailerService {
@@ -31,7 +31,7 @@ export class NodemailerServiceImpl implements MailerService {
   async sendEmail(email: Email): Promise<void> {
     await this.transporter.sendMail({
       from: '"Exchange Rate Service" <no-reply@exchangerateservice.com>',
-      to: email.to.join(', '),
+      to: email.to.join(", "),
       subject: email.subject,
       text: email.text,
       html: email.html,

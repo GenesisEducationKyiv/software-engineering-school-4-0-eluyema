@@ -1,11 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
-import { CronJob } from 'cron';
+import { Inject, Injectable } from "@nestjs/common";
+import { SchedulerRegistry } from "@nestjs/schedule";
+import { CronJob } from "cron";
 
-import { ExchangeRateCronService } from './interfaces/exchange-rate-cron.service.interface';
-import { TriggerSendExchangeRateNotificationApplication } from '../../application/interfaces/trigger-send-exchange-rate-notification.application.interface';
-import { TYPES } from '../../ioc/types';
-import { AppConfigService } from '../config/interfaces/app-config.service.interface';
+import { ExchangeRateCronService } from "./interfaces/exchange-rate-cron.service.interface";
+import { TriggerSendExchangeRateNotificationApplication } from "../../application/interfaces/trigger-send-exchange-rate-notification.application.interface";
+import { TYPES } from "../../ioc/types";
+import { AppConfigService } from "../config/interfaces/app-config.service.interface";
 
 @Injectable()
 export class ExchangeRateCronServiceImpl implements ExchangeRateCronService {
@@ -34,7 +34,7 @@ export class ExchangeRateCronServiceImpl implements ExchangeRateCronService {
     };
 
     const job = new CronJob(this.cronPattern, callback);
-    this.schedulerRegistry.addCronJob('exchangeRateUpdate', job);
+    this.schedulerRegistry.addCronJob("exchangeRateUpdate", job);
     job.start();
   }
 

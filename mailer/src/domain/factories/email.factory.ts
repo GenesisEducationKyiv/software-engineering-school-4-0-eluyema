@@ -1,4 +1,4 @@
-import { Email } from '../entities/email.entity';
+import { Email } from "../entities/email.entity";
 
 export class EmailFactory {
   static create(data: {

@@ -1,10 +1,10 @@
-import { AppConfig } from './interfaces/configuration.interface';
+import { AppConfig } from "./interfaces/configuration.interface";
 
 export const RequiredEnvVars = [
-  'SERVER_PORT',
-  'SERVER_HOST',
-  'MICROSERVICE_SUBSCRIPTION_URL',
-  'MICROSERVICE_EXCHANGE_RATE_URL',
+  "SERVER_PORT",
+  "SERVER_HOST",
+  "MICROSERVICE_SUBSCRIPTION_URL",
+  "MICROSERVICE_EXCHANGE_RATE_URL",
 ];
 
 const DEFAULT_SERVER_PORT = 3000;
@@ -27,7 +27,7 @@ export const configuration = (): AppConfig => {
 
 export const validateEnvironmentVars = (): void => {
   if (process.env.NODE_ENV === undefined) {
-    process.env.NODE_ENV = 'development';
+    process.env.NODE_ENV = "development";
   }
 
   RequiredEnvVars.forEach((v) => {

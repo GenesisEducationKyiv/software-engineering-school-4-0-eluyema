@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from "@nestjs/common";
 
-import { CreateSubscriptionApplication } from './interfaces/create-subscription.application.interface';
-import { SubscriptionService } from '../domain/services/interfaces/subscription.service.interface';
-import { TYPES } from '../ioc/types';
+import { CreateSubscriptionApplication } from "./interfaces/create-subscription.application.interface";
+import { SubscriptionService } from "../domain/services/interfaces/subscription.service.interface";
+import { TYPES } from "../ioc/types";
 
 @Injectable()
 export class CreateSubscriptionApplicationImpl

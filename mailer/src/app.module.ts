@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Module } from "@nestjs/common";
 
-import { NodemailerServiceImpl } from 'src/infrastructure/email/nodemailer.service';
-import { TYPES } from 'src/ioc/types';
+import { NodemailerServiceImpl } from "src/infrastructure/email/nodemailer.service";
+import { TYPES } from "src/ioc/types";
 
-import { SendEmailApplicationImpl } from './application/send-email.application';
-import { MailerController } from './controllers/mailer.controller';
-import { AppConfigModule } from './infrastructure/config/app-config.module';
-import { AppConfigServiceImpl } from './infrastructure/config/app-config.service';
+import { SendEmailApplicationImpl } from "./application/send-email.application";
+import { MailerController } from "./controllers/mailer.controller";
+import { AppConfigModule } from "./infrastructure/config/app-config.module";
+import { AppConfigServiceImpl } from "./infrastructure/config/app-config.service";
 
 const sendEmailApp = {
   provide: TYPES.applications.SendEmailApplication,

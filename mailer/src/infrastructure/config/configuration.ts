@@ -1,12 +1,12 @@
-import { AppConfig } from './interfaces/configuration.interface';
+import { AppConfig } from "./interfaces/configuration.interface";
 
 export const RequiredEnvVars = [
-  'SERVER_PORT',
-  'SERVER_HOST',
-  'MAIL_HOST',
-  'MAIL_PORT',
-  'MAIL_USER',
-  'MAIL_PASSWORD',
+  "SERVER_PORT",
+  "SERVER_HOST",
+  "MAIL_HOST",
+  "MAIL_PORT",
+  "MAIL_USER",
+  "MAIL_PASSWORD",
 ];
 
 const DEFAULT_SERVER_PORT = 3000;
@@ -31,7 +31,7 @@ export const configuration = (): AppConfig => {
 
 export const validateEnvironmentVars = (): void => {
   if (process.env.NODE_ENV === undefined) {
-    process.env.NODE_ENV = 'development';
+    process.env.NODE_ENV = "development";
   }
 
   RequiredEnvVars.forEach((v) => {

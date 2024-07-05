@@ -1,9 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from "@nestjs/common";
 
-import { SubscriptionService } from './interfaces/subscription.service.interface';
-import { TYPES } from '../../ioc/types';
-import { Subscription } from '../entities/subscription.entity';
-import { SubscriptionRepository } from '../repositories/subscription.repository';
+import { SubscriptionService } from "./interfaces/subscription.service.interface";
+import { TYPES } from "../../ioc/types";
+import { Subscription } from "../entities/subscription.entity";
+import { SubscriptionRepository } from "../repositories/subscription.repository";
 
 @Injectable()
 export class SubscriptionServiceImpl implements SubscriptionService {

@@ -1,11 +1,11 @@
-import { Body, Controller, Inject, Post, Res } from '@nestjs/common';
-import { FastifyReply } from 'fastify';
+import { Body, Controller, Inject, Post, Res } from "@nestjs/common";
+import { FastifyReply } from "fastify";
 
-import { CreateSubscriptionDto } from './dto/create-subscription.dto';
-import { CreateSubscriptionApplication } from '../application/interfaces/create-subscription.application.interface';
-import { TYPES } from '../ioc/types';
+import { CreateSubscriptionDto } from "./dto/create-subscription.dto";
+import { CreateSubscriptionApplication } from "../application/interfaces/create-subscription.application.interface";
+import { TYPES } from "../ioc/types";
 
-@Controller('subscribe')
+@Controller("subscribe")
 export class SubscriptionController {
   constructor(
     @Inject(TYPES.applications.CreateSubscriptionApplication)

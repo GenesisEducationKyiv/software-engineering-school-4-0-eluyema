@@ -1,0 +1,24 @@
+{
+  "name": "currency-exchange-subscription",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "install-dependencies:api-gateway": "cd ./api-gateway && npm install --package-lock-only --only=dev && cd ..",
+    "install-dependencies:exchange-rate": "cd ./exchange-rate && npm install --package-lock-only --only=dev && cd ..",
+    "install-dependencies:mailer": "cd ./mailer && npm install --package-lock-only --only=dev && cd ..",
+    "install-dependencies:subscription": "cd ./subscription && npm install --package-lock-only --only=dev && cd ..",
+    "install-dependencies:all": "npm run install-dependencies:api-gateway && npm run install-dependencies:exchange-rate && npm run install-dependencies:mailer && npm run install-dependencies:subscription",
+    "api-gateway:lint:check": "cd ./api-gateway && npm run format:check && npm run lint:check && cd ..",
+    "exchange-rate:lint:check": "cd ./exchange-rate && npm run format:check && npm run lint:check && cd ..",
+    "mailer:lint:check": "cd ./mailer && npm run format:check && npm run lint:check && cd ..",
+    "subscription:lint:check": "cd ./subscription && npm run format:check && npm run lint:check && cd ..",
+    "lint:check:all": "npm run api-gateway:lint:check && npm run exchange-rate:lint:check && npm run mailer:lint:check && subscription:lint:check",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.0.11"
+  }
+}

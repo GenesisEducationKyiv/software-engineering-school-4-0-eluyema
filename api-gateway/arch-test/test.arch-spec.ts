@@ -1,76 +1,76 @@
-import 'tsarch/dist/jest';
+import "tsarch/dist/jest";
 
-import { filesOfProject } from 'tsarch';
+import { filesOfProject } from "tsarch";
 
-const skipTestFilesPattern = '^(?!.*\\.(spec|int-spec)\\.ts$).*$';
+const skipTestFilesPattern = "^(?!.*\\.(spec|int-spec)\\.ts$).*$";
 
 const SECOND = 1000;
 
-describe('architecture', () => {
+describe("architecture", () => {
   jest.setTimeout(60 * SECOND);
 
-  it('application should not depend on the controllers', async () => {
+  it("application should not depend on the controllers", async () => {
     const rule = filesOfProject()
-      .inFolder('application')
+      .inFolder("application")
       .matchingPattern(skipTestFilesPattern)
       .shouldNot()
       .dependOnFiles()
-      .inFolder('controller');
+      .inFolder("controller");
 
     await expect(rule).toPassAsync();
   });
 
-  it('application should not depend on the infrastructure', async () => {
+  it("application should not depend on the infrastructure", async () => {
     const rule = filesOfProject()
-      .inFolder('application')
+      .inFolder("application")
       .matchingPattern(skipTestFilesPattern)
       .shouldNot()
       .dependOnFiles()
-      .inFolder('infrastructure');
+      .inFolder("infrastructure");
 
     await expect(rule).toPassAsync();
   });
 
-  it('controllers should not depend on the infrastructure', async () => {
+  it("controllers should not depend on the infrastructure", async () => {
     const rule = filesOfProject()
-      .inFolder('controller')
+      .inFolder("controller")
       .matchingPattern(skipTestFilesPattern)
       .shouldNot()
       .dependOnFiles()
-      .inFolder('infrastructure');
+      .inFolder("infrastructure");
 
     await expect(rule).toPassAsync();
   });
 
-  it('domain should not depend on the infrastructure', async () => {
+  it("domain should not depend on the infrastructure", async () => {
     const rule = filesOfProject()
-      .inFolder('domain')
+      .inFolder("domain")
       .matchingPattern(skipTestFilesPattern)
       .shouldNot()
       .dependOnFiles()
-      .inFolder('infrastructure');
+      .inFolder("infrastructure");
 
     await expect(rule).toPassAsync();
   });
 
-  it('domain should not depend on the controller', async () => {
+  it("domain should not depend on the controller", async () => {
     const rule = filesOfProject()
-      .inFolder('domain')
+      .inFolder("domain")
       .matchingPattern(skipTestFilesPattern)
       .shouldNot()
       .dependOnFiles()
-      .inFolder('controller');
+      .inFolder("controller");
 
     await expect(rule).toPassAsync();
   });
 
-  it('domain should not depend on the application', async () => {
+  it("domain should not depend on the application", async () => {
     const rule = filesOfProject()
-      .inFolder('domain')
+      .inFolder("domain")
       .matchingPattern(skipTestFilesPattern)
       .shouldNot()
       .dependOnFiles()
-      .inFolder('application');
+      .inFolder("application");
 
     await expect(rule).toPassAsync();
   });
