@@ -1,8 +1,8 @@
 import { SchedulerRegistry } from "@nestjs/schedule";
-import { TestAppConfigServiceImpl } from "src/test-utils/config/test-app-config.service";
 
 import { ExchangeRateCronServiceImpl } from "./exchange-rate-cron.service";
-import { SendExchangeRateToSubscribersApplication } from "../../application/interfaces/send-exchange-rate-to-subscribers.application.interface";
+import { TriggerSendExchangeRateNotificationApplication } from "../../application/interfaces/trigger-send-exchange-rate-notification.application.interface";
+import { TestAppConfigServiceImpl } from "../../test-utils/config/test-app-config.service";
 
 jest.mock("@nestjs/schedule", () => ({
   SchedulerRegistry: function () {
@@ -21,24 +21,24 @@ jest.mock("cron", () => ({
 describe("ExchangeRateCronServiceImpl", () => {
   let service: ExchangeRateCronServiceImpl;
   let schedulerRegistry: SchedulerRegistry;
-  let sendExchangeRateToSubscribersApplication: SendExchangeRateToSubscribersApplication;
+  let triggerSendExchangeRateNotificationApplication: TriggerSendExchangeRateNotificationApplication;
   let appConfigService: TestAppConfigServiceImpl;
 
-  class TestSendExchangeRateToSubscribersApplication
-    implements SendExchangeRateToSubscribersApplication
+  class TestTriggerSendExchangeRateNotificationApplication
+    implements TriggerSendExchangeRateNotificationApplication
   {
     execute = jest.fn();
   }
 
   beforeEach(async () => {
     schedulerRegistry = new SchedulerRegistry();
-    sendExchangeRateToSubscribersApplication =
-      new TestSendExchangeRateToSubscribersApplication();
+    triggerSendExchangeRateNotificationApplication =
+      new TestTriggerSendExchangeRateNotificationApplication();
 
     appConfigService = new TestAppConfigServiceImpl();
     service = new ExchangeRateCronServiceImpl(
       schedulerRegistry,
-      sendExchangeRateToSubscribersApplication,
+      triggerSendExchangeRateNotificationApplication,
       appConfigService,
     );
   });
@@ -50,7 +50,7 @@ describe("ExchangeRateCronServiceImpl", () => {
   it("should send exchange rate throw configured time", () => {
     service.onModuleInit();
     expect(
-      sendExchangeRateToSubscribersApplication.execute,
+      triggerSendExchangeRateNotificationApplication.execute,
     ).toHaveBeenCalledTimes(1);
   });
 });
