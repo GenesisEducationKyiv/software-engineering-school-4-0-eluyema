@@ -1,7 +1,7 @@
 import { Body, Controller, Inject, Post, Res } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
-import { CreateSubscriptionDto } from './dto/create-subscription.dto';
+import { CreateSubscriptionDto } from './dtos/create-subscription.dto';
 import { CreateSubscriptionApplication } from '../application/interfaces/create-subscription.application.interface';
 import { TYPES } from '../ioc/types';
 
@@ -17,11 +17,9 @@ export class SubscriptionController {
     @Res() response: FastifyReply,
     @Body() createSubscriptionDto: CreateSubscriptionDto,
   ) {
-    console.log(1);
     const isSubscribeSuccess = await this.createSubscriptionApp.execute(
       createSubscriptionDto.email,
     );
-    console.log(2);
 
     if (!isSubscribeSuccess) {
       response.status(409).send();
