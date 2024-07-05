@@ -1,6 +1,9 @@
+import { HttpModule, HttpService } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { CreateSubscriptionApplicationImpl } from './application/create-subscription.application';
+import { TriggerSendExchangeRateNotificationApplicationImpl } from './application/trigger-send-exchange-rate-notification.interface';
 import { SubscriptionController } from './controller/subscription.controller';
 import { SubscriptionServiceImpl } from './domain/services/subscription.service';
 import { AppConfigModule } from './infrastructure/config/app-config.module';
@@ -41,10 +44,21 @@ const exchangeRateCronService = {
   useClass: ExchangeRateCronServiceImpl,
 };
 
+const triggerSendExchangeRateNotificationApp = {
+  provide: TYPES.applications.TriggerSendExchangeRateNotificationApplication,
+  useClass: TriggerSendExchangeRateNotificationApplicationImpl,
+};
+
 @Module({
-  imports: [PrismaModule, AppConfigModule],
+  imports: [
+    PrismaModule,
+    AppConfigModule,
+    HttpModule,
+    ScheduleModule.forRoot(),
+  ],
   controllers: [SubscriptionController],
   providers: [
+    triggerSendExchangeRateNotificationApp,
     createSubscriptionApp,
     subscriptionService,
     subscriptionRepository,

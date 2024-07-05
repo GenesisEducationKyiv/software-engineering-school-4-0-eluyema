@@ -1,10 +1,9 @@
 import { PrismaClient, Subscription } from '@prisma/client';
 import { DeepMockProxy } from 'jest-mock-extended';
 
-import { PrismaService } from 'srcdf/shared/infrastructure/prisma/prisma.service';
-import { prismaMock } from 'srcdf/test-utils/database/mocked-prisma';
-
 import { PrismaSubscriptionRepositoryImpl } from './prisma-subscription.repository';
+import { PrismaService } from '../../infrastructure/prisma/prisma.service';
+import { prismaMock } from '../../test-utils/database/mocked-prisma';
 
 describe('PrismaSubscriptionRepositoryImpl', () => {
   let repository: PrismaSubscriptionRepositoryImpl;
