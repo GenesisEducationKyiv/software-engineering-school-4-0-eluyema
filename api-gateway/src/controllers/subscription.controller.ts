@@ -1,10 +1,19 @@
-import { Body, Controller, Inject, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Inject,
+  Post,
+  Res,
+  UseFilters,
+} from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
 import { CreateSubscriptionDto } from './dtos/create-subscription.dto';
 import { CreateSubscriptionApplication } from '../application/interfaces/create-subscription.application.interface';
+import { HttpExceptionFilter } from '../infrastructure/nestjs/filters/http-exception.filter';
 import { TYPES } from '../ioc/types';
 
+@UseFilters(new HttpExceptionFilter())
 @Controller('subscribe')
 export class SubscriptionController {
   constructor(
