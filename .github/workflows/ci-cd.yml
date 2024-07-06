@@ -11,12 +11,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           version: 9.2.0
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20.11.0"
           cache: "npm"
+
       - name: Install dependencies
         run: npm run install-dependencies:all
+
       - name: Check lint errors in microservices
         run: npm run lint:check:all
