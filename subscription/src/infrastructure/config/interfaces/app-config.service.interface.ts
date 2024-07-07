@@ -1,6 +1,7 @@
 import {
   CronConfig,
   DatabaseConfig,
+  MessageBrokersConfig,
   MicroservicesConfig,
   ServerConfig,
 } from "./configuration.interface";
@@ -13,4 +14,6 @@ export interface AppConfigService {
   get cron(): CronConfig;
 
   get microservicesApi(): MicroservicesConfig;
+
+  get messageBrokers(): MessageBrokersConfig;
 }

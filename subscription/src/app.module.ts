@@ -1,3 +1,5 @@
+import { randomUUID } from "crypto";
+
 import { Module } from "@nestjs/common";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 import { ScheduleModule } from "@nestjs/schedule";
@@ -8,6 +10,7 @@ import { SubscriptionController } from "./controller/subscription.controller";
 import { SubscriptionServiceImpl } from "./domain/services/subscription.service";
 import { AppConfigModule } from "./infrastructure/config/app-config.module";
 import { AppConfigServiceImpl } from "./infrastructure/config/app-config.service";
+import { AppConfigService } from "./infrastructure/config/interfaces/app-config.service.interface";
 import { KafkaExchangeRateNotificationService } from "./infrastructure/notification/kafka-exchange-rate-notification.service";
 import { PrismaModule } from "./infrastructure/prisma/prisma.module";
 import { PrismaSubscriptionRepositoryImpl } from "./infrastructure/repositories/prisma-subscription.repository";
@@ -52,23 +55,32 @@ const triggerSendExchangeRateNotificationApp = {
 @Module({
   imports: [
     PrismaModule,
-    ClientsModule.register([
-      {
-        name: "exchange-rate-microservice",
-        transport: Transport.KAFKA,
-        options: {
-          client: {
-            clientId: "client-exchange-rate",
-            brokers: ["kafka:9093"],
-          },
-          consumer: {
-            groupId: "exchange-rate-consumer",
-          },
-        },
-      },
-    ]),
     AppConfigModule,
     ScheduleModule.forRoot(),
+    ClientsModule.registerAsync([
+      {
+        name: TYPES.brokers.ExchangeRate,
+        useFactory: (appConfigService: AppConfigService) => {
+          const brokerHost = appConfigService.messageBrokers.exchangeRate.host;
+          const brokerGroupId =
+            appConfigService.messageBrokers.exchangeRate.groupId;
+          return {
+            transport: Transport.KAFKA,
+            options: {
+              client: {
+                clientId: "client-exchange-rate-" + randomUUID(),
+                brokers: [brokerHost],
+              },
+              consumer: {
+                groupId: brokerGroupId,
+              },
+            },
+          };
+        },
+        extraProviders: [appConfigService],
+        inject: [appConfigService.provide],
+      },
+    ]),
   ],
   controllers: [SubscriptionController],
   providers: [

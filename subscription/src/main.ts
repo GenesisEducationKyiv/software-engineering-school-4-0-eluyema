@@ -17,23 +17,28 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter({ logger: true }),
   );
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.KAFKA,
-    options: {
-      client: {
-        brokers: ["kafka:9093"],
-      },
-      consumer: {
-        groupId: "subscription-consumer",
-      },
-    },
-  });
+
   app.setGlobalPrefix("/api");
   app.useGlobalPipes(new ValidationPipe());
   const configService = app.get(ConfigService);
 
   const port = configService.get("server.port");
   const host = configService.get("server.host");
+
+  const brokerHost = configService.get("messageBrokers.current.host");
+  const brokerGroupId = configService.get("messageBrokers.current.groupId");
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        brokers: [brokerHost],
+      },
+      consumer: {
+        groupId: brokerGroupId,
+      },
+    },
+  });
 
   await app.startAllMicroservices();
   await app.listen(port, host);

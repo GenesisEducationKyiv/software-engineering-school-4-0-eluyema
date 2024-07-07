@@ -6,6 +6,7 @@ import {
   AppConfig,
   CronConfig,
   DatabaseConfig,
+  MessageBrokersConfig,
   MicroservicesConfig,
   ServerConfig,
 } from "./interfaces/configuration.interface";
@@ -28,5 +29,11 @@ export class AppConfigServiceImpl implements AppConfigService {
 
   get microservicesApi(): MicroservicesConfig {
     return this.configService.get<CronConfig>("microservices", { infer: true });
+  }
+
+  get messageBrokers(): MessageBrokersConfig {
+    return this.configService.get<MessageBrokersConfig>("messageBrokers", {
+      infer: true,
+    });
   }
 }
