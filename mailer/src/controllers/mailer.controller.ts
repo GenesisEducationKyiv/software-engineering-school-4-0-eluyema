@@ -1,19 +1,20 @@
-import { Body, Controller, Inject, Post } from "@nestjs/common";
+import { Controller, Inject, ValidationPipe } from "@nestjs/common";
+import { EventPattern, Payload } from "@nestjs/microservices";
 
 import { SendEmailApplication } from "src/application/interfaces/send-email.application.interface";
 import { TYPES } from "src/ioc";
 
 import { SendEmailsDto } from "./dtos/send-emails.dto";
 
-@Controller("mailer")
+@Controller()
 export class MailerController {
   constructor(
     @Inject(TYPES.applications.SendEmailApplication)
     private readonly sendEmailApp: SendEmailApplication,
   ) {}
 
-  @Post("/send-emails")
-  async sendEmails(@Body() dto: SendEmailsDto): Promise<void> {
-    return await this.sendEmailApp.execute(dto);
+  @EventPattern("send-emails")
+  async count(@Payload(ValidationPipe) value: SendEmailsDto) {
+    await this.sendEmailApp.execute(value);
   }
 }

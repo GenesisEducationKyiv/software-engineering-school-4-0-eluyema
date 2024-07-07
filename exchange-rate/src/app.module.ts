@@ -1,6 +1,7 @@
 import { HttpModule, HttpService } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { ClientsModule, Transport } from "@nestjs/microservices";
 
 import { FetchExchangeRateApplicationImpl } from "./application/fetch-exchange-rate.application";
 import { SendExchangeRateToSubscribersApplicationImpl } from "./application/send-exchange-rate-to-subscribers.application";
@@ -13,10 +14,10 @@ import { AppConfigServiceImpl } from "./infrastructure/config/app-config.service
 import { AppConfigService } from "./infrastructure/config/interfaces/app-config.service.interface";
 import { BankgovClientImpl } from "./infrastructure/http/clients/bankgov.client";
 import { LoggingExchangeRateServiceDecorator } from "./infrastructure/http/clients/logging-exchange-rate.decorator";
-import { MailerServiceImpl } from "./infrastructure/http/clients/mailer.service";
 import { OpenexchangeratesClientImpl } from "./infrastructure/http/clients/openexchangerates.client";
 import { PrivatbankClientImpl } from "./infrastructure/http/clients/privatbank.client";
 import { ExchangeRateNotificationServiceImpl } from "./infrastructure/notification/exchange-rate-email.service";
+import { KafkaMailerServiceImpl } from "./infrastructure/notification/kafka-mailer.service";
 import { HandlebarsTemplateServiceImpl } from "./infrastructure/template/template.service";
 import { TYPES } from "./ioc";
 
@@ -81,7 +82,7 @@ const emailComposerService = {
 
 const mailerService = {
   provide: TYPES.services.EmailService,
-  useClass: MailerServiceImpl,
+  useClass: KafkaMailerServiceImpl,
 };
 
 const templateService = {
@@ -90,7 +91,26 @@ const templateService = {
 };
 
 @Module({
-  imports: [AppConfigModule, ConfigModule, HttpModule],
+  imports: [
+    AppConfigModule,
+    ClientsModule.register([
+      {
+        name: "mailer-microservice",
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: "client-mailer",
+            brokers: ["kafka:9093"],
+          },
+          consumer: {
+            groupId: "mailer-consumer",
+          },
+        },
+      },
+    ]),
+    ConfigModule,
+    HttpModule,
+  ],
   controllers: [ExchangeRateController],
   providers: [
     fetchExchangeRateApp,
