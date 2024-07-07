@@ -4,6 +4,7 @@ import { ConfigService } from "@nestjs/config";
 import { AppConfigService } from "./interfaces/app-config.service.interface";
 import {
   AppConfig,
+  BrokerConfig,
   MailerConfig,
   ServerConfig,
 } from "./interfaces/configuration.interface";
@@ -18,5 +19,9 @@ export class AppConfigServiceImpl implements AppConfigService {
 
   get mailer(): MailerConfig {
     return this.configService.get<MailerConfig>("mailer", { infer: true });
+  }
+
+  get broker(): BrokerConfig {
+    return this.configService.get<BrokerConfig>("broker", { infer: true });
   }
 }

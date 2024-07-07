@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { AppConfigService } from "../../infrastructure/config/interfaces/app-config.service.interface";
 import {
   AppConfig,
+  BrokerConfig,
   MailerConfig,
   ServerConfig,
 } from "../../infrastructure/config/interfaces/configuration.interface";
@@ -19,6 +20,10 @@ export class TestAppConfigServiceImpl implements AppConfigService {
     server: {
       port: 3000,
       host: "0.0.0.0",
+    },
+    broker: {
+      host: "0.0.0.0",
+      groupId: "id",
     },
   };
 
@@ -38,5 +43,13 @@ export class TestAppConfigServiceImpl implements AppConfigService {
 
   set mailer(value: MailerConfig) {
     this.config.mailer = value;
+  }
+
+  get brokers(): BrokerConfig {
+    return this.config.broker;
+  }
+
+  set broker(value: BrokerConfig) {
+    this.config.broker = value;
   }
 }

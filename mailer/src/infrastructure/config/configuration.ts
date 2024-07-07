@@ -7,6 +7,8 @@ export const RequiredEnvVars = [
   "MAIL_PORT",
   "MAIL_USER",
   "MAIL_PASSWORD",
+  "BROKER_HOST",
+  "BROKER_GROUP_ID",
 ];
 
 const DEFAULT_SERVER_PORT = 3000;
@@ -23,6 +25,10 @@ export const configuration = (): AppConfig => {
       port: Number(process.env.MAIL_PORT),
       user: process.env.MAIL_USER,
       password: process.env.MAIL_PASSWORD,
+    },
+    broker: {
+      host: process.env.BROKER_HOST,
+      groupId: process.env.BROKER_GROUP_ID,
     },
   } as AppConfig;
 
