@@ -1,6 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ClientKafka } from "@nestjs/microservices";
 
+import { EventFactory } from "./event.factory";
 import { MailerService } from "./interfaces/mailer.service.interface";
 import { Email } from "../../domain/entities/email.entity";
 
@@ -16,6 +17,9 @@ export class KafkaMailerServiceImpl implements MailerService {
   }
 
   async sendEmail(email: Email) {
-    await this.serverClient.emit("send-emails", JSON.stringify(email));
+    await this.serverClient.emit(
+      "send-emails",
+      JSON.stringify(EventFactory.createEvent("send-emails", email)),
+    );
   }
 }

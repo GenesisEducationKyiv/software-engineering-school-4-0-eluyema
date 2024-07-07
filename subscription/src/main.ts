@@ -2,6 +2,7 @@ import "dotenv/config";
 import { Logger, ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
+import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -16,6 +17,17 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter({ logger: true }),
   );
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        brokers: ["kafka:9093"],
+      },
+      consumer: {
+        groupId: "subscription-consumer",
+      },
+    },
+  });
   app.setGlobalPrefix("/api");
   app.useGlobalPipes(new ValidationPipe());
   const configService = app.get(ConfigService);
@@ -23,6 +35,7 @@ async function bootstrap() {
   const port = configService.get("server.port");
   const host = configService.get("server.host");
 
+  await app.startAllMicroservices();
   await app.listen(port, host);
   Logger.log(`Appplication started on port: ${port}`);
 }

@@ -36,6 +36,6 @@ async function bootstrap() {
 
   await app.startAllMicroservices();
   await app.listen(port, host);
-  Logger.log(`Appplication(exchange) started on port: ${port}`);
+  Logger.log(`Appplication started on port: ${port}`);
 }
 bootstrap();

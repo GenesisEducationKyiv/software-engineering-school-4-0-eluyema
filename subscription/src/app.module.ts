@@ -1,5 +1,5 @@
-import { HttpModule } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
+import { ClientsModule, Transport } from "@nestjs/microservices";
 import { ScheduleModule } from "@nestjs/schedule";
 
 import { CreateSubscriptionApplicationImpl } from "./application/create-subscription.application";
@@ -8,7 +8,7 @@ import { SubscriptionController } from "./controller/subscription.controller";
 import { SubscriptionServiceImpl } from "./domain/services/subscription.service";
 import { AppConfigModule } from "./infrastructure/config/app-config.module";
 import { AppConfigServiceImpl } from "./infrastructure/config/app-config.service";
-import { ExchangeRateNotificationService } from "./infrastructure/notification/exchange-rate-notification.service";
+import { KafkaExchangeRateNotificationService } from "./infrastructure/notification/kafka-exchange-rate-notification.service";
 import { PrismaModule } from "./infrastructure/prisma/prisma.module";
 import { PrismaSubscriptionRepositoryImpl } from "./infrastructure/repositories/prisma-subscription.repository";
 import { ExchangeRateCronServiceImpl } from "./infrastructure/scheduling/exchange-rate-cron.service";
@@ -36,7 +36,7 @@ const subscriptionRepository = {
 
 const notificationService = {
   provide: TYPES.infrastructure.NotificationService,
-  useClass: ExchangeRateNotificationService,
+  useClass: KafkaExchangeRateNotificationService,
 };
 
 const exchangeRateCronService = {
@@ -52,8 +52,22 @@ const triggerSendExchangeRateNotificationApp = {
 @Module({
   imports: [
     PrismaModule,
+    ClientsModule.register([
+      {
+        name: "exchange-rate-microservice",
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: "client-exchange-rate",
+            brokers: ["kafka:9093"],
+          },
+          consumer: {
+            groupId: "exchange-rate-consumer",
+          },
+        },
+      },
+    ]),
     AppConfigModule,
-    HttpModule,
     ScheduleModule.forRoot(),
   ],
   controllers: [SubscriptionController],

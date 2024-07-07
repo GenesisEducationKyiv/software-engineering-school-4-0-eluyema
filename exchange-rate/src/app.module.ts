@@ -5,7 +5,8 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
 
 import { FetchExchangeRateApplicationImpl } from "./application/fetch-exchange-rate.application";
 import { SendExchangeRateToSubscribersApplicationImpl } from "./application/send-exchange-rate-to-subscribers.application";
-import { ExchangeRateController } from "./controller/exchange-rate.controller";
+import { HttpExchangeRateController } from "./controller/http-exchange-rate.controller";
+import { KafkaExchangeRateController } from "./controller/kafka-exchange-rate.controller";
 import { ExchangeRateServiceImpl } from "./domain/services/exchange-rate.service";
 import { ExchangeRateClient } from "./domain/services/interfaces/exchange-rate.client.interface";
 import { ExchangeRateEmailComposerServiceImpl } from "./infrastructure/composers/exchange-rate-email-composer.service";
@@ -111,7 +112,7 @@ const templateService = {
     ConfigModule,
     HttpModule,
   ],
-  controllers: [ExchangeRateController],
+  controllers: [HttpExchangeRateController, KafkaExchangeRateController],
   providers: [
     fetchExchangeRateApp,
     emailComposerService,

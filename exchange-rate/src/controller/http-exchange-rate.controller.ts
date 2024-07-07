@@ -1,12 +1,11 @@
-import { Body, Controller, Get, Inject, Post } from "@nestjs/common";
+import { Controller, Get, Inject } from "@nestjs/common";
 
-import { SendEmailsDto } from "./dtos/send-emails.dto";
 import { FetchExchangeRateApplication } from "../application/interfaces/fetch-exchange-rate.application.interface";
 import { SendExchangeRateToSubscribersApplication } from "../application/interfaces/send-exchange-rate-to-subscribers.application.interface";
 import { TYPES } from "../ioc/types";
 
 @Controller("rate")
-export class ExchangeRateController {
+export class HttpExchangeRateController {
   constructor(
     @Inject(TYPES.applications.FetchExchangeRateApplication)
     private readonly fetchExchangeRateApp: FetchExchangeRateApplication,
@@ -19,10 +18,5 @@ export class ExchangeRateController {
     const exchangeRate = await this.fetchExchangeRateApp.execute();
 
     return exchangeRate.rate;
-  }
-
-  @Post("/send-emails")
-  async sendEmails(@Body() dto: SendEmailsDto): Promise<void> {
-    return await this.sendExchangeRateToSubscribersApp.execute(dto.emails);
   }
 }
