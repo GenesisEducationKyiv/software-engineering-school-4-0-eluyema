@@ -4,6 +4,7 @@ import { AppConfigService } from "../../infrastructure/config/interfaces/app-con
 import {
   AppConfig,
   ExchangeApiConfig,
+  MessageBrokersConfig,
   MicroservicesConfig,
   ServerConfig,
 } from "../../infrastructure/config/interfaces/configuration.interface";
@@ -22,6 +23,16 @@ export class TestAppConfigServiceImpl implements AppConfigService {
     },
     microservices: {
       mailerUrl: "0.0.0.0:3002",
+    },
+    messageBrokers: {
+      current: {
+        host: "0.0.0.0:3002",
+        groupId: "myid",
+      },
+      mailer: {
+        host: "0.0.0.0:3001",
+        groupId: "mailerid",
+      },
     },
   };
 
@@ -49,5 +60,13 @@ export class TestAppConfigServiceImpl implements AppConfigService {
 
   get microservicesApi(): MicroservicesConfig {
     return this.config.microservices;
+  }
+
+  get messageBrokers(): MessageBrokersConfig {
+    return this.config.messageBrokers;
+  }
+
+  set messageBrokers(value: MessageBrokersConfig) {
+    this.config.messageBrokers = value;
   }
 }

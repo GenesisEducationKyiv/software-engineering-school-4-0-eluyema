@@ -13,8 +13,19 @@ export interface MicroservicesConfig {
   mailerUrl: string;
 }
 
+export interface BrokerConfig {
+  host: string;
+  groupId: string;
+}
+
+export interface MessageBrokersConfig {
+  current: BrokerConfig;
+  mailer: BrokerConfig;
+}
+
 export interface AppConfig {
   server: ServerConfig;
   exchangeApi: ExchangeApiConfig;
   microservices: MicroservicesConfig;
+  messageBrokers: MessageBrokersConfig;
 }

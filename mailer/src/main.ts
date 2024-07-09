@@ -24,8 +24,8 @@ async function bootstrap() {
   const port = configService.get("server.port");
   const host = configService.get("server.host");
 
-  const brokerHost = configService.get("broker.host");
-  const brokerGroupId = configService.get("broker.groupId");
+  const brokerHost = configService.get("messageBroker.current.host");
+  const brokerGroupId = configService.get("messageBroker.current.groupId");
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,

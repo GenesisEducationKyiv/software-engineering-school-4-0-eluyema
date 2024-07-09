@@ -26,9 +26,11 @@ export const configuration = (): AppConfig => {
       user: process.env.MAIL_USER,
       password: process.env.MAIL_PASSWORD,
     },
-    broker: {
-      host: process.env.BROKER_HOST,
-      groupId: process.env.BROKER_GROUP_ID,
+    messageBroker: {
+      current: {
+        host: process.env.BROKER_HOST,
+        groupId: process.env.BROKER_GROUP_ID,
+      },
     },
   } as AppConfig;
 

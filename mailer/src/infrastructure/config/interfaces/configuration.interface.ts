@@ -15,8 +15,12 @@ export interface BrokerConfig {
   groupId: string;
 }
 
+export interface MessageBrokersConfig {
+  current: BrokerConfig;
+}
+
 export interface AppConfig {
   server: ServerConfig;
   mailer: MailerConfig;
-  broker: BrokerConfig;
+  messageBroker: MessageBrokersConfig;
 }

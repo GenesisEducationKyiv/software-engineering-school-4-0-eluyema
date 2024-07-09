@@ -7,6 +7,10 @@ export const RequiredEnvVars = [
   "BANK_GOV_EXCHANGE_API_URL",
   "PRIVATBANK_EXCHANGE_API_URL",
   "MICROSERVICE_MAILER_URL",
+  "BROKER_HOST",
+  "BROKER_GROUP_ID",
+  "MAILER_BROKER_HOST",
+  "MAILER_BROKER_GROUP_ID",
 ];
 
 const DEFAULT_SERVER_PORT = 3000;
@@ -25,6 +29,16 @@ export const configuration = (): AppConfig => {
     },
     microservices: {
       mailerUrl: process.env.MICROSERVICE_MAILER_URL,
+    },
+    messageBrokers: {
+      current: {
+        host: process.env.BROKER_HOST,
+        groupId: process.env.BROKER_GROUP_ID,
+      },
+      mailer: {
+        host: process.env.MAILER_BROKER_HOST,
+        groupId: process.env.MAILER_BROKER_GROUP_ID,
+      },
     },
   } as AppConfig;
 

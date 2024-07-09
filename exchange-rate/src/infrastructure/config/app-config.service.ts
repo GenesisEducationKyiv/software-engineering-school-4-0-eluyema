@@ -5,6 +5,7 @@ import { AppConfigService } from "./interfaces/app-config.service.interface";
 import {
   AppConfig,
   ExchangeApiConfig,
+  MessageBrokersConfig,
   MicroservicesConfig,
   ServerConfig,
 } from "./interfaces/configuration.interface";
@@ -25,6 +26,12 @@ export class AppConfigServiceImpl implements AppConfigService {
 
   get exchangeApi(): ExchangeApiConfig {
     return this.configService.get<ExchangeApiConfig>("exchangeApi", {
+      infer: true,
+    });
+  }
+
+  get messageBrokers(): MessageBrokersConfig {
+    return this.configService.get<MessageBrokersConfig>("messageBrokers", {
       infer: true,
     });
   }

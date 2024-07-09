@@ -1,6 +1,6 @@
 import {
-  BrokerConfig,
   MailerConfig,
+  MessageBrokersConfig,
   ServerConfig,
 } from "./configuration.interface";
 
@@ -9,5 +9,5 @@ export interface AppConfigService {
 
   get mailer(): MailerConfig;
 
-  get broker(): BrokerConfig;
+  get messageBroker(): MessageBrokersConfig;
 }

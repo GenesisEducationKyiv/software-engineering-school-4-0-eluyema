@@ -1,3 +1,5 @@
+import { randomUUID } from "crypto";
+
 import { HttpModule, HttpService } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
@@ -94,23 +96,32 @@ const templateService = {
 @Module({
   imports: [
     AppConfigModule,
-    ClientsModule.register([
-      {
-        name: "mailer-microservice",
-        transport: Transport.KAFKA,
-        options: {
-          client: {
-            clientId: "client-mailer",
-            brokers: ["kafka:9093"],
-          },
-          consumer: {
-            groupId: "mailer-consumer",
-          },
-        },
-      },
-    ]),
     ConfigModule,
     HttpModule,
+    ClientsModule.registerAsync([
+      {
+        name: TYPES.brokers.Mailer,
+        useFactory: (appConfigService: AppConfigService) => {
+          const brokerHost = appConfigService.messageBrokers.mailer.host;
+          const brokerGroupId = appConfigService.messageBrokers.mailer.groupId;
+
+          return {
+            transport: Transport.KAFKA,
+            options: {
+              client: {
+                clientId: "mailer-" + randomUUID(),
+                brokers: [brokerHost],
+              },
+              consumer: {
+                groupId: brokerGroupId,
+              },
+            },
+          };
+        },
+        extraProviders: [appConfigService],
+        inject: [appConfigService.provide],
+      },
+    ]),
   ],
   controllers: [HttpExchangeRateController, KafkaExchangeRateController],
   providers: [
