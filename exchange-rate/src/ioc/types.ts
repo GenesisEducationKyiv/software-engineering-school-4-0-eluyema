@@ -19,4 +19,7 @@ export const TYPES = {
     ),
     AppConfigService: Symbol("AppConfigService"),
   },
+  brokers: {
+    Mailer: "MailerBrokerClient",
+  },
 };

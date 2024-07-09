@@ -16,4 +16,7 @@ export const TYPES = {
     NotificationService: Symbol("NotificationService"),
     ExchangeRateCronService: Symbol("ExchangeRateCronService"),
   },
+  brokers: {
+    ExchangeRate: "ExchangeRateBrokerClient",
+  },
 };

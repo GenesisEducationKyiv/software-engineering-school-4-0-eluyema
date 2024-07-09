@@ -5,6 +5,7 @@ import { AppConfigService } from "./interfaces/app-config.service.interface";
 import {
   AppConfig,
   MailerConfig,
+  MessageBrokersConfig,
   ServerConfig,
 } from "./interfaces/configuration.interface";
 
@@ -18,5 +19,11 @@ export class AppConfigServiceImpl implements AppConfigService {
 
   get mailer(): MailerConfig {
     return this.configService.get<MailerConfig>("mailer", { infer: true });
+  }
+
+  get messageBroker(): MessageBrokersConfig {
+    return this.configService.get<MessageBrokersConfig>("messageBroker", {
+      infer: true,
+    });
   }
 }

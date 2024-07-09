@@ -1,6 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ClientKafka } from "@nestjs/microservices";
 
+import { TYPES } from "src/ioc";
+
 import { EventFactory } from "./event.factory";
 import { MailerService } from "./interfaces/mailer.service.interface";
 import { Email } from "../../domain/entities/email.entity";
@@ -8,7 +10,7 @@ import { Email } from "../../domain/entities/email.entity";
 @Injectable()
 export class KafkaMailerServiceImpl implements MailerService {
   constructor(
-    @Inject("mailer-microservice")
+    @Inject(TYPES.brokers.Mailer)
     protected readonly serverClient: ClientKafka,
   ) {}
 

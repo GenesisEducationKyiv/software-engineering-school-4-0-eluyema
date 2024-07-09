@@ -5,6 +5,7 @@ import {
   AppConfig,
   CronConfig,
   DatabaseConfig,
+  MessageBrokersConfig,
   MicroservicesConfig,
   ServerConfig,
 } from "../../infrastructure/config/interfaces/configuration.interface";
@@ -24,6 +25,16 @@ export class TestAppConfigServiceImpl implements AppConfigService {
     },
     microservices: {
       exchangeRateUrl: "0.0.0.0:3111",
+    },
+    messageBrokers: {
+      current: {
+        host: "0.0.0.0:3111",
+        groupId: "id",
+      },
+      exchangeRate: {
+        host: "0.0.0.0:3121",
+        groupId: "exchangeRateid",
+      },
     },
   };
 
@@ -59,5 +70,13 @@ export class TestAppConfigServiceImpl implements AppConfigService {
 
   get microservicesApi(): MicroservicesConfig {
     return this.config.microservices;
+  }
+
+  get messageBrokers(): MessageBrokersConfig {
+    return this.config.messageBrokers;
+  }
+
+  set messageBrokers(value: MessageBrokersConfig) {
+    this.config.messageBrokers = value;
   }
 }

@@ -4,6 +4,7 @@ import { AppConfigService } from "../../infrastructure/config/interfaces/app-con
 import {
   AppConfig,
   MailerConfig,
+  MessageBrokersConfig,
   ServerConfig,
 } from "../../infrastructure/config/interfaces/configuration.interface";
 
@@ -19,6 +20,12 @@ export class TestAppConfigServiceImpl implements AppConfigService {
     server: {
       port: 3000,
       host: "0.0.0.0",
+    },
+    messageBroker: {
+      current: {
+        host: "0.0.0.0",
+        groupId: "id",
+      },
     },
   };
 
@@ -38,5 +45,13 @@ export class TestAppConfigServiceImpl implements AppConfigService {
 
   set mailer(value: MailerConfig) {
     this.config.mailer = value;
+  }
+
+  get messageBroker(): MessageBrokersConfig {
+    return this.config.messageBroker;
+  }
+
+  set messageBroker(value: MessageBrokersConfig) {
+    this.config.messageBroker = value;
   }
 }

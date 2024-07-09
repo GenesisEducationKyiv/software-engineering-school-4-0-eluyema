@@ -10,7 +10,17 @@ export interface MailerConfig {
   password: string;
 }
 
+export interface BrokerConfig {
+  host: string;
+  groupId: string;
+}
+
+export interface MessageBrokersConfig {
+  current: BrokerConfig;
+}
+
 export interface AppConfig {
   server: ServerConfig;
   mailer: MailerConfig;
+  messageBroker: MessageBrokersConfig;
 }

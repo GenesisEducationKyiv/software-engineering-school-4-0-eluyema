@@ -9,6 +9,10 @@ export const RequiredEnvVars = [
   "DATABASE_DB",
   "MICROSERVICE_EXCHANGE_RATE_URL",
   "CRON_SCHEDULE_PATTERN",
+  "BROKER_HOST",
+  "BROKER_GROUP_ID",
+  "EXCHANGE_RATE_BROKER_HOST",
+  "EXCHANGE_RATE_BROKER_GROUP_ID",
 ];
 
 const DEFAULT_SERVER_PORT = 3000;
@@ -28,6 +32,16 @@ export const configuration = (): AppConfig => {
     },
     microservices: {
       exchangeRateUrl: process.env.MICROSERVICE_EXCHANGE_RATE_URL,
+    },
+    messageBrokers: {
+      current: {
+        host: process.env.BROKER_HOST,
+        groupId: process.env.BROKER_GROUP_ID,
+      },
+      exchangeRate: {
+        host: process.env.EXCHANGE_RATE_BROKER_HOST,
+        groupId: process.env.EXCHANGE_RATE_BROKER_GROUP_ID,
+      },
     },
   } as AppConfig;
 

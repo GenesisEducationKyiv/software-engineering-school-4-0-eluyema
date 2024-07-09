@@ -24,14 +24,17 @@ async function bootstrap() {
   const port = configService.get("server.port");
   const host = configService.get("server.host");
 
+  const brokerHost = configService.get("messageBroker.current.host");
+  const brokerGroupId = configService.get("messageBroker.current.groupId");
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
       client: {
-        brokers: ["kafka:9093"],
+        brokers: [brokerHost],
       },
       consumer: {
-        groupId: "mailer-consumer",
+        groupId: brokerGroupId,
       },
     },
   });
