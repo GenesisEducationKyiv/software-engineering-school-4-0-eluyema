@@ -2,19 +2,22 @@ import { Inject, Injectable } from "@nestjs/common";
 import { SchedulerRegistry } from "@nestjs/schedule";
 import { CronJob } from "cron";
 
-import { ExchangeRateCronService } from "./interfaces/exchange-rate-cron.service.interface";
-import { TriggerSendExchangeRateNotificationApplication } from "../../application/interfaces/trigger-send-exchange-rate-notification.application.interface";
-import { TYPES } from "../../ioc/types";
+import { NotifyRateSubscribersApplication } from "src/application/interfaces/notify-rate-subscribers.application.interface";
+import { TYPES } from "src/ioc";
+
+import { NotifyRateSubscribtionCronService } from "./interfaces/notify-rate-subscribtion-cron.service.interface";
 import { AppConfigService } from "../config/interfaces/app-config.service.interface";
 
 @Injectable()
-export class ExchangeRateCronServiceImpl implements ExchangeRateCronService {
+export class NotifyRateSubscribtionCronServiceImpl
+  implements NotifyRateSubscribtionCronService
+{
   private cronPattern: string;
 
   constructor(
     private schedulerRegistry: SchedulerRegistry,
-    @Inject(TYPES.applications.TriggerSendExchangeRateNotificationApplication)
-    private readonly triggerSendExchangeRateNotificationApplication: TriggerSendExchangeRateNotificationApplication,
+    @Inject(TYPES.applications.NotifyRateSubscribersApplication)
+    private readonly notifyRateSubscribersApplication: NotifyRateSubscribersApplication,
     @Inject(TYPES.infrastructure.AppConfigService)
     private readonly appConfigService: AppConfigService,
   ) {}
@@ -34,11 +37,11 @@ export class ExchangeRateCronServiceImpl implements ExchangeRateCronService {
     };
 
     const job = new CronJob(this.cronPattern, callback);
-    this.schedulerRegistry.addCronJob("exchangeRateUpdate", job);
+    this.schedulerRegistry.addCronJob("notifyRateSubscribers", job);
     job.start();
   }
 
   async handleCron() {
-    await this.triggerSendExchangeRateNotificationApplication.execute();
+    await this.notifyRateSubscribersApplication.execute();
   }
 }

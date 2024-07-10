@@ -14,7 +14,7 @@ import { AppConfigService } from "./infrastructure/config/interfaces/app-config.
 import { KafkaExchangeRateNotificationService } from "./infrastructure/notification/kafka-exchange-rate-notification.service";
 import { PrismaModule } from "./infrastructure/prisma/prisma.module";
 import { PrismaSubscriptionRepositoryImpl } from "./infrastructure/repositories/prisma-subscription.repository";
-import { ExchangeRateCronServiceImpl } from "./infrastructure/scheduling/exchange-rate-cron.service";
+// import { ExchangeRateCronServiceImpl } from "./infrastructure/scheduling/exchange-rate-cron.service";
 import { TYPES } from "./ioc/types";
 
 const createSubscriptionApp = {
@@ -42,10 +42,10 @@ const notificationService = {
   useClass: KafkaExchangeRateNotificationService,
 };
 
-const exchangeRateCronService = {
-  provide: TYPES.infrastructure.ExchangeRateCronService,
-  useClass: ExchangeRateCronServiceImpl,
-};
+// const exchangeRateCronService = {
+//   provide: TYPES.infrastructure.ExchangeRateCronService,
+//   useClass: ExchangeRateCronServiceImpl,
+// };
 
 const triggerSendExchangeRateNotificationApp = {
   provide: TYPES.applications.TriggerSendExchangeRateNotificationApplication,
@@ -90,7 +90,7 @@ const triggerSendExchangeRateNotificationApp = {
     subscriptionRepository,
     appConfigService,
     notificationService,
-    exchangeRateCronService,
+    // exchangeRateCronService,
   ],
   exports: [subscriptionService],
 })

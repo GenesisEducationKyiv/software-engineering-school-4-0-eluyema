@@ -4,7 +4,7 @@ import { join } from "path";
 import { Injectable } from "@nestjs/common";
 import * as hbs from "handlebars";
 
-import { TemplateService } from "../notification/interfaces/template.service.interface";
+import { TemplateService } from "../../../../exchange-rate/src/infrastructure/notification/interfaces/template.service.interface";
 
 @Injectable()
 export class HandlebarsTemplateServiceImpl implements TemplateService {

@@ -3,9 +3,9 @@ import { join } from "path";
 
 import * as hbs from "handlebars";
 
+import { TemplateService } from "./interfaces/template.service.interface";
 import { HandlebarsTemplateServiceImpl } from "./template.service";
 import { AvailableTemplatesEnum } from "../../domain/entities/template.entity";
-import { TemplateService } from "../notification/interfaces/template.service.interface";
 
 jest.mock("fs/promises");
 jest.mock("handlebars");

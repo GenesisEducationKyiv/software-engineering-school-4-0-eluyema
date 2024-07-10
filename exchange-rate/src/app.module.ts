@@ -20,8 +20,7 @@ import { LoggingExchangeRateServiceDecorator } from "./infrastructure/http/clien
 import { OpenexchangeratesClientImpl } from "./infrastructure/http/clients/openexchangerates.client";
 import { PrivatbankClientImpl } from "./infrastructure/http/clients/privatbank.client";
 import { ExchangeRateNotificationServiceImpl } from "./infrastructure/notification/exchange-rate-email.service";
-import { KafkaMailerServiceImpl } from "./infrastructure/notification/kafka-mailer.service";
-import { HandlebarsTemplateServiceImpl } from "./infrastructure/template/template.service";
+// import { KafkaMailerServiceImpl } from "./infrastructure/notification/kafka-mailer.service";
 import { TYPES } from "./ioc";
 
 const appConfigService = {
@@ -83,16 +82,6 @@ const emailComposerService = {
   useClass: ExchangeRateEmailComposerServiceImpl,
 };
 
-const mailerService = {
-  provide: TYPES.services.EmailService,
-  useClass: KafkaMailerServiceImpl,
-};
-
-const templateService = {
-  provide: TYPES.services.TemplateService,
-  useClass: HandlebarsTemplateServiceImpl,
-};
-
 @Module({
   imports: [
     AppConfigModule,
@@ -132,8 +121,6 @@ const templateService = {
     appConfigService,
     exchangeRateClients,
     exchangeRateService,
-    mailerService,
-    templateService,
   ],
 })
 export class AppModule {}
