@@ -15,7 +15,7 @@ export class RateController {
     private readonly updateExchangeRateApplication: UpdateExchangeRateApplication,
   ) {}
 
-  @EventPattern("rate-update")
+  @EventPattern("rate-updated")
   async subscriptionCreated(
     @Payload(ValidationPipe) value: Event<RateUpdatedDto>,
   ) {

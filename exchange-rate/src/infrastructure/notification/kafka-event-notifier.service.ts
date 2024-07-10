@@ -4,11 +4,12 @@ import { ClientKafka } from "@nestjs/microservices";
 import { TYPES } from "src/ioc";
 
 import { EventFactory } from "./event.factory";
-import { MailerService } from "./interfaces/mailer.service.interface";
-import { Email } from "../../domain/entities/email.entity";
+import { EventNotificationService } from "./interfaces/event-notification.service.interface";
 
 @Injectable()
-export class KafkaMailerServiceImpl implements MailerService {
+export class KafkaEventNotificationServiceImpl
+  implements EventNotificationService
+{
   constructor(
     @Inject(TYPES.brokers.Mailer)
     protected readonly serverClient: ClientKafka,
@@ -18,10 +19,10 @@ export class KafkaMailerServiceImpl implements MailerService {
     await this.serverClient.connect();
   }
 
-  async sendEmail(email: Email) {
+  async emitEvent(eventName: string, payload: unknown, aggregateId?: string) {
     await this.serverClient.emit(
-      "send-emails",
-      JSON.stringify(EventFactory.createEvent("send-emails", email)),
+      eventName,
+      JSON.stringify(EventFactory.createEvent(eventName, payload, aggregateId)),
     );
   }
 }

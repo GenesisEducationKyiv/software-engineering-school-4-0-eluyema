@@ -26,6 +26,10 @@ export class NotifyRateSubscribersApplicationImpl
       this.subscriptionService.getSubscribers(),
     ]);
 
+    if (!subscriptions.length) {
+      return;
+    }
+
     await this.exchangeRateEmailComposerService.sendExchangeRateNotification(
       rate,
       subscriptions,
