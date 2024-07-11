@@ -1,12 +1,14 @@
 import {
   Body,
   Controller,
+  Delete,
   Inject,
+  Param,
   Post,
-  Res,
   UseFilters,
 } from "@nestjs/common";
-import { FastifyReply } from "fastify";
+
+import { RemoveSubscriptionApplication } from "src/application/interfaces/remove-subscription.application.interface";
 
 import { CreateSubscriptionDto } from "./dtos/create-subscription.dto";
 import { CreateSubscriptionApplication } from "../application/interfaces/create-subscription.application.interface";
@@ -19,13 +21,17 @@ export class SubscriptionController {
   constructor(
     @Inject(TYPES.applications.CreateSubscriptionApplication)
     private readonly createSubscriptionApp: CreateSubscriptionApplication,
+    @Inject(TYPES.applications.RemoveSubscriptionApplication)
+    private readonly removeSubscriptionApp: RemoveSubscriptionApplication,
   ) {}
 
   @Post()
-  async subscribe(
-    @Res() response: FastifyReply,
-    @Body() createSubscriptionDto: CreateSubscriptionDto,
-  ) {
+  async subscribe(@Body() createSubscriptionDto: CreateSubscriptionDto) {
     await this.createSubscriptionApp.execute(createSubscriptionDto.email);
+  }
+
+  @Delete(":email")
+  async unsubscribe(@Param("email") email: string) {
+    await this.removeSubscriptionApp.execute(email);
   }
 }

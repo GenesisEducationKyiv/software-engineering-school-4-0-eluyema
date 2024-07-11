@@ -4,15 +4,14 @@ export const RequiredEnvVars = [
   "SERVER_PORT",
   "SERVER_HOST",
   "DATABASE_URL",
-  "DATABASE_USER",
-  "DATABASE_PASSWORD",
-  "DATABASE_DB",
   "MICROSERVICE_EXCHANGE_RATE_URL",
   "CRON_SCHEDULE_PATTERN",
   "BROKER_HOST",
   "BROKER_GROUP_ID",
   "EXCHANGE_RATE_BROKER_HOST",
   "EXCHANGE_RATE_BROKER_GROUP_ID",
+  "MAILER_BROKER_HOST",
+  "MAILER_BROKER_GROUP_ID",
 ];
 
 const DEFAULT_SERVER_PORT = 3000;
@@ -41,6 +40,10 @@ export const configuration = (): AppConfig => {
       exchangeRate: {
         host: process.env.EXCHANGE_RATE_BROKER_HOST,
         groupId: process.env.EXCHANGE_RATE_BROKER_GROUP_ID,
+      },
+      mailer: {
+        host: process.env.MAILER_BROKER_HOST,
+        groupId: process.env.MAILER_BROKER_GROUP_ID,
       },
     },
   } as AppConfig;

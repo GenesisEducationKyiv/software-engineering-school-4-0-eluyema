@@ -1,7 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
 
+import { AvailableTemplatesEnum } from "src/domain/entities/template.entity";
+
 import { ExchangeRateEmailComposerService } from "./interfaces/exchange-rate-email-composer-service.interface";
-import { AvailableTemplatesEnum } from "../../../../mailer/src/domain/entities/template.entity";
 import { Email } from "../../domain/entities/email.entity";
 import { Rate } from "../../domain/entities/rate.entity";
 import { EmailFactory } from "../../domain/factories/email.factory";

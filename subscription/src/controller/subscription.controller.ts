@@ -1,5 +1,16 @@
-import { Body, Controller, Inject, Post, Res } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpCode,
+  Inject,
+  Param,
+  Post,
+  Res,
+} from "@nestjs/common";
 import { FastifyReply } from "fastify";
+
+import { RemoveSubscriptionApplication } from "src/application/interfaces/remove-subscription.application.interface";
 
 import { CreateSubscriptionDto } from "./dto/create-subscription.dto";
 import { CreateSubscriptionApplication } from "../application/interfaces/create-subscription.application.interface";
@@ -10,6 +21,8 @@ export class SubscriptionController {
   constructor(
     @Inject(TYPES.applications.CreateSubscriptionApplication)
     private readonly createSubscriptionApp: CreateSubscriptionApplication,
+    @Inject(TYPES.applications.RemoveSubscriptionApplication)
+    private readonly removeSubscriptionApplication: RemoveSubscriptionApplication,
   ) {}
 
   @Post()
@@ -26,5 +39,11 @@ export class SubscriptionController {
       return;
     }
     return response.status(200).send();
+  }
+
+  @Delete(":email")
+  @HttpCode(200)
+  async unsubscribe(@Param("email") email: string) {
+    await this.removeSubscriptionApplication.execute(email);
   }
 }

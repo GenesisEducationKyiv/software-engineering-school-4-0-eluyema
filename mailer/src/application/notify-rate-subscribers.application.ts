@@ -16,8 +16,8 @@ export class NotifyRateSubscribersApplicationImpl
     private readonly rateService: RateService,
     @Inject(TYPES.services.SubscriptionService)
     private readonly subscriptionService: SubscriptionService,
-    @Inject(TYPES.infrastructure.ExchangeRateEmailComposerService)
-    private readonly exchangeRateEmailComposerService: ExchangeRateNotificationService,
+    @Inject(TYPES.services.ExchangeRateNotificationService)
+    private readonly exchangeRateNotificationService: ExchangeRateNotificationService,
   ) {}
 
   async execute(): Promise<void> {
@@ -30,7 +30,7 @@ export class NotifyRateSubscribersApplicationImpl
       return;
     }
 
-    await this.exchangeRateEmailComposerService.sendExchangeRateNotification(
+    await this.exchangeRateNotificationService.sendExchangeRateNotification(
       rate,
       subscriptions,
     );

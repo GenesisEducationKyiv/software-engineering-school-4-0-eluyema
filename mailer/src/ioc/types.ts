@@ -12,6 +12,7 @@ export const TYPES = {
   services: {
     SubscriptionService: Symbol("SubscriptionService"),
     RateService: Symbol("RateService"),
+    ExchangeRateNotificationService: Symbol("ExchangeRateNotificationService"),
   },
   infrastructure: {
     AppConfigService: Symbol("AppConfigService"),

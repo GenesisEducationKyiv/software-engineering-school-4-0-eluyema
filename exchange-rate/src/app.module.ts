@@ -4,6 +4,7 @@ import { HttpModule, HttpService } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { ClientsModule, Transport } from "@nestjs/microservices";
+import { ScheduleModule } from "@nestjs/schedule";
 
 import { FetchExchangeRateApplicationImpl } from "./application/fetch-exchange-rate.application";
 import { NotifyCurrentExchangeRateApplicationImpl } from "./application/notify-current-exchange-rate.application";
@@ -85,6 +86,7 @@ const currentRateCronService = {
     AppConfigModule,
     ConfigModule,
     HttpModule,
+    ScheduleModule.forRoot(),
     ClientsModule.registerAsync([
       {
         name: TYPES.brokers.Mailer,

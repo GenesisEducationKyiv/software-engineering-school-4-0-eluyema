@@ -56,4 +56,18 @@ export class SubscriptionServiceImpl implements SubscriptionService {
       throw new HttpException("", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async unsubscribe(email: string) {
+    try {
+      const response = await firstValueFrom(
+        this.httpService.post<void>(
+          `${this.subscriptionUrl}/subscribe/` + email,
+        ),
+      );
+
+      return response.data;
+    } catch (error) {
+      throw new HttpException("", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
