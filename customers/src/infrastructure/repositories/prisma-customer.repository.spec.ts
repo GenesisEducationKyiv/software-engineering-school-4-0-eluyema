@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { DeepMockProxy } from "jest-mock-extended";
-import { Customer } from "src/domain/entities/customer.entity";
 
 import { PrismaCustomerRepositoryImpl } from "./prisma-customer.repository";
+import { Customer } from "../../domain/entities/customer.entity";
 import { PrismaService } from "../../infrastructure/prisma/prisma.service";
 import { prismaMock } from "../../test-utils/database/mocked-prisma";
 

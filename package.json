@@ -15,7 +15,8 @@
     "exchange-rate:lint:check": "cd ./exchange-rate && npm run format:check && npm run lint:check && cd ..",
     "mailer:lint:check": "cd ./mailer && npm run format:check && npm run lint:check && cd ..",
     "subscription:lint:check": "cd ./subscription && npm run format:check && npm run lint:check && cd ..",
-    "lint:check:all": "npm run api-gateway:lint:check && npm run exchange-rate:lint:check && npm run mailer:lint:check && npm run subscription:lint:check",
+    "customers:lint:check": "cd ./customers && npm run format:check && npm run lint:check && cd ..",
+    "lint:check:all": "npm run api-gateway:lint:check && npm run exchange-rate:lint:check && npm run mailer:lint:check && npm run subscription:lint:check && npm run customers:lint:check",
     "prepare": "husky"
   },
   "devDependencies": {

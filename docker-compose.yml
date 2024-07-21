@@ -22,6 +22,27 @@ services:
       timeout: 60s
       retries: 5
       start_period: 80s
+  customer-db:
+    image: postgres:13
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${CUSTOMER_DATABASE_USER}
+      POSTGRES_PASSWORD: ${CUSTOMER_DATABASE_PASSWORD}
+      POSTGRES_DB: ${CUSTOMER_DATABASE_DB}
+    volumes:
+      - customer-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${CUSTOMER_DATABASE_USER} -d ${CUSTOMER_DATABASE_DB}",
+        ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
   mailer-db:
     image: postgres:13
     restart: always
@@ -112,3 +133,4 @@ services:
 volumes:
   mailer-db-data:
   subscription-db-data:
+  customer-db-data:
