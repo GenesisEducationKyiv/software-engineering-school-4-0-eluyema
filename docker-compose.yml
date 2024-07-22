@@ -128,8 +128,18 @@ services:
     depends_on:
       subscription-db:
         condition: service_healthy
+      customers:
+        condition: service_started
       exchange_rate:
         condition: service_started
+
+  customers:
+    build: ./customers/
+    env_file:
+      - ./customers/.env
+    depends_on:
+      customer-db:
+        condition: service_healthy
 
 volumes:
   mailer-db-data:

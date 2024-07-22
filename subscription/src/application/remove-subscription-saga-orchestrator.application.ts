@@ -18,7 +18,9 @@ export class RemoveSubscriptionSagaOrchestratorApplicationImpl
   ) {}
 
   async execute(email: string): Promise<void> {
+    console.log("remove 2");
     await this.subscriptionService.updateStatus(email, "PENDING");
+    console.log("remove 3");
     await this.eventNotificationService.emitEvent("remove-customer", { email });
   }
 

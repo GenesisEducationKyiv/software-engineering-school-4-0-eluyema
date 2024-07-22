@@ -37,6 +37,8 @@ export class SubscriptionServiceImpl implements SubscriptionService {
   }
 
   async updateStatus(email: string, status: SubscriptionStatus): Promise<void> {
+    console.log("remove 2.1");
     await this.subscriptionRepository.updateStatus(email, status);
+    console.log("remove 2.2");
   }
 }
