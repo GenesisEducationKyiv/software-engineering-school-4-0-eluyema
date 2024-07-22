@@ -16,5 +16,6 @@ export const TYPES = {
   brokers: {
     ExchangeRate: "ExchangeRateBrokerClient",
     Mailer: "MailerBrokerClient",
+    Subscription: "SubscriptionBrokerClient",
   },
 };

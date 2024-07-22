@@ -20,6 +20,7 @@ export interface MessageBrokersConfig {
   current: BrokerConfig;
   exchangeRate: BrokerConfig;
   mailer: BrokerConfig;
+  subscription: BrokerConfig;
 }
 
 export interface AppConfig {

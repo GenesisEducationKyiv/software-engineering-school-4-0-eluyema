@@ -1,4 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { SubscriptionStatus } from "@prisma/client";
 
 import { SubscriptionService } from "./interfaces/subscription.service.interface";
 import { TYPES } from "../../ioc/types";
@@ -33,5 +34,9 @@ export class SubscriptionServiceImpl implements SubscriptionService {
     const subscribers = subscriptions.map((subscription) => subscription.email);
 
     return subscribers;
+  }
+
+  async updateStatus(email: string, status: SubscriptionStatus): Promise<void> {
+    await this.subscriptionRepository.updateStatus(email, status);
   }
 }

@@ -4,7 +4,10 @@ import { TYPES } from "src/ioc";
 
 import { SubscriptionCreatedDto } from "./dtos/subscription-created.dto";
 import { SubscriptionRemovedDto } from "./dtos/subscription-removed.dto";
-import { Subscription } from "../../domain/entities/subscription.entity";
+import {
+  Subscription,
+  SubscriptionStatus,
+} from "../../domain/entities/subscription.entity";
 import { SubscriptionRepository } from "../../domain/repositories/subscription.repository";
 import { PrismaService } from "../../infrastructure/prisma/prisma.service";
 import { EventNotificationService } from "../notification/interfaces/event-notification.service.interface";
@@ -15,7 +18,7 @@ export class PrismaSubscriptionRepositoryImpl
 {
   constructor(
     private readonly prisma: PrismaService,
-    @Inject(TYPES.infrastructure.EventNotificationService)
+    @Inject(TYPES.infrastructure.EventMailerNotificationService)
     private readonly eventNotificationService: EventNotificationService,
   ) {}
 
@@ -25,11 +28,15 @@ export class PrismaSubscriptionRepositoryImpl
     });
 
     // todo: think about to use decorator pattern for it
-    this.eventNotificationService.emitEvent<SubscriptionCreatedDto>(
+    await this.eventNotificationService.emitEvent<SubscriptionCreatedDto>(
       "subscription-created",
       { email },
     );
-    return new Subscription(subscription.id, subscription.email);
+    return new Subscription(
+      subscription.id,
+      subscription.email,
+      subscription.status,
+    );
   }
 
   async delete(email: string): Promise<void> {
@@ -37,7 +44,7 @@ export class PrismaSubscriptionRepositoryImpl
       where: { email },
     });
 
-    this.eventNotificationService.emitEvent<SubscriptionRemovedDto>(
+    await this.eventNotificationService.emitEvent<SubscriptionRemovedDto>(
       "subscription-removed",
       { email },
     );
@@ -48,14 +55,34 @@ export class PrismaSubscriptionRepositoryImpl
       where: { email },
     });
     return subscription
-      ? new Subscription(subscription.id, subscription.email)
+      ? new Subscription(
+          subscription.id,
+          subscription.email,
+          subscription.status,
+        )
       : null;
   }
 
   async findAll(): Promise<Subscription[]> {
     const subscriptions = await this.prisma.subscription.findMany();
     return subscriptions.map(
-      (subscription) => new Subscription(subscription.id, subscription.email),
+      (subscription) =>
+        new Subscription(
+          subscription.id,
+          subscription.email,
+          subscription.status,
+        ),
     );
+  }
+
+  async updateStatus(email: string, status: SubscriptionStatus) {
+    await this.prisma.subscription.update({
+      where: {
+        email,
+      },
+      data: {
+        status: status,
+      },
+    });
   }
 }

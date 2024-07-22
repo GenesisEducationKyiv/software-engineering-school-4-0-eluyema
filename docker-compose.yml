@@ -26,11 +26,12 @@ services:
     image: postgres:13
     restart: always
     ports:
-      - "5432:5432"
+      - "5434:5434"
     environment:
       POSTGRES_USER: ${CUSTOMER_DATABASE_USER}
       POSTGRES_PASSWORD: ${CUSTOMER_DATABASE_PASSWORD}
       POSTGRES_DB: ${CUSTOMER_DATABASE_DB}
+      PGPORT: 5434
     volumes:
       - customer-db-data:/var/lib/postgresql/data
     healthcheck:

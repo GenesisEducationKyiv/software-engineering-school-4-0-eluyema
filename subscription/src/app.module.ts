@@ -4,26 +4,27 @@ import { Module } from "@nestjs/common";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 import { ScheduleModule } from "@nestjs/schedule";
 
-import { CreateSubscriptionApplicationImpl } from "./application/create-subscription.application";
-import { RemoveSubscriptionApplicationImpl } from "./application/remove-subscription.application";
+import { CreateSubscriptionSagaOrchestratorApplicationImpl } from "./application/create-subscription-saga-orchestrator.application";
+import { RemoveSubscriptionSagaOrchestratorApplicationImpl } from "./application/remove-subscription-saga-orchestrator.application";
+import { KafkaSubscriptionController } from "./controller/kafka-subscription.controller";
 import { SubscriptionController } from "./controller/subscription.controller";
 import { SubscriptionServiceImpl } from "./domain/services/subscription.service";
 import { AppConfigModule } from "./infrastructure/config/app-config.module";
 import { AppConfigServiceImpl } from "./infrastructure/config/app-config.service";
 import { AppConfigService } from "./infrastructure/config/interfaces/app-config.service.interface";
-import { KafkaMailerEventNotificationServiceImpl } from "./infrastructure/notification/kafka-mailer-event-notification.service";
+import { KafkaEventNotificationServiceImpl } from "./infrastructure/notification/kafka-event-notification.service";
 import { PrismaModule } from "./infrastructure/prisma/prisma.module";
 import { PrismaSubscriptionRepositoryImpl } from "./infrastructure/repositories/prisma-subscription.repository";
 import { TYPES } from "./ioc/types";
 
 const createSubscriptionApp = {
-  provide: TYPES.applications.CreateSubscriptionApplication,
-  useClass: CreateSubscriptionApplicationImpl,
+  provide: TYPES.applications.CreateSubscriptionSagaOrchestratorApplication,
+  useClass: CreateSubscriptionSagaOrchestratorApplicationImpl,
 };
 
 const removeSubscriptionApp = {
-  provide: TYPES.applications.RemoveSubscriptionApplication,
-  useClass: RemoveSubscriptionApplicationImpl,
+  provide: TYPES.applications.RemoveSubscriptionSagaOrchestratorApplication,
+  useClass: RemoveSubscriptionSagaOrchestratorApplicationImpl,
 };
 
 const appConfigService = {
@@ -41,9 +42,20 @@ const subscriptionRepository = {
   useClass: PrismaSubscriptionRepositoryImpl,
 };
 
-const eventNotificationService = {
-  provide: TYPES.infrastructure.EventNotificationService,
-  useClass: KafkaMailerEventNotificationServiceImpl,
+const eventCustomersNotificationService = {
+  provide: TYPES.infrastructure.EventCustomersNotificationService,
+  useFactory: (client) => {
+    return new KafkaEventNotificationServiceImpl(client);
+  },
+  inject: [TYPES.brokers.Customers],
+};
+
+const eventMailerNotificationService = {
+  provide: TYPES.infrastructure.EventMailerNotificationService,
+  useFactory: (client) => {
+    return new KafkaEventNotificationServiceImpl(client);
+  },
+  inject: [TYPES.brokers.Mailer],
 };
 
 @Module({
@@ -61,7 +73,29 @@ const eventNotificationService = {
             transport: Transport.KAFKA,
             options: {
               client: {
-                clientId: "mailer-" + randomUUID(),
+                clientId: "subscription-" + randomUUID(),
+                brokers: [brokerHost],
+              },
+              consumer: {
+                groupId: brokerGroupId,
+              },
+            },
+          };
+        },
+        extraProviders: [appConfigService],
+        inject: [appConfigService.provide],
+      },
+      {
+        name: TYPES.brokers.Customers,
+        useFactory: (appConfigService: AppConfigService) => {
+          const brokerHost = appConfigService.messageBrokers.customers.host;
+          const brokerGroupId =
+            appConfigService.messageBrokers.customers.groupId;
+          return {
+            transport: Transport.KAFKA,
+            options: {
+              client: {
+                clientId: "customers-" + randomUUID(),
                 brokers: [brokerHost],
               },
               consumer: {
@@ -75,14 +109,15 @@ const eventNotificationService = {
       },
     ]),
   ],
-  controllers: [SubscriptionController],
+  controllers: [SubscriptionController, KafkaSubscriptionController],
   providers: [
     createSubscriptionApp,
     removeSubscriptionApp,
     subscriptionService,
     subscriptionRepository,
     appConfigService,
-    eventNotificationService,
+    eventCustomersNotificationService,
+    eventMailerNotificationService,
   ],
   exports: [subscriptionService],
 })

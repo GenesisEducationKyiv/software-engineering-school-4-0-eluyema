@@ -1,4 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
+import {
+  PrismaClientKnownRequestError,
+  PrismaClientUnknownRequestError,
+} from "@prisma/client/runtime/library";
 
 import { TYPES } from "src/ioc";
 
@@ -18,27 +22,52 @@ export class PrismaCustomerRepositoryImpl implements CustomerRepository {
   ) {}
 
   async create(email: string): Promise<Customer> {
-    const customer = await this.prisma.customer.create({
-      data: { email },
-    });
+    try {
+      const customer = await this.prisma.customer.create({
+        data: { email },
+      });
 
-    // todo: think about to use decorator pattern for it
-    this.eventNotificationService.emitEvent<CustomerCreatedDto>(
-      "customer-created",
-      { email },
-    );
-    return new Customer(customer.id, customer.email);
+      await this.eventNotificationService.emitEvent<CustomerCreatedDto>(
+        "customer-created",
+        { email },
+      );
+
+      return new Customer(customer.id, customer.email);
+    } catch (err) {
+      if (
+        err instanceof PrismaClientKnownRequestError ||
+        err instanceof PrismaClientUnknownRequestError
+      ) {
+        await this.eventNotificationService.emitEvent<CustomerCreatedDto>(
+          "customer-create-failed",
+          { email },
+        );
+      }
+      throw err;
+    }
   }
 
   async delete(email: string): Promise<void> {
-    await this.prisma.customer.delete({
-      where: { email },
-    });
+    try {
+      await this.prisma.customer.delete({
+        where: { email },
+      });
 
-    this.eventNotificationService.emitEvent<CustomerRemovedDto>(
-      "customer-removed",
-      { email },
-    );
+      await this.eventNotificationService.emitEvent<CustomerRemovedDto>(
+        "customer-removed",
+        { email },
+      );
+    } catch (err) {
+      if (
+        err instanceof PrismaClientKnownRequestError ||
+        err instanceof PrismaClientUnknownRequestError
+      ) {
+        await this.eventNotificationService.emitEvent<CustomerRemovedDto>(
+          "customer-remove-failed",
+          { email },
+        );
+      }
+    }
   }
 
   async findByEmail(email: string): Promise<Customer | null> {

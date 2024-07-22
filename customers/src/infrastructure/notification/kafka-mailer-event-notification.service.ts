@@ -11,7 +11,7 @@ export class KafkaMailerEventNotificationServiceImpl
   implements EventNotificationService
 {
   constructor(
-    @Inject(TYPES.brokers.Mailer)
+    @Inject(TYPES.brokers.Subscription)
     protected readonly serverClient: ClientKafka,
   ) {}
 

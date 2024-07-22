@@ -13,7 +13,7 @@ import { AppConfigServiceImpl } from "./infrastructure/config/app-config.service
 import { AppConfigService } from "./infrastructure/config/interfaces/app-config.service.interface";
 import { KafkaMailerEventNotificationServiceImpl } from "./infrastructure/notification/kafka-mailer-event-notification.service";
 import { PrismaModule } from "./infrastructure/prisma/prisma.module";
-import { PrismaSubscriptionRepositoryImpl } from "./infrastructure/repositories/prisma-customer.repository";
+import { PrismaCustomerRepositoryImpl } from "./infrastructure/repositories/prisma-customer.repository";
 import { TYPES } from "./ioc/types";
 
 const createCustomerApp = {
@@ -38,7 +38,7 @@ const customerService = {
 
 const customerRepository = {
   provide: TYPES.repositories.CustomerRepository,
-  useClass: PrismaSubscriptionRepositoryImpl,
+  useClass: PrismaCustomerRepositoryImpl,
 };
 
 const eventNotificationService = {
@@ -53,15 +53,16 @@ const eventNotificationService = {
     ScheduleModule.forRoot(),
     ClientsModule.registerAsync([
       {
-        name: TYPES.brokers.Mailer,
+        name: TYPES.brokers.Subscription,
         useFactory: (appConfigService: AppConfigService) => {
-          const brokerHost = appConfigService.messageBrokers.mailer.host;
-          const brokerGroupId = appConfigService.messageBrokers.mailer.groupId;
+          const brokerHost = appConfigService.messageBrokers.subscription.host;
+          const brokerGroupId =
+            appConfigService.messageBrokers.subscription.groupId;
           return {
             transport: Transport.KAFKA,
             options: {
               client: {
-                clientId: "mailer-" + randomUUID(),
+                clientId: "subscription-" + randomUUID(),
                 brokers: [brokerHost],
               },
               consumer: {
@@ -84,6 +85,5 @@ const eventNotificationService = {
     appConfigService,
     eventNotificationService,
   ],
-  exports: [subscriptionService],
 })
 export class AppModule {}
