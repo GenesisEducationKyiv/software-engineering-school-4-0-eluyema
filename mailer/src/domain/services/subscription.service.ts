@@ -23,7 +23,7 @@ export class SubscriptionServiceImpl implements SubscriptionService {
   }
 
   async delete(email: string): Promise<void> {
-    await this.subscriptionRepository.findByEmail(email);
+    await this.subscriptionRepository.delete(email);
   }
 
   async getSubscribers(): Promise<string[]> {
