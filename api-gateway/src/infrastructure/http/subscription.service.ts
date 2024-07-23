@@ -60,7 +60,7 @@ export class SubscriptionServiceImpl implements SubscriptionService {
   async unsubscribe(email: string) {
     try {
       const response = await firstValueFrom(
-        this.httpService.post<void>(
+        this.httpService.delete<void>(
           `${this.subscriptionUrl}/subscribe/` + email,
         ),
       );

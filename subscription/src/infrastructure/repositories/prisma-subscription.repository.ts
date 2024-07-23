@@ -76,7 +76,6 @@ export class PrismaSubscriptionRepositoryImpl
   }
 
   async updateStatus(email: string, status: SubscriptionStatus) {
-    console.log("remove 2.1.1", email, status);
     await this.prisma.subscription.update({
       where: {
         email,

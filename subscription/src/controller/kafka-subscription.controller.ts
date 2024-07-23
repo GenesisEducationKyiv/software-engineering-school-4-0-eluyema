@@ -24,7 +24,7 @@ export class KafkaSubscriptionController {
   async onCustomerCreated(
     @Payload(ValidationPipe) value: Event<CustomerCreatedDto>,
   ) {
-    await this.createSubscriptionSagaOrchestratorApplication.execute(
+    await this.createSubscriptionSagaOrchestratorApplication.onCustomerCreateSuccess(
       value.data.email,
     );
   }
@@ -33,7 +33,7 @@ export class KafkaSubscriptionController {
   async onCustomerCreateFailed(
     @Payload(ValidationPipe) value: Event<CustomerCreateFailedDto>,
   ) {
-    await this.createSubscriptionSagaOrchestratorApplication.execute(
+    await this.createSubscriptionSagaOrchestratorApplication.onCustomerCreateFail(
       value.data.email,
     );
   }
@@ -42,7 +42,7 @@ export class KafkaSubscriptionController {
   async onCustomerRemoved(
     @Payload(ValidationPipe) value: Event<CustomerRemovedDto>,
   ) {
-    await this.removeSubscriptionSagaOrchestratorApplication.execute(
+    await this.removeSubscriptionSagaOrchestratorApplication.onCustomerRemoveSuccess(
       value.data.email,
     );
   }
@@ -51,7 +51,7 @@ export class KafkaSubscriptionController {
   async onCustomerRemoveFailed(
     @Payload(ValidationPipe) value: Event<CustomerRemoveFailedDto>,
   ) {
-    await this.removeSubscriptionSagaOrchestratorApplication.execute(
+    await this.removeSubscriptionSagaOrchestratorApplication.onCustomerRemoveFail(
       value.data.email,
     );
   }

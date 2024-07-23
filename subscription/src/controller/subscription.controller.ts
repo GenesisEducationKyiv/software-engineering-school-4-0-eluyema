@@ -44,7 +44,6 @@ export class SubscriptionController {
   @Delete(":email")
   @HttpCode(200)
   async unsubscribe(@Param("email") email: string) {
-    console.log("remove 1");
     await this.removeSubscriptionApplication.execute(email);
   }
 }
