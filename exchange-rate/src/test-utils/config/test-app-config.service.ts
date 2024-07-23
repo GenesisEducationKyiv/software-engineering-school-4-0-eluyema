@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { AppConfigService } from "../../infrastructure/config/interfaces/app-config.service.interface";
 import {
   AppConfig,
+  CronConfig,
   ExchangeApiConfig,
   MessageBrokersConfig,
   MicroservicesConfig,
@@ -20,6 +21,9 @@ export class TestAppConfigServiceImpl implements AppConfigService {
     server: {
       port: 3000,
       host: "0.0.0.0",
+    },
+    cron: {
+      pattern: "*/10 * * * * *",
     },
     microservices: {
       mailerUrl: "0.0.0.0:3002",
@@ -60,6 +64,14 @@ export class TestAppConfigServiceImpl implements AppConfigService {
 
   get microservicesApi(): MicroservicesConfig {
     return this.config.microservices;
+  }
+
+  set cron(value: CronConfig) {
+    this.config.cron = value;
+  }
+
+  get cron(): CronConfig {
+    return this.config.cron;
   }
 
   get messageBrokers(): MessageBrokersConfig {

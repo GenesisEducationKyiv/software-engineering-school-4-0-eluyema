@@ -22,6 +22,10 @@ export class SubscriptionServiceImpl implements SubscriptionService {
     return true;
   }
 
+  async unsubscribe(email: string): Promise<void> {
+    await this.subscriptionRepository.delete(email);
+  }
+
   async getSubscribers(): Promise<string[]> {
     const subscriptions: Subscription[] =
       await this.subscriptionRepository.findAll();

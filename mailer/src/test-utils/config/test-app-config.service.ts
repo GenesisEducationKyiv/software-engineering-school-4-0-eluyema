@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { AppConfigService } from "../../infrastructure/config/interfaces/app-config.service.interface";
 import {
   AppConfig,
+  CronConfig,
   MailerConfig,
   MessageBrokersConfig,
   ServerConfig,
@@ -20,6 +21,9 @@ export class TestAppConfigServiceImpl implements AppConfigService {
     server: {
       port: 3000,
       host: "0.0.0.0",
+    },
+    cron: {
+      pattern: "0 10 * * *",
     },
     messageBroker: {
       current: {
@@ -45,6 +49,14 @@ export class TestAppConfigServiceImpl implements AppConfigService {
 
   set mailer(value: MailerConfig) {
     this.config.mailer = value;
+  }
+
+  get cron(): CronConfig {
+    return this.config.cron;
+  }
+
+  set cron(value: CronConfig) {
+    this.config.cron = value;
   }
 
   get messageBroker(): MessageBrokersConfig {

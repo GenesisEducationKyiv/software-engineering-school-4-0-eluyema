@@ -10,6 +10,10 @@ export interface MailerConfig {
   password: string;
 }
 
+export interface CronConfig {
+  pattern: string;
+}
+
 export interface BrokerConfig {
   host: string;
   groupId: string;
@@ -22,5 +26,6 @@ export interface MessageBrokersConfig {
 export interface AppConfig {
   server: ServerConfig;
   mailer: MailerConfig;
+  cron: CronConfig;
   messageBroker: MessageBrokersConfig;
 }

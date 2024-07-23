@@ -11,6 +11,7 @@ export const RequiredEnvVars = [
   "BROKER_GROUP_ID",
   "MAILER_BROKER_HOST",
   "MAILER_BROKER_GROUP_ID",
+  "CRON_SCHEDULE_PATTERN",
 ];
 
 const DEFAULT_SERVER_PORT = 3000;
@@ -29,6 +30,9 @@ export const configuration = (): AppConfig => {
     },
     microservices: {
       mailerUrl: process.env.MICROSERVICE_MAILER_URL,
+    },
+    cron: {
+      pattern: process.env.CRON_SCHEDULE_PATTERN,
     },
     messageBrokers: {
       current: {

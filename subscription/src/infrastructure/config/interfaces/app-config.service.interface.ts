@@ -1,5 +1,4 @@
 import {
-  CronConfig,
   DatabaseConfig,
   MessageBrokersConfig,
   MicroservicesConfig,
@@ -10,8 +9,6 @@ export interface AppConfigService {
   get server(): ServerConfig;
 
   get database(): DatabaseConfig;
-
-  get cron(): CronConfig;
 
   get microservicesApi(): MicroservicesConfig;
 

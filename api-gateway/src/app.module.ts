@@ -3,6 +3,7 @@ import { Module } from "@nestjs/common";
 
 import { CreateSubscriptionApplicationImpl } from "./application/create-subscription.application";
 import { FetchExchangeRateApplicationImpl } from "./application/fetch-exchange-rate.application";
+import { RemoveSubscriptionApplicationImpl } from "./application/remove-subscription.application";
 import { ExchangeRateController } from "./controllers/exchange-rate.controller";
 import { SubscriptionController } from "./controllers/subscription.controller";
 import { AppConfigModule } from "./infrastructure/config/app-config.module";
@@ -26,6 +27,11 @@ const fetchExchangeRateApp = {
   useClass: FetchExchangeRateApplicationImpl,
 };
 
+const removeSubscriptionApp = {
+  provide: TYPES.applications.RemoveSubscriptionApplication,
+  useClass: RemoveSubscriptionApplicationImpl,
+};
+
 const exchangeRateService = {
   provide: TYPES.infrastructure.ExchangeRateService,
   useClass: ExchangeRateServiceImpl,
@@ -43,6 +49,7 @@ const subscriptionService = {
     appConfigService,
     createSubscriptionApp,
     fetchExchangeRateApp,
+    removeSubscriptionApp,
     exchangeRateService,
     subscriptionService,
   ],

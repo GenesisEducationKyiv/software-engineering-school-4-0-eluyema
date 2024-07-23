@@ -9,6 +9,7 @@ export const RequiredEnvVars = [
   "MAIL_PASSWORD",
   "BROKER_HOST",
   "BROKER_GROUP_ID",
+  "CRON_SCHEDULE_PATTERN",
 ];
 
 const DEFAULT_SERVER_PORT = 3000;
@@ -31,6 +32,9 @@ export const configuration = (): AppConfig => {
         host: process.env.BROKER_HOST,
         groupId: process.env.BROKER_GROUP_ID,
       },
+    },
+    cron: {
+      pattern: process.env.CRON_SCHEDULE_PATTERN,
     },
   } as AppConfig;
 
