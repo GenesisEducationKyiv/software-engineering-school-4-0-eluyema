@@ -1,2 +1,1 @@
-npx pnpm format:check
-npx pnpm lint:check
+npm run lint:check:all

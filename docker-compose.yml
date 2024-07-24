@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   db:
@@ -11,18 +11,40 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready', '-d', 'db_prod']
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
       interval: 30s
       timeout: 60s
       retries: 5
       start_period: 80s
 
-  app:
-    build: .
+  app_gateway:
+    build: ./api-gateway/
     ports:
-      - '3000:3000'
+      - "3000:3333"
     env_file:
-      - .env
+      - ./api-gateway/.env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  exchange_rate:
+    build: ./exchange-rate/
+    env_file:
+      - ./exchange-rate/.env
+    depends_on:
+      db:
+        condition: service_healthy
+  mailer:
+    build: ./mailer/
+    env_file:
+      - ./mailer/.env
+    depends_on:
+      db:
+        condition: service_healthy
+  subscription:
+    build: ./subscription/
+    env_file:
+      - ./subscription/.env
     depends_on:
       db:
         condition: service_healthy
