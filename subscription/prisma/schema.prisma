@@ -7,7 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum SubscriptionStatus {
+  PENDING
+  ACTIVE
+}
+
 model Subscription {
-  id    String @id @default(uuid())
-  email String @unique
+  id     String             @id @default(uuid())
+  email  String             @unique
+  status SubscriptionStatus @default(PENDING)
 }

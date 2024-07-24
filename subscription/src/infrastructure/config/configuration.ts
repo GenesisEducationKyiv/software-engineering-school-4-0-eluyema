@@ -12,6 +12,8 @@ export const RequiredEnvVars = [
   "EXCHANGE_RATE_BROKER_GROUP_ID",
   "MAILER_BROKER_HOST",
   "MAILER_BROKER_GROUP_ID",
+  "CUSTOMERS_BROKER_HOST",
+  "CUSTOMERS_BROKER_GROUP_ID",
 ];
 
 const DEFAULT_SERVER_PORT = 3000;
@@ -44,6 +46,10 @@ export const configuration = (): AppConfig => {
       mailer: {
         host: process.env.MAILER_BROKER_HOST,
         groupId: process.env.MAILER_BROKER_GROUP_ID,
+      },
+      customers: {
+        host: process.env.CUSTOMERS_BROKER_HOST,
+        groupId: process.env.CUSTOMERS_BROKER_GROUP_ID,
       },
     },
   } as AppConfig;

@@ -35,6 +35,10 @@ export class TestAppConfigServiceImpl implements AppConfigService {
         host: "0.0.0.0:3121",
         groupId: "mailerid",
       },
+      customers: {
+        host: "0.0.0.0:3121",
+        groupId: "customersid",
+      },
     },
   };
 

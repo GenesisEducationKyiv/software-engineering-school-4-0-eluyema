@@ -1,5 +1,5 @@
-import { CreateSubscriptionApplicationImpl } from "./create-subscription.application";
-import { SubscriptionService } from "../domain/services/interfaces/subscription.service.interface";
+import { CreateSubscriptionApplicationImpl } from "./create-customer.application";
+import { SubscriptionService } from "../domain/services/interfaces/customer.service.interface";
 
 describe("CreateSubscriptionApplicationImpl", () => {
   let application: CreateSubscriptionApplicationImpl;
