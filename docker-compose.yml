@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   db:
@@ -11,21 +11,73 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready', '-d', 'db_prod']
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
       interval: 30s
       timeout: 60s
       retries: 5
       start_period: 80s
-
-  app:
-    build: .
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ALLOW_ANONYMOUS_LOGIN: yes
     ports:
-      - '3000:3000'
+      - "2181:2181"
+
+  kafka:
+    image: "docker.io/bitnami/kafka:2-debian-10"
+    ports:
+      - 9092:9092
+      - 9093:9093
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://kafka:9093
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+    depends_on:
+      - zookeeper
+  app_gateway:
+    build: ./api-gateway/
+    ports:
+      - "3000:3333"
     env_file:
-      - .env
+      - ./api-gateway/.env
     depends_on:
       db:
         condition: service_healthy
+
+  exchange_rate:
+    build: ./exchange-rate/
+    env_file:
+      - ./exchange-rate/.env
+    depends_on:
+      db:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+  mailer:
+    build: ./mailer/
+    env_file:
+      - ./mailer/.env
+    depends_on:
+      db:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+  subscription:
+    build: ./subscription/
+    env_file:
+      - ./subscription/.env
+    depends_on:
+      db:
+        condition: service_healthy
+      exchange_rate:
+        condition: service_started
 
 volumes:
   db-data:
