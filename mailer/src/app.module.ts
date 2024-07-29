@@ -8,6 +8,7 @@ import { AddRateSubscriptionApplicationImpl } from "./application/add-rate-subsc
 import { NotifyRateSubscribersApplicationImpl } from "./application/notify-rate-subscribers.application";
 import { RemoveRateSubscriptionApplicationImpl } from "./application/remove-rate-subscription.application";
 import { UpdateExchangeRateApplicationImpl } from "./application/update-exchange-rate.application";
+import { MetricsController } from "./controllers/metrics.controller";
 import { RateController } from "./controllers/rate.controller";
 import { SubscriptionController } from "./controllers/subscription.controller";
 import { RateServiceImpl } from "./domain/services/rate.service";
@@ -16,7 +17,8 @@ import { ExchangeRateEmailComposerServiceImpl } from "./infrastructure/composers
 import { AppConfigModule } from "./infrastructure/config/app-config.module";
 import { AppConfigServiceImpl } from "./infrastructure/config/app-config.service";
 import { ExchangeRateNotificationServiceImpl } from "./infrastructure/email/exchange-rate-notification.service";
-import { PrismaModule } from "./infrastructure/prisma/prisma.module";
+import { PrometheusMetricsServiceImpl } from "./infrastructure/metrics/metrics.service";
+import { PrismaService } from "./infrastructure/prisma/prisma.service";
 import { PrismaRateRepositoryImpl } from "./infrastructure/repositories/prisma-rate.repository";
 import { PrismaSubscriptionRepositoryImpl } from "./infrastructure/repositories/prisma-subscription.repository";
 import { NotifyRateSubscribtionCronServiceImpl } from "./infrastructure/scheduling/notify-rate-subscription-cron.service";
@@ -92,9 +94,14 @@ const subscriptionRepository = {
   useClass: PrismaSubscriptionRepositoryImpl,
 };
 
+const metricsService = {
+  provide: TYPES.infrastructure.MetricsService,
+  useClass: PrometheusMetricsServiceImpl,
+};
+
 @Module({
-  imports: [PrismaModule, AppConfigModule, ScheduleModule.forRoot()],
-  controllers: [SubscriptionController, RateController],
+  imports: [AppConfigModule, ScheduleModule.forRoot()],
+  controllers: [SubscriptionController, RateController, MetricsController],
   providers: [
     appConfigService,
     updateExchangeRateApplication,
@@ -111,6 +118,8 @@ const subscriptionRepository = {
     rateRepository,
     subscriptionRepository,
     exchangeRateNotificationService,
+    metricsService,
+    PrismaService,
   ],
 })
 export class AppModule {}

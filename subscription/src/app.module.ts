@@ -7,13 +7,15 @@ import { ScheduleModule } from "@nestjs/schedule";
 import { CreateSubscriptionSagaOrchestratorApplicationImpl } from "./application/create-subscription-saga-orchestrator.application";
 import { RemoveSubscriptionSagaOrchestratorApplicationImpl } from "./application/remove-subscription-saga-orchestrator.application";
 import { KafkaSubscriptionController } from "./controller/kafka-subscription.controller";
+import { MetricsController } from "./controller/metrics.controller";
 import { SubscriptionController } from "./controller/subscription.controller";
 import { SubscriptionServiceImpl } from "./domain/services/subscription.service";
 import { AppConfigModule } from "./infrastructure/config/app-config.module";
 import { AppConfigServiceImpl } from "./infrastructure/config/app-config.service";
 import { AppConfigService } from "./infrastructure/config/interfaces/app-config.service.interface";
+import { PrometheusMetricsServiceImpl } from "./infrastructure/metrics/metrics.service";
 import { KafkaEventNotificationServiceImpl } from "./infrastructure/notification/kafka-event-notification.service";
-import { PrismaModule } from "./infrastructure/prisma/prisma.module";
+import { PrismaService } from "./infrastructure/prisma/prisma.service";
 import { PrismaSubscriptionRepositoryImpl } from "./infrastructure/repositories/prisma-subscription.repository";
 import { TYPES } from "./ioc/types";
 
@@ -58,9 +60,13 @@ const eventMailerNotificationService = {
   inject: [TYPES.brokers.Mailer],
 };
 
+const metricsService = {
+  provide: TYPES.infrastructure.MetricsService,
+  useClass: PrometheusMetricsServiceImpl,
+};
+
 @Module({
   imports: [
-    PrismaModule,
     AppConfigModule,
     ScheduleModule.forRoot(),
     ClientsModule.registerAsync([
@@ -109,7 +115,11 @@ const eventMailerNotificationService = {
       },
     ]),
   ],
-  controllers: [SubscriptionController, KafkaSubscriptionController],
+  controllers: [
+    SubscriptionController,
+    KafkaSubscriptionController,
+    MetricsController,
+  ],
   providers: [
     createSubscriptionApp,
     removeSubscriptionApp,
@@ -118,6 +128,8 @@ const eventMailerNotificationService = {
     appConfigService,
     eventCustomersNotificationService,
     eventMailerNotificationService,
+    metricsService,
+    PrismaService,
   ],
   exports: [subscriptionService],
 })

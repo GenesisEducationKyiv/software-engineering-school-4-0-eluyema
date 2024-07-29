@@ -15,6 +15,7 @@ export const TYPES = {
     CurrentRateCronService: Symbol("CurrentRateCronService"),
     EventNotificationService: Symbol("EventNotificationService"),
     AppConfigService: Symbol("AppConfigService"),
+    MetricsService: Symbol("MetricsService"),
   },
   brokers: {
     Mailer: "MailerBrokerClient",

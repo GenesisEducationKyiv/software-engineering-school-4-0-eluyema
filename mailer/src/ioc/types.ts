@@ -25,6 +25,7 @@ export const TYPES = {
     NotifyRateSubscribtionCronService: Symbol(
       "NotifyRateSubscribtionCronService",
     ),
+    MetricsService: Symbol("MetricsService"),
   },
   repositories: {
     SubscriptionRepository: Symbol("SubscriptionRepository"),

@@ -1,13 +1,20 @@
-import { Controller, Inject, ValidationPipe } from "@nestjs/common";
+import {
+  Controller,
+  Inject,
+  UseInterceptors,
+  ValidationPipe,
+} from "@nestjs/common";
 import { EventPattern, Payload } from "@nestjs/microservices";
 
 import { CreateCustomerDto } from "./dtos/create-customer.dto";
 import { RemoveCustomerDto } from "./dtos/remove-customer.dto";
 import { CreateCustomerApplication } from "../application/interfaces/create-customer.application.interface";
 import { RemoveCustomerApplication } from "../application/interfaces/remove-customer.application.interface";
+import { KafkaMetricsInterceptor } from "../infrastructure/metrics/kafka-metrics.interceptor";
 import { Event } from "../infrastructure/notification/event";
 import { TYPES } from "../ioc";
 
+@UseInterceptors(KafkaMetricsInterceptor)
 @Controller()
 export class CustomerController {
   constructor(
