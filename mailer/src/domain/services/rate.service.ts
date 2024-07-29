@@ -1,4 +1,4 @@
-import { HttpException, Inject, Injectable } from "@nestjs/common";
+import { HttpException, Inject, Injectable, Logger } from "@nestjs/common";
 
 import { TYPES } from "src/ioc";
 
@@ -10,6 +10,8 @@ import { RateRepository } from "../repositories/rate.repository";
 
 @Injectable()
 export class RateServiceImpl implements RateService {
+  private readonly logger = new Logger(this.constructor.name);
+
   constructor(
     @Inject(TYPES.repositories.RateRepository)
     private rateRepository: RateRepository,
@@ -26,15 +28,19 @@ export class RateServiceImpl implements RateService {
 
   async getRate(): Promise<Rate> {
     try {
+      this.logger.log(`Request rate`);
       const rate = await this.rateRepository.findByName(Currency.UAH);
       if (!rate) {
+        this.logger.warn(`Rate not found in DB`);
         throw new HttpException("Rate didn't exist in DB", 404);
       }
       this.metricsService.incrementCounter("rate_requests", {
         status: "success",
       });
+      this.logger.log(`Found rate ${JSON.stringify(rate)}`);
       return rate;
     } catch (err) {
+      this.logger.error(`Request rate failed with error: ${err.message}`);
       this.metricsService.incrementCounter("rate_requests", {
         status: "failed",
       });
@@ -44,11 +50,14 @@ export class RateServiceImpl implements RateService {
 
   async updateRate(rate: Rate) {
     try {
+      this.logger.log(`Update rate started`);
       await this.rateRepository.createOrUpdate(rate);
+      this.logger.log(`Update rate success`);
       this.metricsService.incrementCounter("rate_updates", {
         status: "success",
       });
     } catch (err) {
+      this.logger.log(`Update rate failed`);
       this.metricsService.incrementCounter("rate_updates", {
         status: "failed",
       });

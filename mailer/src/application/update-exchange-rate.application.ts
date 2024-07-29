@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 
 import { Rate } from "src/domain/entities/rate.entity";
 import { RateService } from "src/domain/services/interfaces/rate.service.interface";
@@ -10,12 +10,21 @@ import { TYPES } from "../ioc";
 export class UpdateExchangeRateApplicationImpl
   implements UpdateExchangeRateApplication
 {
+  private readonly logger = new Logger(this.constructor.name);
+
   constructor(
     @Inject(TYPES.services.RateService)
     private readonly rateService: RateService,
   ) {}
 
   async execute(rate: Rate): Promise<void> {
-    await this.rateService.updateRate(rate);
+    try {
+      this.logger.log(`Update rate ${JSON.stringify(rate)} started`);
+      await this.rateService.updateRate(rate);
+      this.logger.log(`Update rate ${JSON.stringify(rate)} success`);
+    } catch (err) {
+      this.logger.warn(`Update rate ${JSON.stringify(rate)} failed`);
+      throw err;
+    }
   }
 }

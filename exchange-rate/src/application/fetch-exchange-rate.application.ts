@@ -17,8 +17,13 @@ export class FetchExchangeRateApplicationImpl
   ) {}
 
   async execute(): Promise<ExchangeRate> {
-    const data = await this.exchangeRateService.getCurrentExchangeRate();
-    this.logger.log(`Exchange rate fetched "${JSON.stringify(data)}"`);
-    return data;
+    try {
+      const data = await this.exchangeRateService.getCurrentExchangeRate();
+      this.logger.log(`Exchange rate fetched "${JSON.stringify(data)}"`);
+      return data;
+    } catch (err) {
+      this.logger.error("Fetching failed! Error: " + err.message);
+      throw err;
+    }
   }
 }

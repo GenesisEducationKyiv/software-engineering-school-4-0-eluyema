@@ -29,16 +29,24 @@ export class NotifyCurrentExchangeRateApplicationImpl
   }
 
   async execute(): Promise<void> {
-    const exchangeRate =
-      await this.exchangeRateService.getCurrentExchangeRate();
-    this.logger.log(`Exchange rate fetched ${exchangeRate.rate}`);
+    try {
+      const exchangeRate =
+        await this.exchangeRateService.getCurrentExchangeRate();
+      this.logger.log(`Exchange rate fetched ${exchangeRate.rate}`);
 
-    const eventPayload: RateUpdatedDto = {
-      rate: exchangeRate.rate,
-      name: "UAH",
-      timestamp: Date.now(),
-    };
-    await this.eventNotificationService.emitEvent("rate-updated", eventPayload);
-    this.metricsService.incrementCounter("rate_update_notification");
+      const eventPayload: RateUpdatedDto = {
+        rate: exchangeRate.rate,
+        name: "UAH",
+        timestamp: Date.now(),
+      };
+      await this.eventNotificationService.emitEvent(
+        "rate-updated",
+        eventPayload,
+      );
+      this.metricsService.incrementCounter("rate_update_notification");
+    } catch (err) {
+      this.logger.error("Notification failed! Error: " + err.message);
+      throw err;
+    }
   }
 }

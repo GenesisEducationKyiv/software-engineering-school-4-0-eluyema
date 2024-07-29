@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { SchedulerRegistry } from "@nestjs/schedule";
 import { CronJob } from "cron";
 
@@ -14,6 +14,8 @@ export class NotifyRateSubscribtionCronServiceImpl
   implements NotifyRateSubscribtionCronService
 {
   private cronPattern: string;
+
+  private readonly logger = new Logger(this.constructor.name);
 
   constructor(
     private schedulerRegistry: SchedulerRegistry,
@@ -31,8 +33,16 @@ export class NotifyRateSubscribtionCronServiceImpl
   }
 
   async onModuleInit() {
-    this.cronPattern = this.appConfigService.cron.pattern;
-    this.initializeCronJob();
+    try {
+      this.logger.log("Notification rate cron initialization started");
+      this.cronPattern = this.appConfigService.cron.pattern;
+      this.initializeCronJob();
+    } catch (err) {
+      this.logger.error(
+        `Notification rate cron initialization failed! Error: ${err.message}`,
+      );
+      throw err;
+    }
   }
 
   private initializeCronJob() {
@@ -50,7 +60,16 @@ export class NotifyRateSubscribtionCronServiceImpl
   }
 
   async handleCron() {
-    this.metricsService.incrementCounter("notification_mailer_cron");
-    await this.notifyRateSubscribersApplication.execute();
+    try {
+      this.logger.log(`Notification rate cron job started`);
+      this.metricsService.incrementCounter("notification_mailer_cron");
+      await this.notifyRateSubscribersApplication.execute();
+      this.logger.log(`Notification rate cron job success`);
+    } catch (err) {
+      this.logger.error(
+        `Notification rate cron job failed! Error: ${err.message}`,
+      );
+      throw err;
+    }
   }
 }

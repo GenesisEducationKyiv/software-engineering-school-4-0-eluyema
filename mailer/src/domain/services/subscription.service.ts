@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 
 import { SubscriptionService } from "./interfaces/subscription.service.interface";
 import { MetricsService } from "../../infrastructure/metrics/interfaces/metrics.service.interface";
@@ -8,6 +8,8 @@ import { SubscriptionRepository } from "../repositories/subscription.repository"
 
 @Injectable()
 export class SubscriptionServiceImpl implements SubscriptionService {
+  private readonly logger = new Logger(this.constructor.name);
+
   constructor(
     @Inject(TYPES.repositories.SubscriptionRepository)
     private readonly subscriptionRepository: SubscriptionRepository,
@@ -28,20 +30,27 @@ export class SubscriptionServiceImpl implements SubscriptionService {
 
   async create(email: string): Promise<boolean> {
     try {
+      this.logger.log(`Try to find subscription ${email}`);
       const existingSubscription =
         await this.subscriptionRepository.findByEmail(email);
       if (existingSubscription) {
+        this.logger.log(`Subscription ${email} already exists`);
         this.metricsService.incrementCounter("subscription_creation", {
           status: "failed",
         });
         return false;
       }
+      this.logger.log(`Subscription ${email} creation started`);
       await this.subscriptionRepository.create(email);
+      this.logger.log(`Subscription ${email} creation success`);
       this.metricsService.incrementCounter("subscription_creation", {
         status: "success",
       });
       return true;
     } catch (err) {
+      this.logger.log(
+        `Subscription ${email} creation failed! Error: ` + err.message,
+      );
       this.metricsService.incrementCounter("subscription_creation", {
         status: "failed",
       });
@@ -51,11 +60,16 @@ export class SubscriptionServiceImpl implements SubscriptionService {
 
   async delete(email: string): Promise<void> {
     try {
+      this.logger.log(`Subscription ${email} removal started`);
       await this.subscriptionRepository.delete(email);
+      this.logger.log(`Subscription ${email} removal success`);
       this.metricsService.incrementCounter("subscription_removal", {
         status: "success",
       });
     } catch (err) {
+      this.logger.error(
+        `Subscription ${email} removal failed! Error: ` + err.message,
+      );
       this.metricsService.incrementCounter("subscription_removal", {
         status: "failed",
       });
@@ -64,11 +78,21 @@ export class SubscriptionServiceImpl implements SubscriptionService {
   }
 
   async getSubscribers(): Promise<string[]> {
-    const subscriptions: Subscription[] =
-      await this.subscriptionRepository.findAll();
+    try {
+      this.logger.log(`Find subscriptions started`);
+      const subscriptions: Subscription[] =
+        await this.subscriptionRepository.findAll();
 
-    const subscribers = subscriptions.map((subscription) => subscription.email);
+      this.logger.log(`Find subscriptions success`);
 
-    return subscribers;
+      const subscribers = subscriptions.map(
+        (subscription) => subscription.email,
+      );
+
+      return subscribers;
+    } catch (err) {
+      this.logger.error(`Find subscriptions failed! Error: ` + err.message);
+      throw err;
+    }
   }
 }
