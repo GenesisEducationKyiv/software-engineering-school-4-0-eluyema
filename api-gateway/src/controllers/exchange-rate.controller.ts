@@ -7,11 +7,11 @@ import {
 } from "@nestjs/common";
 
 import { FetchExchangeRateApplication } from "../application/interfaces/fetch-exchange-rate.application.interface";
-import { MetricsInterceptor } from "../infrastructure/metrics/metrics.interceptor";
+import { HttpMetricsInterceptor } from "../infrastructure/metrics/http-metrics.interceptor";
 import { HttpExceptionFilter } from "../infrastructure/nestjs/filters/http-exception.filter";
 import { TYPES } from "../ioc/types";
 
-@UseInterceptors(MetricsInterceptor)
+@UseInterceptors(HttpMetricsInterceptor)
 @UseFilters(new HttpExceptionFilter())
 @Controller("rate")
 export class ExchangeRateController {

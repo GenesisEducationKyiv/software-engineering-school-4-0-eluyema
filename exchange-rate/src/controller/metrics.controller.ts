@@ -1,11 +1,11 @@
 import { Controller, Get, Inject, Res, UseInterceptors } from "@nestjs/common";
 import { FastifyReply } from "fastify";
 
+import { HttpMetricsInterceptor } from "../infrastructure/metrics/http-metrics.interceptor";
 import { MetricsService } from "../infrastructure/metrics/interfaces/metrics.service.interface";
-import { MetricsInterceptor } from "../infrastructure/metrics/metrics.interceptor";
 import { TYPES } from "../ioc";
 
-@UseInterceptors(MetricsInterceptor)
+@UseInterceptors(HttpMetricsInterceptor)
 @Controller("metrics")
 export class MetricsController {
   constructor(

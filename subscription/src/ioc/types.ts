@@ -19,6 +19,7 @@ export const TYPES = {
     EventCustomersNotificationService: Symbol(
       "EventCustomersNotificationService",
     ),
+    MetricsService: Symbol("MetricsService"),
   },
   brokers: {
     ExchangeRate: "ExchangeRateBrokerClient",

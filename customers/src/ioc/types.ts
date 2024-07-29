@@ -12,6 +12,7 @@ export const TYPES = {
   infrastructure: {
     AppConfigService: Symbol("AppConfigService"),
     EventNotificationService: Symbol("EventNotificationService"),
+    MetricsService: Symbol("MetricsService"),
   },
   brokers: {
     ExchangeRate: "ExchangeRateBrokerClient",

@@ -13,11 +13,11 @@ import { RemoveSubscriptionApplication } from "src/application/interfaces/remove
 
 import { CreateSubscriptionDto } from "./dtos/create-subscription.dto";
 import { CreateSubscriptionApplication } from "../application/interfaces/create-subscription.application.interface";
-import { MetricsInterceptor } from "../infrastructure/metrics/metrics.interceptor";
+import { HttpMetricsInterceptor } from "../infrastructure/metrics/http-metrics.interceptor";
 import { HttpExceptionFilter } from "../infrastructure/nestjs/filters/http-exception.filter";
 import { TYPES } from "../ioc/types";
 
-@UseInterceptors(MetricsInterceptor)
+@UseInterceptors(HttpMetricsInterceptor)
 @UseFilters(new HttpExceptionFilter())
 @Controller("subscribe")
 export class SubscriptionController {

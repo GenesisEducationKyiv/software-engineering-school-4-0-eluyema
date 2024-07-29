@@ -5,7 +5,6 @@ import {
   Injectable,
   NestInterceptor,
 } from "@nestjs/common";
-import { FastifyRequest } from "fastify";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 
@@ -13,31 +12,25 @@ import { MetricsService } from "./interfaces/metrics.service.interface";
 import { TYPES } from "../../ioc";
 
 @Injectable()
-export class MetricsInterceptor implements NestInterceptor {
+export class KafkaMetricsInterceptor implements NestInterceptor {
   constructor(
     @Inject(TYPES.infrastructure.MetricsService)
     private readonly metricsService: MetricsService,
   ) {
     this.metricsService.initCounter(
-      "http_request",
-      "HTTP request to microservice",
-      ["method", "path", "statusCode"],
+      "kafka_event",
+      "Kafka events to microservice",
+      ["eventType"],
     );
   }
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-    const request: FastifyRequest = context.switchToHttp().getRequest();
-    const response = context.switchToHttp().getResponse();
-
-    const { method, url } = request;
+    const eventData = context.switchToRpc().getData();
 
     return next.handle().pipe(
       tap(() => {
-        const statusCode = response.statusCode.toString();
-        this.metricsService.incrementCounter("http_request", {
-          method,
-          path: url,
-          statusCode,
+        this.metricsService.incrementCounter("kafka_event", {
+          eventType: eventData.eventType,
         });
       }),
     );

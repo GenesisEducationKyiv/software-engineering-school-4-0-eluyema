@@ -7,4 +7,6 @@ export interface MetricsService {
   ): void;
   getMetrics(): Promise<string>;
   getMetricsContentType(): string;
+  addMetricHandler(name: string, callback: () => Promise<string>): void;
+  removeMetricHandler(name: string): void;
 }

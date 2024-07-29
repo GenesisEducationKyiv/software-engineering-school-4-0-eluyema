@@ -6,13 +6,33 @@ import { MetricsService } from "./interfaces/metrics.service.interface";
 @Injectable()
 export class PrometheusMetricsServiceImpl implements MetricsService {
   private counters: Map<string, Counter<string>> = new Map();
+  private metricsHandlers: Map<string, () => Promise<string>> = new Map();
 
   private onModuleInit(): void {
-    collectDefaultMetrics({ prefix: "exchange_rate_" });
+    collectDefaultMetrics();
+  }
+
+  public addMetricHandler(name: string, callback: () => Promise<string>) {
+    this.metricsHandlers.set(name, callback);
+  }
+
+  public removeMetricHandler(name: string) {
+    this.metricsHandlers.delete(name);
   }
 
   public async getMetrics(): Promise<string> {
-    return register.metrics();
+    const callbackPromises: Promise<string>[] = [];
+
+    for (const callback of this.metricsHandlers.values()) {
+      callbackPromises.push(callback());
+    }
+
+    const metricsStrArray = await Promise.all([
+      register.metrics(),
+      ...callbackPromises,
+    ]);
+
+    return metricsStrArray.join();
   }
 
   public getMetricsContentType() {

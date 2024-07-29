@@ -1,10 +1,10 @@
 import { Controller, Get, Inject, UseInterceptors } from "@nestjs/common";
 
 import { FetchExchangeRateApplication } from "../application/interfaces/fetch-exchange-rate.application.interface";
-import { MetricsInterceptor } from "../infrastructure/metrics/metrics.interceptor";
+import { HttpMetricsInterceptor } from "../infrastructure/metrics/http-metrics.interceptor";
 import { TYPES } from "../ioc/types";
 
-@UseInterceptors(MetricsInterceptor)
+@UseInterceptors(HttpMetricsInterceptor)
 @Controller("rate")
 export class HttpExchangeRateController {
   constructor(

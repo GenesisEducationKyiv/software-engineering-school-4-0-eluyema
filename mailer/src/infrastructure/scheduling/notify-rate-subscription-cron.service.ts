@@ -7,6 +7,7 @@ import { TYPES } from "src/ioc";
 
 import { NotifyRateSubscribtionCronService } from "./interfaces/notify-rate-subscribtion-cron.service.interface";
 import { AppConfigService } from "../config/interfaces/app-config.service.interface";
+import { MetricsService } from "../metrics/interfaces/metrics.service.interface";
 
 @Injectable()
 export class NotifyRateSubscribtionCronServiceImpl
@@ -20,7 +21,14 @@ export class NotifyRateSubscribtionCronServiceImpl
     private readonly notifyRateSubscribersApplication: NotifyRateSubscribersApplication,
     @Inject(TYPES.infrastructure.AppConfigService)
     private readonly appConfigService: AppConfigService,
-  ) {}
+    @Inject(TYPES.infrastructure.MetricsService)
+    private readonly metricsService: MetricsService,
+  ) {
+    this.metricsService.initCounter(
+      "notification_mailer_cron",
+      "Count of notification mail cron",
+    );
+  }
 
   async onModuleInit() {
     this.cronPattern = this.appConfigService.cron.pattern;
@@ -42,6 +50,7 @@ export class NotifyRateSubscribtionCronServiceImpl
   }
 
   async handleCron() {
+    this.metricsService.incrementCounter("notification_mailer_cron");
     await this.notifyRateSubscribersApplication.execute();
   }
 }
