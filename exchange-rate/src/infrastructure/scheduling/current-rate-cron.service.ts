@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { SchedulerRegistry } from "@nestjs/schedule";
 import { CronJob } from "cron";
 
@@ -12,6 +12,8 @@ import { MetricsService } from "../metrics/interfaces/metrics.service.interface"
 @Injectable()
 export class CurrentRateCronServiceImpl implements CurrentRateCronService {
   private cronPattern: string;
+
+  private readonly logger = new Logger(this.constructor.name);
 
   constructor(
     private schedulerRegistry: SchedulerRegistry,
@@ -29,8 +31,15 @@ export class CurrentRateCronServiceImpl implements CurrentRateCronService {
   }
 
   async onModuleInit() {
-    this.cronPattern = this.appConfigService.cron.pattern;
-    this.initializeCronJob();
+    try {
+      this.logger.debug("Cron initialization started");
+      this.cronPattern = this.appConfigService.cron.pattern;
+      this.initializeCronJob();
+      this.logger.debug("Cron initialization success");
+    } catch (err) {
+      this.logger.error("Cron initialization failed");
+      throw err;
+    }
   }
 
   private initializeCronJob() {
@@ -38,7 +47,7 @@ export class CurrentRateCronServiceImpl implements CurrentRateCronService {
       try {
         await this.handleCron();
       } catch (err) {
-        console.error(err);
+        this.logger.error("Cron callback failed");
       }
     };
 
@@ -51,7 +60,12 @@ export class CurrentRateCronServiceImpl implements CurrentRateCronService {
   }
 
   async handleCron() {
-    this.metricsService.incrementCounter("rate_update_cron");
-    await this.notifyCurrentExchangeRateApplication.execute();
+    this.logger.log("Rate update cron started");
+    try {
+      this.metricsService.incrementCounter("rate_update_cron");
+      await this.notifyCurrentExchangeRateApplication.execute();
+    } catch (err) {
+      this.logger.error("Rate update cron failed! Error: " + err.message);
+    }
   }
 }

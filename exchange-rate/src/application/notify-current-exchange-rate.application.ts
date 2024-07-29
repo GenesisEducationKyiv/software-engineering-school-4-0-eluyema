@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 
 import { EventNotificationService } from "src/infrastructure/notification/interfaces/event-notification.service.interface";
 
@@ -12,6 +12,8 @@ import { TYPES } from "../ioc";
 export class NotifyCurrentExchangeRateApplicationImpl
   implements NotifyCurrentExchangeRateApplication
 {
+  private readonly logger = new Logger(this.constructor.name);
+
   constructor(
     @Inject(TYPES.services.ExchangeRateService)
     private readonly exchangeRateService: ExchangeRateService,
@@ -29,6 +31,7 @@ export class NotifyCurrentExchangeRateApplicationImpl
   async execute(): Promise<void> {
     const exchangeRate =
       await this.exchangeRateService.getCurrentExchangeRate();
+    this.logger.log(`Exchange rate fetched ${exchangeRate.rate}`);
 
     const eventPayload: RateUpdatedDto = {
       rate: exchangeRate.rate,

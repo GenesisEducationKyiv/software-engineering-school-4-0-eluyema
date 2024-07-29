@@ -1,5 +1,5 @@
 import { HttpService } from "@nestjs/axios";
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { firstValueFrom } from "rxjs";
 
 import { PrivatbankDto } from "./dto/privatbank.dto";
@@ -13,6 +13,7 @@ import { MetricsService } from "../../metrics/interfaces/metrics.service.interfa
 @Injectable()
 export class PrivatbankClientImpl implements ExchangeRateClient {
   private exchangeApiUrl: string;
+  private readonly logger = new Logger(this.constructor.name);
 
   constructor(
     private readonly httpService: HttpService,
@@ -22,15 +23,11 @@ export class PrivatbankClientImpl implements ExchangeRateClient {
     private readonly metricsService: MetricsService,
   ) {
     this.exchangeApiUrl = appConfigService.exchangeApi.privatbankUrl;
+
     this.metricsService.initCounter(
-      "exchange_rate_fetched_success",
-      "Fetch rate success",
-      ["source"],
-    );
-    this.metricsService.initCounter(
-      "exchange_rate_fetched_failed",
+      "exchange_rate_fetched",
       "Fetch rate failed",
-      ["source"],
+      ["source", "status"],
     );
   }
 
@@ -39,7 +36,11 @@ export class PrivatbankClientImpl implements ExchangeRateClient {
       const exchangeRatesDto = await firstValueFrom(
         this.httpService.get<PrivatbankDto>(this.exchangeApiUrl),
       );
-      this.metricsService.incrementCounter("exchange_rate_fetched_success", {
+      this.logger.debug(
+        `Fetched exchange rate body received from URL [${this.exchangeApiUrl}] throw exception: ${JSON.stringify(exchangeRatesDto)}`,
+      );
+      this.metricsService.incrementCounter("exchange_rate_fetched", {
+        status: "success",
         source: "privatbank",
       });
       return ExchangeRateFactory.create(
@@ -48,10 +49,13 @@ export class PrivatbankClientImpl implements ExchangeRateClient {
         new Date(),
       );
     } catch (err) {
-      this.metricsService.incrementCounter("exchange_rate_fetched_failed", {
+      this.metricsService.incrementCounter("exchange_rate_fetched", {
         source: "privatbank",
+        status: "failed",
       });
-      console.error(err.message);
+      this.logger.error(
+        `Fetch exchange rate from URL [${this.exchangeApiUrl}] throw exception: ${err.message}`,
+      );
       throw new Error("Request to get currency rate failed");
     }
   }

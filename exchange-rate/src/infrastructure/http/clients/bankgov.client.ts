@@ -1,5 +1,5 @@
 import { HttpService } from "@nestjs/axios";
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { firstValueFrom } from "rxjs";
 
 import { ExchangeRate } from "src/domain/entities/exchange-rate.entity";
@@ -14,6 +14,7 @@ import { MetricsService } from "../../metrics/interfaces/metrics.service.interfa
 @Injectable()
 export class BankgovClientImpl implements ExchangeRateClient {
   private exchangeApiUrl: string;
+  private readonly logger = new Logger(this.constructor.name);
 
   constructor(
     private readonly httpService: HttpService,
@@ -24,14 +25,9 @@ export class BankgovClientImpl implements ExchangeRateClient {
   ) {
     this.exchangeApiUrl = appConfigService.exchangeApi.bankgovUrl;
     this.metricsService.initCounter(
-      "exchange_rate_fetched_success",
+      "exchange_rate_fetched",
       "Fetch rate success",
-      ["source"],
-    );
-    this.metricsService.initCounter(
-      "exchange_rate_fetched_failed",
-      "Fetch rate failed",
-      ["source"],
+      ["source", "status"],
     );
   }
 
@@ -40,8 +36,12 @@ export class BankgovClientImpl implements ExchangeRateClient {
       const exchangeRatesDto = await firstValueFrom(
         this.httpService.get<BankgovDto>(this.exchangeApiUrl),
       );
-      this.metricsService.incrementCounter("exchange_rate_fetched_success", {
+      this.logger.debug(
+        `Fetched exchange rate body received from URL [${this.exchangeApiUrl}] throw exception: ${JSON.stringify(exchangeRatesDto)}`,
+      );
+      this.metricsService.incrementCounter("exchange_rate_fetched", {
         source: "bankgov",
+        status: "failed",
       });
       return ExchangeRateFactory.create(
         exchangeRatesDto.data[0].cc,
@@ -49,10 +49,13 @@ export class BankgovClientImpl implements ExchangeRateClient {
         new Date(),
       );
     } catch (err) {
-      this.metricsService.incrementCounter("exchange_rate_fetched_failed", {
+      this.metricsService.incrementCounter("exchange_rate_fetched", {
         source: "bankgov",
+        status: "failed",
       });
-      console.error(err.message);
+      this.logger.error(
+        `Fetch exchange rate from URL [${this.exchangeApiUrl}] throw exception: ${err.message}`,
+      );
       throw new Error("Request to get currency rate failed");
     }
   }
