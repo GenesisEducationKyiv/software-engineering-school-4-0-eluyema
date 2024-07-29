@@ -14,6 +14,46 @@ This application has unit tests, you can run it with command:
 $ npx pnpm run test
 ```
 
+## Alert Documentation
+
+### High CPU Usage Alert
+- **Source**: Prometheus metrics
+- **Description**: Total CPU time.
+- **Metric**: `process_cpu_seconds_total`
+- **Condition**: Increase of `process_cpu_seconds_total` > 0.5s in 1m.
+
+### Event Loop Lag Alert
+- **Source**: Prometheus metrics
+- **Description**: Maximum event loop delay.
+- **Metric**: `nodejs_eventloop_lag_max_seconds`
+- **Condition**: `nodejs_eventloop_lag_max_seconds` > 0.5s.
+
+### Long GC Duration Alert
+- **Source**: Prometheus metrics
+- **Description**: Garbage collection duration.
+- **Metric**: `nodejs_gc_duration_seconds_sum`
+- **Condition**: `nodejs_gc_duration_seconds_sum` > 0.1s in 1m.
+
+### Mail scheduling failed
+- **Source**: Custom metrics
+- **Description**: Cron job didn't work in scheduled time.
+- **Metric**: `notification_mailer_cron`
+- **Condition**: notification_mailer_cron didn't change for 25 hours
+
+### Exchange Rate can't reach rate's sources
+- **Source**: Custom metrics
+- **Description**: Exchange Rate failed too much
+- **Metric**: `all_rate_client_failed`
+- **Condition**: all_rate_client_failed > 5 in 1m.
+
+### Mail sent failed
+- **Source**: Log
+- **Description**: Error happened in email sending
+
+### Infrastructure failing
+- **Source**: Log
+- **Description**: Connection to DB or Kafka failed
+
 ## Custom Metrics Documentation
 
 ### `rate_update_cron`
