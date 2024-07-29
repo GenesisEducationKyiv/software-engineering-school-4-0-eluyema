@@ -5,6 +5,7 @@ import { EventNotificationService } from "src/infrastructure/notification/interf
 import { RateUpdatedDto } from "./dtos/rate-updated.dto";
 import { NotifyCurrentExchangeRateApplication } from "./interfaces/notify-current-exchange-rate.application.interface";
 import { ExchangeRateService } from "../domain/services/interfaces/exchange-rate.service.interface";
+import { MetricsService } from "../infrastructure/metrics/interfaces/metrics.service.interface";
 import { TYPES } from "../ioc";
 
 @Injectable()
@@ -16,7 +17,14 @@ export class NotifyCurrentExchangeRateApplicationImpl
     private readonly exchangeRateService: ExchangeRateService,
     @Inject(TYPES.infrastructure.EventNotificationService)
     private readonly eventNotificationService: EventNotificationService,
-  ) {}
+    @Inject(TYPES.infrastructure.MetricsService)
+    private readonly metricsService: MetricsService,
+  ) {
+    this.metricsService.initCounter(
+      "rate_update_notification",
+      "Rate update cron calls counter",
+    );
+  }
 
   async execute(): Promise<void> {
     const exchangeRate =
@@ -28,5 +36,6 @@ export class NotifyCurrentExchangeRateApplicationImpl
       timestamp: Date.now(),
     };
     await this.eventNotificationService.emitEvent("rate-updated", eventPayload);
+    this.metricsService.incrementCounter("rate_update_notification");
   }
 }

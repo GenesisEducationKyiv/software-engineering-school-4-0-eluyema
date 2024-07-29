@@ -107,6 +107,8 @@ services:
         condition: service_started
   exchange_rate:
     build: ./exchange-rate/
+    ports:
+      - "3001:3001"
     env_file:
       - ./exchange-rate/.env
     depends_on:

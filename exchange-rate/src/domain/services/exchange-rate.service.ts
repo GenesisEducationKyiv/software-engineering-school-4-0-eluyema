@@ -21,14 +21,19 @@ export class ExchangeRateServiceImpl implements ExchangeRateService {
     this.chainExchangeRateService = ChainExchangeRateServiceImpl.generateChain([
       ...clients,
     ]);
+
+    this.metricsService.initCounter(
+      "all_rate_client_failed",
+      "Counter of all failed clients",
+    );
   }
 
   async getCurrentExchangeRate(): Promise<ExchangeRate> {
     try {
-      const data = await this.chainExchangeRateService.getCurrentExchangeRate();
-      this.metricsService.incrementCounter("exchange_rate_fetched");
-      return data;
+      return await this.chainExchangeRateService.getCurrentExchangeRate();
     } catch (error) {
+      this.metricsService.incrementCounter("all_rate_client_failed");
+
       throw new Error(
         "Failed to fetch exchange rates from all available services.",
       );

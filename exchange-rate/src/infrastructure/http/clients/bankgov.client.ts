@@ -9,6 +9,7 @@ import { TYPES } from "src/ioc";
 
 import { BankgovDto } from "./dto/bankgov.dto";
 import { ExchangeRateClient } from "./interfaces/exchange-rate-client";
+import { MetricsService } from "../../metrics/interfaces/metrics.service.interface";
 
 @Injectable()
 export class BankgovClientImpl implements ExchangeRateClient {
@@ -18,8 +19,20 @@ export class BankgovClientImpl implements ExchangeRateClient {
     private readonly httpService: HttpService,
     @Inject(TYPES.infrastructure.AppConfigService)
     readonly appConfigService: AppConfigService,
+    @Inject(TYPES.infrastructure.MetricsService)
+    private readonly metricsService: MetricsService,
   ) {
     this.exchangeApiUrl = appConfigService.exchangeApi.bankgovUrl;
+    this.metricsService.initCounter(
+      "exchange_rate_fetched_success",
+      "Fetch rate success",
+      ["source"],
+    );
+    this.metricsService.initCounter(
+      "exchange_rate_fetched_failed",
+      "Fetch rate failed",
+      ["source"],
+    );
   }
 
   async getCurrentExchangeRate(): Promise<ExchangeRate> {
@@ -27,13 +40,18 @@ export class BankgovClientImpl implements ExchangeRateClient {
       const exchangeRatesDto = await firstValueFrom(
         this.httpService.get<BankgovDto>(this.exchangeApiUrl),
       );
-
+      this.metricsService.incrementCounter("exchange_rate_fetched_success", {
+        source: "bankgov",
+      });
       return ExchangeRateFactory.create(
         exchangeRatesDto.data[0].cc,
         exchangeRatesDto.data[0].rate,
         new Date(),
       );
     } catch (err) {
+      this.metricsService.incrementCounter("exchange_rate_fetched_failed", {
+        source: "bankgov",
+      });
       console.error(err.message);
       throw new Error("Request to get currency rate failed");
     }
