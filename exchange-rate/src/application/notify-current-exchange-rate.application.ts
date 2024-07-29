@@ -24,7 +24,7 @@ export class NotifyCurrentExchangeRateApplicationImpl
   ) {
     this.metricsService.initCounter(
       "rate_update_notification",
-      "Rate update cron calls counter",
+      "Rate update notification counter",
     );
   }
 

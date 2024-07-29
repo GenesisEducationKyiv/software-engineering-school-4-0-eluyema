@@ -17,13 +17,13 @@ export class SubscriptionServiceImpl implements SubscriptionService {
     private readonly metricsService: MetricsService,
   ) {
     this.metricsService.initCounter(
-      "subscription_creation",
-      "Count of subscription creation",
+      "mailer_subscription_creation",
+      "Count of mailer subscription creation",
       ["status"],
     );
     this.metricsService.initCounter(
-      "subscription_removal",
-      "Count of subscription removal",
+      "mailer_subscription_removal",
+      "Count of mailer subscription removal",
       ["status"],
     );
   }
@@ -35,7 +35,7 @@ export class SubscriptionServiceImpl implements SubscriptionService {
         await this.subscriptionRepository.findByEmail(email);
       if (existingSubscription) {
         this.logger.log(`Subscription ${email} already exists`);
-        this.metricsService.incrementCounter("subscription_creation", {
+        this.metricsService.incrementCounter("mailer_subscription_creation", {
           status: "failed",
         });
         return false;
@@ -43,7 +43,7 @@ export class SubscriptionServiceImpl implements SubscriptionService {
       this.logger.log(`Subscription ${email} creation started`);
       await this.subscriptionRepository.create(email);
       this.logger.log(`Subscription ${email} creation success`);
-      this.metricsService.incrementCounter("subscription_creation", {
+      this.metricsService.incrementCounter("mailer_subscription_creation", {
         status: "success",
       });
       return true;
@@ -51,7 +51,7 @@ export class SubscriptionServiceImpl implements SubscriptionService {
       this.logger.log(
         `Subscription ${email} creation failed! Error: ` + err.message,
       );
-      this.metricsService.incrementCounter("subscription_creation", {
+      this.metricsService.incrementCounter("mailer_subscription_creation", {
         status: "failed",
       });
       throw err;
@@ -63,14 +63,14 @@ export class SubscriptionServiceImpl implements SubscriptionService {
       this.logger.log(`Subscription ${email} removal started`);
       await this.subscriptionRepository.delete(email);
       this.logger.log(`Subscription ${email} removal success`);
-      this.metricsService.incrementCounter("subscription_removal", {
+      this.metricsService.incrementCounter("mailer_subscription_removal", {
         status: "success",
       });
     } catch (err) {
       this.logger.error(
         `Subscription ${email} removal failed! Error: ` + err.message,
       );
-      this.metricsService.incrementCounter("subscription_removal", {
+      this.metricsService.incrementCounter("mailer_subscription_removal", {
         status: "failed",
       });
       throw err;

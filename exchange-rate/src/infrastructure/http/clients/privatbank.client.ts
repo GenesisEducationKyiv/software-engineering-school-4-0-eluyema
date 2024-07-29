@@ -26,7 +26,7 @@ export class PrivatbankClientImpl implements ExchangeRateClient {
 
     this.metricsService.initCounter(
       "exchange_rate_fetched",
-      "Fetch rate failed",
+      "Fetch rate counter",
       ["source", "status"],
     );
   }
