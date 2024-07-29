@@ -33,11 +33,14 @@ export class BankgovClientImpl implements ExchangeRateClient {
 
   async getCurrentExchangeRate(): Promise<ExchangeRate> {
     try {
+      this.logger.log(
+        `Fetch exchange rate from URL [${this.exchangeApiUrl}] started`,
+      );
       const exchangeRatesDto = await firstValueFrom(
         this.httpService.get<BankgovDto>(this.exchangeApiUrl),
       );
       this.logger.debug(
-        `Fetched exchange rate body received from URL [${this.exchangeApiUrl}] throw exception: ${JSON.stringify(exchangeRatesDto)}`,
+        `Fetched exchange rate body received from URL [${this.exchangeApiUrl}] throw exception: ${JSON.stringify(exchangeRatesDto.data)}`,
       );
       this.metricsService.incrementCounter("exchange_rate_fetched", {
         source: "bankgov",

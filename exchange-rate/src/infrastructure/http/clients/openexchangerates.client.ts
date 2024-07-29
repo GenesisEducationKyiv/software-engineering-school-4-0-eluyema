@@ -34,6 +34,9 @@ export class OpenexchangeratesClientImpl implements ExchangeRateClient {
 
   async getCurrentExchangeRate(): Promise<ExchangeRate> {
     try {
+      this.logger.log(
+        `Fetch exchange rate from URL [${this.exchangeApiUrl}] started`,
+      );
       const exchangeRatesDto = await firstValueFrom(
         this.httpService.get<OpenexchangeratesDto>(this.exchangeApiUrl),
       );
@@ -42,7 +45,7 @@ export class OpenexchangeratesClientImpl implements ExchangeRateClient {
         status: "success",
       });
       this.logger.debug(
-        `Fetched exchange rate body received from URL [${this.exchangeApiUrl}] throw exception: ${JSON.stringify(exchangeRatesDto)}`,
+        `Fetched exchange rate body received from URL [${this.exchangeApiUrl}] throw exception: ${JSON.stringify(exchangeRatesDto.data)}`,
       );
       return ExchangeRateFactory.create(
         exchangeRatesDto.data.base,

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 
 import { Rate } from "src/domain/entities/rate.entity";
 
@@ -12,6 +12,8 @@ import { MetricsService } from "../metrics/interfaces/metrics.service.interface"
 export class ExchangeRateNotificationServiceImpl
   implements ExchangeRateNotificationService
 {
+  private readonly logger = new Logger(this.constructor.name);
+
   constructor(
     @Inject(TYPES.infrastructure.MailerService)
     private readonly mailerService: MailerService,
@@ -32,15 +34,28 @@ export class ExchangeRateNotificationServiceImpl
     recipients: string[],
   ): Promise<void> {
     try {
+      this.logger.log(
+        `Start compose exchange rate email for rate (${JSON.stringify(rate)}) and send to subscriptions (${recipients.length} amount)`,
+      );
       const email = await this.emailComposerService.composeExchangeRateEmail(
         rate,
         recipients,
       );
+      this.logger.log(
+        `Email successfully composed for rate (${JSON.stringify(rate)}) and subscriptions (${recipients.length} amount)`,
+      );
       await this.mailerService.sendEmail(email);
+      this.logger.log(
+        `Email successfully sent for rate (${JSON.stringify(rate)}) and subscriptions (${recipients.length} amount)`,
+      );
       this.metricsService.incrementCounter("exchange_rate_mail_notification", {
         status: "success",
       });
     } catch (err) {
+      this.logger.error(
+        `Failed compose exchange rate email for rate (${JSON.stringify(rate)}) and ` +
+          `subscriptions (${recipients.length} amount)! Error: ${err.message}`,
+      );
       this.metricsService.incrementCounter("exchange_rate_mail_notification", {
         status: "failed",
       });
