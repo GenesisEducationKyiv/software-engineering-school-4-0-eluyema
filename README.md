@@ -17,69 +17,69 @@ $ npx pnpm run test
 ## Custom Metrics Documentation
 
 ### `rate_update_cron`
-- **Description**: Update rate cron counter
+- **Description**: Counter for rate update cron executions
 - **Labels**: None
 
 ### `rate_update_notification`
-- **Description**: Rate update notification counter
+- **Description**: Counter for rate update notifications
 - **Labels**: None
 
 ### `all_rate_client_failed`
-- **Description**: Counter of all failed clients
+- **Description**: Counter for all failed client requests
 - **Labels**: None
 
 ### `exchange_rate_fetched`
-- **Description**: Fetch rate counter
+- **Description**: Counter for fetched exchange rates
 - **Labels**: `source`, `status`
 
 ### `http_request`
-- **Description**: HTTP request to microservice
+- **Description**: Counter for HTTP requests to microservice
 - **Labels**: `method`, `path`, `statusCode`
 
 ### `subscription_removal_ended_transactions`
-- **Description**: Counter of ended subscription removal transactions
+- **Description**: Counter for ended subscription removal transactions
 - **Labels**: `status`
 
 ### `kafka_event`
-- **Description**: Kafka events to microservice
+- **Description**: Counter for Kafka events sent to microservice
 - **Labels**: `eventType`
 
 ### `subscription_created`
-- **Description**: Count of subscriptions creation
+- **Description**: Counter for created subscriptions
 - **Labels**: `status`
 
 ### `subscription_removal`
-- **Description**: Count of subscriptions removal
+- **Description**: Counter for removed subscriptions
 - **Labels**: `status`
 
 ### `customers_created`
-- **Description**: Count of customers creation
+- **Description**: Counter for created customers
 - **Labels**: `status`
 
 ### `customers_removal`
-- **Description**: Count of customers removal
+- **Description**: Counter for removed customers
 - **Labels**: `status`
 
 ### `rate_requests`
-- **Description**: Count of rate requests
+- **Description**: Counter for rate requests
 - **Labels**: `status`
 
 ### `rate_updates`
-- **Description**: Count of rate updates
+- **Description**: Counter for rate updates
 - **Labels**: `status`
 
 ### `mailer_subscription_creation`
-- **Description**: Count of mailer subscription creation
+- **Description**: Counter for created mailer subscriptions
 - **Labels**: `status`
 
 ### `mailer_subscription_removal`
-- **Description**: Count of mailer subscription removal
+- **Description**: Counter for removed mailer subscriptions
 - **Labels**: `status`
 
 ### `exchange_rate_mail_notification`
-- **Description**: Count of exchange rate mail notification
+- **Description**: Counter for exchange rate mail notifications
 - **Labels**: `status`
 
 ### `notification_mailer_cron`
-- **Description**: Count of notification mail cron
+- **Description**: Counter for notification mail cron jobs
 - **Labels**: None
