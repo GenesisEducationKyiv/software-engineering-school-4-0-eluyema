@@ -1,8 +1,8 @@
 export const TYPES = {
   applications: {
     FetchExchangeRateApplication: Symbol("FetchExchangeRateApplication"),
-    SendExchangeRateToSubscribersApplication: Symbol(
-      "SendExchangeRateToSubscribersApplication",
+    NotifyCurrentExchangeRateApplication: Symbol(
+      "NotifyCurrentExchangeRateApplication",
     ),
   },
   services: {
@@ -12,11 +12,8 @@ export const TYPES = {
   },
   infrastructure: {
     ExchangeRateClients: Symbol("ExchangeRateClients"),
-    ExchangeRateNotificationService: Symbol("ExchangeRateNotificationService"),
-    ExchangeRateCronService: Symbol("ExchangeRateCronService"),
-    ExchangeRateEmailComposerService: Symbol(
-      "ExchangeRateEmailComposerServiceImpl",
-    ),
+    CurrentRateCronService: Symbol("CurrentRateCronService"),
+    EventNotificationService: Symbol("EventNotificationService"),
     AppConfigService: Symbol("AppConfigService"),
   },
   brokers: {

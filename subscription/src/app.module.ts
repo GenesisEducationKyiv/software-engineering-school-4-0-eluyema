@@ -5,21 +5,25 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
 import { ScheduleModule } from "@nestjs/schedule";
 
 import { CreateSubscriptionApplicationImpl } from "./application/create-subscription.application";
-import { TriggerSendExchangeRateNotificationApplicationImpl } from "./application/trigger-send-exchange-rate-notification.interface";
+import { RemoveSubscriptionApplicationImpl } from "./application/remove-subscription.application";
 import { SubscriptionController } from "./controller/subscription.controller";
 import { SubscriptionServiceImpl } from "./domain/services/subscription.service";
 import { AppConfigModule } from "./infrastructure/config/app-config.module";
 import { AppConfigServiceImpl } from "./infrastructure/config/app-config.service";
 import { AppConfigService } from "./infrastructure/config/interfaces/app-config.service.interface";
-import { KafkaExchangeRateNotificationService } from "./infrastructure/notification/kafka-exchange-rate-notification.service";
+import { KafkaMailerEventNotificationServiceImpl } from "./infrastructure/notification/kafka-mailer-event-notification.service";
 import { PrismaModule } from "./infrastructure/prisma/prisma.module";
 import { PrismaSubscriptionRepositoryImpl } from "./infrastructure/repositories/prisma-subscription.repository";
-import { ExchangeRateCronServiceImpl } from "./infrastructure/scheduling/exchange-rate-cron.service";
 import { TYPES } from "./ioc/types";
 
 const createSubscriptionApp = {
   provide: TYPES.applications.CreateSubscriptionApplication,
   useClass: CreateSubscriptionApplicationImpl,
+};
+
+const removeSubscriptionApp = {
+  provide: TYPES.applications.RemoveSubscriptionApplication,
+  useClass: RemoveSubscriptionApplicationImpl,
 };
 
 const appConfigService = {
@@ -37,19 +41,9 @@ const subscriptionRepository = {
   useClass: PrismaSubscriptionRepositoryImpl,
 };
 
-const notificationService = {
-  provide: TYPES.infrastructure.NotificationService,
-  useClass: KafkaExchangeRateNotificationService,
-};
-
-const exchangeRateCronService = {
-  provide: TYPES.infrastructure.ExchangeRateCronService,
-  useClass: ExchangeRateCronServiceImpl,
-};
-
-const triggerSendExchangeRateNotificationApp = {
-  provide: TYPES.applications.TriggerSendExchangeRateNotificationApplication,
-  useClass: TriggerSendExchangeRateNotificationApplicationImpl,
+const eventNotificationService = {
+  provide: TYPES.infrastructure.EventNotificationService,
+  useClass: KafkaMailerEventNotificationServiceImpl,
 };
 
 @Module({
@@ -59,16 +53,15 @@ const triggerSendExchangeRateNotificationApp = {
     ScheduleModule.forRoot(),
     ClientsModule.registerAsync([
       {
-        name: TYPES.brokers.ExchangeRate,
+        name: TYPES.brokers.Mailer,
         useFactory: (appConfigService: AppConfigService) => {
-          const brokerHost = appConfigService.messageBrokers.exchangeRate.host;
-          const brokerGroupId =
-            appConfigService.messageBrokers.exchangeRate.groupId;
+          const brokerHost = appConfigService.messageBrokers.mailer.host;
+          const brokerGroupId = appConfigService.messageBrokers.mailer.groupId;
           return {
             transport: Transport.KAFKA,
             options: {
               client: {
-                clientId: "client-exchange-rate-" + randomUUID(),
+                clientId: "mailer-" + randomUUID(),
                 brokers: [brokerHost],
               },
               consumer: {
@@ -84,13 +77,12 @@ const triggerSendExchangeRateNotificationApp = {
   ],
   controllers: [SubscriptionController],
   providers: [
-    triggerSendExchangeRateNotificationApp,
     createSubscriptionApp,
+    removeSubscriptionApp,
     subscriptionService,
     subscriptionRepository,
     appConfigService,
-    notificationService,
-    exchangeRateCronService,
+    eventNotificationService,
   ],
   exports: [subscriptionService],
 })

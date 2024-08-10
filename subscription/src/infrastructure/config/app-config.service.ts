@@ -4,7 +4,6 @@ import { ConfigService } from "@nestjs/config";
 import { AppConfigService } from "./interfaces/app-config.service.interface";
 import {
   AppConfig,
-  CronConfig,
   DatabaseConfig,
   MessageBrokersConfig,
   MicroservicesConfig,
@@ -23,12 +22,10 @@ export class AppConfigServiceImpl implements AppConfigService {
     return this.configService.get<DatabaseConfig>("database", { infer: true });
   }
 
-  get cron(): CronConfig {
-    return this.configService.get<CronConfig>("cron", { infer: true });
-  }
-
   get microservicesApi(): MicroservicesConfig {
-    return this.configService.get<CronConfig>("microservices", { infer: true });
+    return this.configService.get<MicroservicesConfig>("microservices", {
+      infer: true,
+    });
   }
 
   get messageBrokers(): MessageBrokersConfig {

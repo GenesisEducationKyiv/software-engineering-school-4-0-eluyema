@@ -1,4 +1,5 @@
 import {
+  CronConfig,
   MailerConfig,
   MessageBrokersConfig,
   ServerConfig,
@@ -10,4 +11,6 @@ export interface AppConfigService {
   get mailer(): MailerConfig;
 
   get messageBroker(): MessageBrokersConfig;
+
+  get cron(): CronConfig;
 }

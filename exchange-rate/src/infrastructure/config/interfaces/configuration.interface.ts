@@ -13,6 +13,10 @@ export interface MicroservicesConfig {
   mailerUrl: string;
 }
 
+export interface CronConfig {
+  pattern: string;
+}
+
 export interface BrokerConfig {
   host: string;
   groupId: string;
@@ -26,6 +30,7 @@ export interface MessageBrokersConfig {
 export interface AppConfig {
   server: ServerConfig;
   exchangeApi: ExchangeApiConfig;
+  cron: CronConfig;
   microservices: MicroservicesConfig;
   messageBrokers: MessageBrokersConfig;
 }
