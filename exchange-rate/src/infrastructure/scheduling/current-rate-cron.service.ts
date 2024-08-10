@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { SchedulerRegistry } from "@nestjs/schedule";
 import { CronJob } from "cron";
 
@@ -7,10 +7,13 @@ import { TYPES } from "src/ioc";
 
 import { CurrentRateCronService } from "./interfaces/current-rate-cron.service.interface";
 import { AppConfigService } from "../config/interfaces/app-config.service.interface";
+import { MetricsService } from "../metrics/interfaces/metrics.service.interface";
 
 @Injectable()
 export class CurrentRateCronServiceImpl implements CurrentRateCronService {
   private cronPattern: string;
+
+  private readonly logger = new Logger(this.constructor.name);
 
   constructor(
     private schedulerRegistry: SchedulerRegistry,
@@ -18,11 +21,25 @@ export class CurrentRateCronServiceImpl implements CurrentRateCronService {
     private readonly notifyCurrentExchangeRateApplication: NotifyCurrentExchangeRateApplication,
     @Inject(TYPES.infrastructure.AppConfigService)
     private readonly appConfigService: AppConfigService,
-  ) {}
+    @Inject(TYPES.infrastructure.MetricsService)
+    private readonly metricsService: MetricsService,
+  ) {
+    this.metricsService.initCounter(
+      "rate_update_cron",
+      "Update rate cron counter",
+    );
+  }
 
   async onModuleInit() {
-    this.cronPattern = this.appConfigService.cron.pattern;
-    this.initializeCronJob();
+    try {
+      this.logger.debug("Cron initialization started");
+      this.cronPattern = this.appConfigService.cron.pattern;
+      this.initializeCronJob();
+      this.logger.debug("Cron initialization success");
+    } catch (err) {
+      this.logger.error("Cron initialization failed");
+      throw err;
+    }
   }
 
   private initializeCronJob() {
@@ -30,7 +47,7 @@ export class CurrentRateCronServiceImpl implements CurrentRateCronService {
       try {
         await this.handleCron();
       } catch (err) {
-        console.error(err);
+        this.logger.error("Cron callback failed");
       }
     };
 
@@ -43,6 +60,12 @@ export class CurrentRateCronServiceImpl implements CurrentRateCronService {
   }
 
   async handleCron() {
-    await this.notifyCurrentExchangeRateApplication.execute();
+    this.logger.log("Rate update cron started");
+    try {
+      this.metricsService.incrementCounter("rate_update_cron");
+      await this.notifyCurrentExchangeRateApplication.execute();
+    } catch (err) {
+      this.logger.error("Rate update cron failed! Error: " + err.message);
+    }
   }
 }

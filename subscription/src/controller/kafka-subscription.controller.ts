@@ -1,4 +1,9 @@
-import { Controller, Inject, ValidationPipe } from "@nestjs/common";
+import {
+  Controller,
+  Inject,
+  UseInterceptors,
+  ValidationPipe,
+} from "@nestjs/common";
 import { EventPattern, Payload } from "@nestjs/microservices";
 
 import { CreateSubscriptionSagaOrchestratorApplication } from "src/application/interfaces/create-subscription-saga-orchestrator.application.interface";
@@ -8,9 +13,11 @@ import { CustomerCreateFailedDto } from "./dto/customer-create-failed.dto";
 import { CustomerCreatedDto } from "./dto/customer-created.dto";
 import { CustomerRemoveFailedDto } from "./dto/customer-remove-failed.dto";
 import { CustomerRemovedDto } from "./dto/customer-removed.dto";
+import { KafkaMetricsInterceptor } from "../infrastructure/metrics/kafka-metrics.interceptor";
 import { Event } from "../infrastructure/notification/event";
 import { TYPES } from "../ioc";
 
+@UseInterceptors(KafkaMetricsInterceptor)
 @Controller()
 export class KafkaSubscriptionController {
   constructor(

@@ -107,6 +107,8 @@ services:
         condition: service_started
   exchange_rate:
     build: ./exchange-rate/
+    ports:
+      - "3001:3001"
     env_file:
       - ./exchange-rate/.env
     depends_on:
@@ -116,6 +118,8 @@ services:
     build: ./mailer/
     env_file:
       - ./mailer/.env
+    ports:
+      - "3002:3002"
     depends_on:
       mailer-db:
         condition: service_healthy
@@ -125,6 +129,8 @@ services:
     build: ./subscription/
     env_file:
       - ./subscription/.env
+    ports:
+      - "3003:3003"
     depends_on:
       subscription-db:
         condition: service_healthy
@@ -135,6 +141,8 @@ services:
 
   customers:
     build: ./customers/
+    ports:
+      - "3006:3006"
     env_file:
       - ./customers/.env
     depends_on:

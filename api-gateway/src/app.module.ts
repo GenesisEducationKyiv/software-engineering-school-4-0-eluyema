@@ -5,11 +5,13 @@ import { CreateSubscriptionApplicationImpl } from "./application/create-subscrip
 import { FetchExchangeRateApplicationImpl } from "./application/fetch-exchange-rate.application";
 import { RemoveSubscriptionApplicationImpl } from "./application/remove-subscription.application";
 import { ExchangeRateController } from "./controllers/exchange-rate.controller";
+import { MetricsController } from "./controllers/metrics.controller";
 import { SubscriptionController } from "./controllers/subscription.controller";
 import { AppConfigModule } from "./infrastructure/config/app-config.module";
 import { AppConfigServiceImpl } from "./infrastructure/config/app-config.service";
 import { ExchangeRateServiceImpl } from "./infrastructure/http/exchange-rate.service";
 import { SubscriptionServiceImpl } from "./infrastructure/http/subscription.service";
+import { PrometheusMetricsServiceImpl } from "./infrastructure/metrics/metrics.service";
 import { TYPES } from "./ioc/types";
 
 const appConfigService = {
@@ -42,9 +44,18 @@ const subscriptionService = {
   useClass: SubscriptionServiceImpl,
 };
 
+const metricsService = {
+  provide: TYPES.infrastructure.MetricsService,
+  useClass: PrometheusMetricsServiceImpl,
+};
+
 @Module({
   imports: [AppConfigModule, HttpModule],
-  controllers: [ExchangeRateController, SubscriptionController],
+  controllers: [
+    ExchangeRateController,
+    SubscriptionController,
+    MetricsController,
+  ],
   providers: [
     appConfigService,
     createSubscriptionApp,
@@ -52,6 +63,7 @@ const subscriptionService = {
     removeSubscriptionApp,
     exchangeRateService,
     subscriptionService,
+    metricsService,
   ],
 })
 export class AppModule {}

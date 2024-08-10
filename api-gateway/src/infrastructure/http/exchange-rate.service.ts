@@ -1,5 +1,5 @@
 import { HttpService } from "@nestjs/axios";
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { firstValueFrom } from "rxjs";
 
 import { ExchangeRateService } from "./interfaces/exchange-rate.service.interface";
@@ -10,6 +10,8 @@ import { AppConfigService } from "../config/interfaces/app-config.service.interf
 export class ExchangeRateServiceImpl implements ExchangeRateService {
   private exchangeRate: string;
 
+  private readonly logger = new Logger(this.constructor.name);
+
   constructor(
     @Inject(TYPES.infrastructure.AppConfigService)
     readonly appConfigService: AppConfigService,
@@ -19,10 +21,16 @@ export class ExchangeRateServiceImpl implements ExchangeRateService {
   }
 
   async fetchExchangeRate() {
-    const response = await firstValueFrom(
-      this.httpService.get<void>(`${this.exchangeRate}/rate`),
-    );
-
-    return response.data;
+    try {
+      this.logger.log(`Fetch exchange rate started`);
+      const response = await firstValueFrom(
+        this.httpService.get<void>(`${this.exchangeRate}/rate`),
+      );
+      this.logger.log(`Fetch exchange rate success`);
+      return response.data;
+    } catch (err) {
+      this.logger.error(`Fetch exchange rate failed! Error: ${err.message}`);
+      throw err;
+    }
   }
 }

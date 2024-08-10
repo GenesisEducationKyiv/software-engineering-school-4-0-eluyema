@@ -8,5 +8,6 @@ export const TYPES = {
     AppConfigService: Symbol("AppConfigService"),
     ExchangeRateService: Symbol("ExchangeRateService"),
     SubscriptionService: Symbol("SubscriptionService"),
+    MetricsService: Symbol("MetricsService"),
   },
 };

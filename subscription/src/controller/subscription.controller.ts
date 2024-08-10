@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Res,
+  UseInterceptors,
 } from "@nestjs/common";
 import { FastifyReply } from "fastify";
 
@@ -14,8 +15,10 @@ import { CreateSubscriptionSagaOrchestratorApplication } from "src/application/i
 import { RemoveSubscriptionSagaOrchestratorApplication } from "src/application/interfaces/remove-subscription-saga-orchestrator.application.interface";
 
 import { CreateSubscriptionDto } from "./dto/create-subscription.dto";
+import { HttpMetricsInterceptor } from "../infrastructure/metrics/http-metrics.interceptor";
 import { TYPES } from "../ioc/types";
 
+@UseInterceptors(HttpMetricsInterceptor)
 @Controller("subscribe")
 export class SubscriptionController {
   constructor(

@@ -6,15 +6,18 @@ import {
   Param,
   Post,
   UseFilters,
+  UseInterceptors,
 } from "@nestjs/common";
 
 import { RemoveSubscriptionApplication } from "src/application/interfaces/remove-subscription.application.interface";
 
 import { CreateSubscriptionDto } from "./dtos/create-subscription.dto";
 import { CreateSubscriptionApplication } from "../application/interfaces/create-subscription.application.interface";
+import { HttpMetricsInterceptor } from "../infrastructure/metrics/http-metrics.interceptor";
 import { HttpExceptionFilter } from "../infrastructure/nestjs/filters/http-exception.filter";
 import { TYPES } from "../ioc/types";
 
+@UseInterceptors(HttpMetricsInterceptor)
 @UseFilters(new HttpExceptionFilter())
 @Controller("subscribe")
 export class SubscriptionController {

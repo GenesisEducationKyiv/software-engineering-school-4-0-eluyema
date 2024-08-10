@@ -9,6 +9,7 @@ import { ScheduleModule } from "@nestjs/schedule";
 import { FetchExchangeRateApplicationImpl } from "./application/fetch-exchange-rate.application";
 import { NotifyCurrentExchangeRateApplicationImpl } from "./application/notify-current-exchange-rate.application";
 import { HttpExchangeRateController } from "./controller/http-exchange-rate.controller";
+import { MetricsController } from "./controller/metrics.controller";
 import { ExchangeRateServiceImpl } from "./domain/services/exchange-rate.service";
 import { ExchangeRateClient } from "./domain/services/interfaces/exchange-rate.client.interface";
 import { AppConfigModule } from "./infrastructure/config/app-config.module";
@@ -18,6 +19,8 @@ import { BankgovClientImpl } from "./infrastructure/http/clients/bankgov.client"
 import { LoggingExchangeRateServiceDecorator } from "./infrastructure/http/clients/logging-exchange-rate.decorator";
 import { OpenexchangeratesClientImpl } from "./infrastructure/http/clients/openexchangerates.client";
 import { PrivatbankClientImpl } from "./infrastructure/http/clients/privatbank.client";
+import { MetricsService } from "./infrastructure/metrics/interfaces/metrics.service.interface";
+import { PrometheusMetricsServiceImpl } from "./infrastructure/metrics/metrics.service";
 import { KafkaEventNotificationServiceImpl } from "./infrastructure/notification/kafka-event-notifier.service";
 import { CurrentRateCronServiceImpl } from "./infrastructure/scheduling/current-rate-cron.service";
 import { TYPES } from "./ioc";
@@ -37,25 +40,35 @@ const notifyCurrentExchangeRateApplication = {
   useClass: NotifyCurrentExchangeRateApplicationImpl,
 };
 
+const metricsService = {
+  provide: TYPES.infrastructure.MetricsService,
+  useClass: PrometheusMetricsServiceImpl,
+};
+
 const exchangeRateClients = {
   provide: TYPES.infrastructure.ExchangeRateClients,
   useFactory: (
     appConfigService: AppConfigService,
     httpService: HttpService,
+    metricsService: MetricsService,
   ) => {
     const clientsMap = new Map<string, ExchangeRateClient>();
 
     clientsMap.set(
       "bank.gov.ua",
-      new BankgovClientImpl(httpService, appConfigService),
+      new BankgovClientImpl(httpService, appConfigService, metricsService),
     );
     clientsMap.set(
       "openexchangerates.org",
-      new OpenexchangeratesClientImpl(httpService, appConfigService),
+      new OpenexchangeratesClientImpl(
+        httpService,
+        appConfigService,
+        metricsService,
+      ),
     );
     clientsMap.set(
       "api.privatbank.ua",
-      new PrivatbankClientImpl(httpService, appConfigService),
+      new PrivatbankClientImpl(httpService, appConfigService, metricsService),
     );
 
     return [...clientsMap].map(
@@ -63,7 +76,7 @@ const exchangeRateClients = {
         new LoggingExchangeRateServiceDecorator(instance, name),
     );
   },
-  inject: [appConfigService.provide, HttpService],
+  inject: [appConfigService.provide, HttpService, metricsService.provide],
 };
 
 const exchangeRateService = {
@@ -112,7 +125,7 @@ const currentRateCronService = {
       },
     ]),
   ],
-  controllers: [HttpExchangeRateController],
+  controllers: [HttpExchangeRateController, MetricsController],
   providers: [
     fetchExchangeRateApp,
     notifyCurrentExchangeRateApplication,
@@ -121,6 +134,7 @@ const currentRateCronService = {
     exchangeRateService,
     eventNotificationService,
     currentRateCronService,
+    metricsService,
   ],
 })
 export class AppModule {}
