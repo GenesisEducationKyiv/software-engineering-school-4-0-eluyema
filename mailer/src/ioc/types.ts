@@ -1,12 +1,34 @@
 export const TYPES = {
   applications: {
-    SendEmailApplication: Symbol("SendEmailApplication"),
+    AddRateSubscriptionApplication: Symbol("AddRateSubscriptionApplication"),
+    NotifyRateSubscribersApplication: Symbol(
+      "NotifyRateSubscribersApplication",
+    ),
+    RemoveRateSubscriptionApplication: Symbol(
+      "RemoveRateSubscriptionApplication",
+    ),
+    UpdateExchangeRateApplication: Symbol("UpdateExchangeRateApplication"),
   },
   services: {
-    EmailService: Symbol("EmailService"),
-    TemplateService: Symbol("TemplateService"),
+    SubscriptionService: Symbol("SubscriptionService"),
+    RateService: Symbol("RateService"),
+    ExchangeRateNotificationService: Symbol("ExchangeRateNotificationService"),
   },
   infrastructure: {
     AppConfigService: Symbol("AppConfigService"),
+    EventNotificationService: Symbol("EventNotificationService"),
+    MailerService: Symbol("MailerService"),
+    TemplateService: Symbol("TemplateService"),
+    ExchangeRateEmailComposerService: Symbol(
+      "ExchangeRateEmailComposerService",
+    ),
+    NotifyRateSubscribtionCronService: Symbol(
+      "NotifyRateSubscribtionCronService",
+    ),
+    MetricsService: Symbol("MetricsService"),
+  },
+  repositories: {
+    SubscriptionRepository: Symbol("SubscriptionRepository"),
+    RateRepository: Symbol("RateRepository"),
   },
 };

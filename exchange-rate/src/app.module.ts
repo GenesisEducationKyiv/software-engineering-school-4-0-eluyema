@@ -4,14 +4,14 @@ import { HttpModule, HttpService } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { ClientsModule, Transport } from "@nestjs/microservices";
+import { ScheduleModule } from "@nestjs/schedule";
 
 import { FetchExchangeRateApplicationImpl } from "./application/fetch-exchange-rate.application";
-import { SendExchangeRateToSubscribersApplicationImpl } from "./application/send-exchange-rate-to-subscribers.application";
+import { NotifyCurrentExchangeRateApplicationImpl } from "./application/notify-current-exchange-rate.application";
 import { HttpExchangeRateController } from "./controller/http-exchange-rate.controller";
-import { KafkaExchangeRateController } from "./controller/kafka-exchange-rate.controller";
+import { MetricsController } from "./controller/metrics.controller";
 import { ExchangeRateServiceImpl } from "./domain/services/exchange-rate.service";
 import { ExchangeRateClient } from "./domain/services/interfaces/exchange-rate.client.interface";
-import { ExchangeRateEmailComposerServiceImpl } from "./infrastructure/composers/exchange-rate-email-composer.service";
 import { AppConfigModule } from "./infrastructure/config/app-config.module";
 import { AppConfigServiceImpl } from "./infrastructure/config/app-config.service";
 import { AppConfigService } from "./infrastructure/config/interfaces/app-config.service.interface";
@@ -19,9 +19,10 @@ import { BankgovClientImpl } from "./infrastructure/http/clients/bankgov.client"
 import { LoggingExchangeRateServiceDecorator } from "./infrastructure/http/clients/logging-exchange-rate.decorator";
 import { OpenexchangeratesClientImpl } from "./infrastructure/http/clients/openexchangerates.client";
 import { PrivatbankClientImpl } from "./infrastructure/http/clients/privatbank.client";
-import { ExchangeRateNotificationServiceImpl } from "./infrastructure/notification/exchange-rate-email.service";
-import { KafkaMailerServiceImpl } from "./infrastructure/notification/kafka-mailer.service";
-import { HandlebarsTemplateServiceImpl } from "./infrastructure/template/template.service";
+import { MetricsService } from "./infrastructure/metrics/interfaces/metrics.service.interface";
+import { PrometheusMetricsServiceImpl } from "./infrastructure/metrics/metrics.service";
+import { KafkaEventNotificationServiceImpl } from "./infrastructure/notification/kafka-event-notifier.service";
+import { CurrentRateCronServiceImpl } from "./infrastructure/scheduling/current-rate-cron.service";
 import { TYPES } from "./ioc";
 
 const appConfigService = {
@@ -34,9 +35,14 @@ const fetchExchangeRateApp = {
   useClass: FetchExchangeRateApplicationImpl,
 };
 
-const sendExchangeRateToSubscribersApp = {
-  provide: TYPES.applications.SendExchangeRateToSubscribersApplication,
-  useClass: SendExchangeRateToSubscribersApplicationImpl,
+const notifyCurrentExchangeRateApplication = {
+  provide: TYPES.applications.NotifyCurrentExchangeRateApplication,
+  useClass: NotifyCurrentExchangeRateApplicationImpl,
+};
+
+const metricsService = {
+  provide: TYPES.infrastructure.MetricsService,
+  useClass: PrometheusMetricsServiceImpl,
 };
 
 const exchangeRateClients = {
@@ -44,20 +50,25 @@ const exchangeRateClients = {
   useFactory: (
     appConfigService: AppConfigService,
     httpService: HttpService,
+    metricsService: MetricsService,
   ) => {
     const clientsMap = new Map<string, ExchangeRateClient>();
 
     clientsMap.set(
       "bank.gov.ua",
-      new BankgovClientImpl(httpService, appConfigService),
+      new BankgovClientImpl(httpService, appConfigService, metricsService),
     );
     clientsMap.set(
       "openexchangerates.org",
-      new OpenexchangeratesClientImpl(httpService, appConfigService),
+      new OpenexchangeratesClientImpl(
+        httpService,
+        appConfigService,
+        metricsService,
+      ),
     );
     clientsMap.set(
       "api.privatbank.ua",
-      new PrivatbankClientImpl(httpService, appConfigService),
+      new PrivatbankClientImpl(httpService, appConfigService, metricsService),
     );
 
     return [...clientsMap].map(
@@ -65,7 +76,7 @@ const exchangeRateClients = {
         new LoggingExchangeRateServiceDecorator(instance, name),
     );
   },
-  inject: [appConfigService.provide, HttpService],
+  inject: [appConfigService.provide, HttpService, metricsService.provide],
 };
 
 const exchangeRateService = {
@@ -73,24 +84,14 @@ const exchangeRateService = {
   useClass: ExchangeRateServiceImpl,
 };
 
-const exchangeRateNotificationService = {
-  provide: TYPES.infrastructure.ExchangeRateNotificationService,
-  useClass: ExchangeRateNotificationServiceImpl,
+const eventNotificationService = {
+  provide: TYPES.infrastructure.EventNotificationService,
+  useClass: KafkaEventNotificationServiceImpl,
 };
 
-const emailComposerService = {
-  provide: TYPES.infrastructure.ExchangeRateEmailComposerService,
-  useClass: ExchangeRateEmailComposerServiceImpl,
-};
-
-const mailerService = {
-  provide: TYPES.services.EmailService,
-  useClass: KafkaMailerServiceImpl,
-};
-
-const templateService = {
-  provide: TYPES.services.TemplateService,
-  useClass: HandlebarsTemplateServiceImpl,
+const currentRateCronService = {
+  provide: TYPES.infrastructure.CurrentRateCronService,
+  useClass: CurrentRateCronServiceImpl,
 };
 
 @Module({
@@ -98,6 +99,7 @@ const templateService = {
     AppConfigModule,
     ConfigModule,
     HttpModule,
+    ScheduleModule.forRoot(),
     ClientsModule.registerAsync([
       {
         name: TYPES.brokers.Mailer,
@@ -123,17 +125,16 @@ const templateService = {
       },
     ]),
   ],
-  controllers: [HttpExchangeRateController, KafkaExchangeRateController],
+  controllers: [HttpExchangeRateController, MetricsController],
   providers: [
     fetchExchangeRateApp,
-    emailComposerService,
-    exchangeRateNotificationService,
-    sendExchangeRateToSubscribersApp,
+    notifyCurrentExchangeRateApplication,
     appConfigService,
     exchangeRateClients,
     exchangeRateService,
-    mailerService,
-    templateService,
+    eventNotificationService,
+    currentRateCronService,
+    metricsService,
   ],
 })
 export class AppModule {}

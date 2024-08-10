@@ -1,8 +1,10 @@
 export const TYPES = {
   applications: {
-    CreateSubscriptionApplication: Symbol("CreateSubscriptionApplication"),
-    TriggerSendExchangeRateNotificationApplication: Symbol(
-      "TriggerSendExchangeRateNotificationApplication",
+    CreateSubscriptionSagaOrchestratorApplication: Symbol(
+      "CreateSubscriptionSagaOrchestratorApplication",
+    ),
+    RemoveSubscriptionSagaOrchestratorApplication: Symbol(
+      "RemoveSubscriptionSagaOrchestratorApplication",
     ),
   },
   services: {
@@ -13,10 +15,15 @@ export const TYPES = {
   },
   infrastructure: {
     AppConfigService: Symbol("AppConfigService"),
-    NotificationService: Symbol("NotificationService"),
-    ExchangeRateCronService: Symbol("ExchangeRateCronService"),
+    EventMailerNotificationService: Symbol("EventMailerNotificationService"),
+    EventCustomersNotificationService: Symbol(
+      "EventCustomersNotificationService",
+    ),
+    MetricsService: Symbol("MetricsService"),
   },
   brokers: {
     ExchangeRate: "ExchangeRateBrokerClient",
+    Mailer: "MailerBrokerClient",
+    Customers: "Customers",
   },
 };

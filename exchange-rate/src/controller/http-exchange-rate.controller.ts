@@ -1,16 +1,15 @@
-import { Controller, Get, Inject } from "@nestjs/common";
+import { Controller, Get, Inject, UseInterceptors } from "@nestjs/common";
 
 import { FetchExchangeRateApplication } from "../application/interfaces/fetch-exchange-rate.application.interface";
-import { SendExchangeRateToSubscribersApplication } from "../application/interfaces/send-exchange-rate-to-subscribers.application.interface";
+import { HttpMetricsInterceptor } from "../infrastructure/metrics/http-metrics.interceptor";
 import { TYPES } from "../ioc/types";
 
+@UseInterceptors(HttpMetricsInterceptor)
 @Controller("rate")
 export class HttpExchangeRateController {
   constructor(
     @Inject(TYPES.applications.FetchExchangeRateApplication)
     private readonly fetchExchangeRateApp: FetchExchangeRateApplication,
-    @Inject(TYPES.applications.SendExchangeRateToSubscribersApplication)
-    private readonly sendExchangeRateToSubscribersApp: SendExchangeRateToSubscribersApplication,
   ) {}
 
   @Get("/")

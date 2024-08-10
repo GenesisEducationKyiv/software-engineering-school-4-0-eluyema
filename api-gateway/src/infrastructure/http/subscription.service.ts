@@ -1,5 +1,11 @@
 import { HttpService } from "@nestjs/axios";
-import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from "@nestjs/common";
 import { AxiosError } from "axios";
 import { firstValueFrom } from "rxjs";
 
@@ -10,6 +16,8 @@ import { AppConfigService } from "../config/interfaces/app-config.service.interf
 @Injectable()
 export class SubscriptionServiceImpl implements SubscriptionService {
   private subscriptionUrl: string;
+
+  private readonly logger = new Logger(this.constructor.name);
 
   constructor(
     @Inject(TYPES.infrastructure.AppConfigService)
@@ -25,6 +33,8 @@ export class SubscriptionServiceImpl implements SubscriptionService {
       const params = new URLSearchParams();
       params.append("email", email);
 
+      this.logger.log(`Creation subscription ${email} started`);
+
       const response = await firstValueFrom(
         this.httpService.post<void>(
           `${this.subscriptionUrl}/subscribe`,
@@ -36,9 +46,12 @@ export class SubscriptionServiceImpl implements SubscriptionService {
           },
         ),
       );
-
+      this.logger.log(`Creation subscription ${email} success`);
       return response.data;
     } catch (error) {
+      this.logger.log(
+        `Creation subscription ${email} failed! Error: ${error.message}`,
+      );
       if (!(error instanceof AxiosError)) {
         throw new HttpException("", HttpStatus.INTERNAL_SERVER_ERROR);
       }
@@ -53,6 +66,24 @@ export class SubscriptionServiceImpl implements SubscriptionService {
         throw new HttpException("", HttpStatus.BAD_REQUEST);
       }
 
+      throw new HttpException("", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async unsubscribe(email: string) {
+    try {
+      this.logger.log(`Removal subscription ${email} started`);
+      const response = await firstValueFrom(
+        this.httpService.delete<void>(
+          `${this.subscriptionUrl}/subscribe/` + email,
+        ),
+      );
+      this.logger.log(`Removal subscription ${email} success`);
+      return response.data;
+    } catch (error) {
+      this.logger.error(
+        `Removal subscription ${email} failed! Error: ${error.message}`,
+      );
       throw new HttpException("", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

@@ -3,12 +3,15 @@ import { Module } from "@nestjs/common";
 
 import { CreateSubscriptionApplicationImpl } from "./application/create-subscription.application";
 import { FetchExchangeRateApplicationImpl } from "./application/fetch-exchange-rate.application";
+import { RemoveSubscriptionApplicationImpl } from "./application/remove-subscription.application";
 import { ExchangeRateController } from "./controllers/exchange-rate.controller";
+import { MetricsController } from "./controllers/metrics.controller";
 import { SubscriptionController } from "./controllers/subscription.controller";
 import { AppConfigModule } from "./infrastructure/config/app-config.module";
 import { AppConfigServiceImpl } from "./infrastructure/config/app-config.service";
 import { ExchangeRateServiceImpl } from "./infrastructure/http/exchange-rate.service";
 import { SubscriptionServiceImpl } from "./infrastructure/http/subscription.service";
+import { PrometheusMetricsServiceImpl } from "./infrastructure/metrics/metrics.service";
 import { TYPES } from "./ioc/types";
 
 const appConfigService = {
@@ -26,6 +29,11 @@ const fetchExchangeRateApp = {
   useClass: FetchExchangeRateApplicationImpl,
 };
 
+const removeSubscriptionApp = {
+  provide: TYPES.applications.RemoveSubscriptionApplication,
+  useClass: RemoveSubscriptionApplicationImpl,
+};
+
 const exchangeRateService = {
   provide: TYPES.infrastructure.ExchangeRateService,
   useClass: ExchangeRateServiceImpl,
@@ -36,15 +44,26 @@ const subscriptionService = {
   useClass: SubscriptionServiceImpl,
 };
 
+const metricsService = {
+  provide: TYPES.infrastructure.MetricsService,
+  useClass: PrometheusMetricsServiceImpl,
+};
+
 @Module({
   imports: [AppConfigModule, HttpModule],
-  controllers: [ExchangeRateController, SubscriptionController],
+  controllers: [
+    ExchangeRateController,
+    SubscriptionController,
+    MetricsController,
+  ],
   providers: [
     appConfigService,
     createSubscriptionApp,
     fetchExchangeRateApp,
+    removeSubscriptionApp,
     exchangeRateService,
     subscriptionService,
+    metricsService,
   ],
 })
 export class AppModule {}

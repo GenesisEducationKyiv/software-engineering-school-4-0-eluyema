@@ -3,10 +3,6 @@ export interface ServerConfig {
   host: string;
 }
 
-export interface CronConfig {
-  pattern: string;
-}
-
 export interface DatabaseConfig {
   url: string;
 }
@@ -23,12 +19,13 @@ export interface BrokerConfig {
 export interface MessageBrokersConfig {
   current: BrokerConfig;
   exchangeRate: BrokerConfig;
+  mailer: BrokerConfig;
+  customers: BrokerConfig;
 }
 
 export interface AppConfig {
   server: ServerConfig;
   database: DatabaseConfig;
-  cron: CronConfig;
   microservices: MicroservicesConfig;
   messageBrokers: MessageBrokersConfig;
 }

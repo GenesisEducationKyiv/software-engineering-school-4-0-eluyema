@@ -1,4 +1,5 @@
 import {
+  CronConfig,
   ExchangeApiConfig,
   MessageBrokersConfig,
   MicroservicesConfig,
@@ -9,6 +10,8 @@ export interface AppConfigService {
   get server(): ServerConfig;
 
   get exchangeApi(): ExchangeApiConfig;
+
+  get cron(): CronConfig;
 
   get microservicesApi(): MicroservicesConfig;
 

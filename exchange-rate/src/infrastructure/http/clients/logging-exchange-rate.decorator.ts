@@ -25,7 +25,7 @@ export class LoggingExchangeRateServiceDecorator
       );
       return rate;
     } catch (error) {
-      this.logger.error(
+      this.logger.warn(
         `Failed to fetch exchange rates from ${this.clientName}: ${error.message}`,
       );
       throw error;
