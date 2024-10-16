@@ -1,0 +1,155 @@
+version: "3.8"
+
+services:
+  subscription-db:
+    image: postgres:13
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${SUBSCRIPTION_DATABASE_USER}
+      POSTGRES_PASSWORD: ${SUBSCRIPTION_DATABASE_PASSWORD}
+      POSTGRES_DB: ${SUBSCRIPTION_DATABASE_DB}
+    volumes:
+      - subscription-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${SUBSCRIPTION_DATABASE_USER} -d ${SUBSCRIPTION_DATABASE_DB}",
+        ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+  customer-db:
+    image: postgres:13
+    restart: always
+    ports:
+      - "5434:5434"
+    environment:
+      POSTGRES_USER: ${CUSTOMER_DATABASE_USER}
+      POSTGRES_PASSWORD: ${CUSTOMER_DATABASE_PASSWORD}
+      POSTGRES_DB: ${CUSTOMER_DATABASE_DB}
+      PGPORT: 5434
+    volumes:
+      - customer-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${CUSTOMER_DATABASE_USER} -d ${CUSTOMER_DATABASE_DB}",
+        ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+  mailer-db:
+    image: postgres:13
+    restart: always
+    ports:
+      - "5433:5433"
+    environment:
+      POSTGRES_USER: ${MAILER_DATABASE_USER}
+      POSTGRES_PASSWORD: ${MAILER_DATABASE_PASSWORD}
+      POSTGRES_DB: ${MAILER_DATABASE_DB}
+      PGPORT: 5433
+    volumes:
+      - mailer-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${MAILER_DATABASE_USER} -d ${MAILER_DATABASE_DB}",
+        ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ALLOW_ANONYMOUS_LOGIN: yes
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: "docker.io/bitnami/kafka:2-debian-10"
+    ports:
+      - 9092:9092
+      - 9093:9093
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://kafka:9093
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+    depends_on:
+      zookeeper:
+        condition: service_started
+  app_gateway:
+    build: ./api-gateway/
+    ports:
+      - "3000:3333"
+    env_file:
+      - ./api-gateway/.env
+    depends_on:
+      exchange_rate:
+        condition: service_started
+      mailer:
+        condition: service_started
+      subscription:
+        condition: service_started
+  exchange_rate:
+    build: ./exchange-rate/
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./exchange-rate/.env
+    depends_on:
+      kafka:
+        condition: service_started
+  mailer:
+    build: ./mailer/
+    env_file:
+      - ./mailer/.env
+    ports:
+      - "3002:3002"
+    depends_on:
+      mailer-db:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+  subscription:
+    build: ./subscription/
+    env_file:
+      - ./subscription/.env
+    ports:
+      - "3003:3003"
+    depends_on:
+      subscription-db:
+        condition: service_healthy
+      customers:
+        condition: service_started
+      exchange_rate:
+        condition: service_started
+
+  customers:
+    build: ./customers/
+    ports:
+      - "3006:3006"
+    env_file:
+      - ./customers/.env
+    depends_on:
+      customer-db:
+        condition: service_healthy
+
+volumes:
+  mailer-db-data:
+  subscription-db-data:
+  customer-db-data:
