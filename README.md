@@ -1,4 +1,4 @@
-**This project is based on a microservice architecture that uses clean architecture, Node.js, Nest.js, Prisma, Nodemailer, and Kafka..**
+**This project is based on a microservice architecture that uses clean architecture, Node.js, Nest.js, Prisma ORM, Nodemailer, and Kafka..**
 
 For mail template it uses handlebars templates.
 
